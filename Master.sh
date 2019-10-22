@@ -14,6 +14,7 @@ for i in "${LIST_FILE[@]}"; do
 	if [ ! -f $i ]; then
 		echo "File $i does not exists"
 		exit 1
+	fi
 done
 
 List_NONFILE=(ID R1 R2 ADAP DODE META SUBS NUCACC NUCDEF PROACC PRODEF DBLINEAGE CONF)
