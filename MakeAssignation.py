@@ -144,6 +144,7 @@ def AssignSample(sString,dKmer,dEndIndex):
 						tClean.append(sSampleId)
 				for sSampleId in tClean:
 					del dAssignation[sSampleId]
+					del dPresentKmer[sSampleId]
 		#If kmer of only one sample, assign sequence to this sample
 		if len(dAssignation)==1:
 			sAssignation=list(dAssignation.keys())[0]
