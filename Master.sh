@@ -34,7 +34,7 @@ echo "------ /Check Input existence ------"
 
 
 echo "------ Extract .gz ------"
-if [ ! -f ${PID}_R1.fastq ] && [ ! -f -f ${PID}_R1.fastq ]; then
+if [ ! -f ${PID}_R1.fastq ] && [ ! -f ${PID}_R1.fastq ]; then
 	echo "bash ${SDIR}/Gz_extraction.sh $ARG"
 	bash ${SDIR}/Gz_extraction.sh $ARG # Output: ${PID}_R1.fastq ${PID}_R2.fastq
 else
