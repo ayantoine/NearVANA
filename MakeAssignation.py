@@ -114,12 +114,12 @@ def ProcessFastq1(dKmer,dEndIndex,sFastq):
 	
 def AssignSample(sString,dKmer,dEndIndex):
 	dAssignation={}
+	dPresentKmer={}
 	sAssignation=SAMPLENONE
 	sEndIndex=INDEXNONE
 	#For bigger size of kmer to lower
 	for iKmerSize in sorted(dKmer, reverse=True):
 		#For all specific kmer
-		dPresentKmer={}
 		for sKmer in dKmer[iKmerSize]:
 			#Check if kmer is present
 			if sKmer in sString:
