@@ -5,12 +5,12 @@
 import time
 from optparse import OptionParser
 
-sCurrentVersionScript="v1"
+sCurrentVersionScript="v2"
 iTime1=time.time()
 ########################################################################
 '''
-V1-2019/10/22
-No more header in midfile
+V2-2019/10/22
+No more header in dodeca/midfile
 
 V1-2019/07/01
 Create list of specific Kmer from MID_file
@@ -57,7 +57,7 @@ def ReadLinkerFile(sString,sPrefix):
 		sRef=sPrefix+"_"+tLine[0]
 		sSeq=tLine[1]+tLine[2]
 		dResult[sRef]=sSeq
-		print(sRef,sSeq)
+		# print(sRef,sSeq)
 	return dResult
 
 def GetKmerRef(dDict):
