@@ -24,11 +24,21 @@ for i in "${List_NONFILE[@]}"; do
 done
 
 echo
-echo "> Conf details"
+echo '> Conf details (/!\ beware bash interpretation for STASKID)'
 source $CONF
 LIST_PARAM=(SCALL SPARAM STASKARRAY SMAXTASK SRENAME SMAXSIMJOB STASKID SPSEUDOTASKID VIRNTDB ALLNTDB VIRPTDB ALLPTDB)
 for i in "${LIST_PARAM[@]}"; do
 	echo "$i: ${!i}"
 done
 echo "------ /Check Input existence ------"
+
+
+echo "------ Extract .gz ------"
+if [ ! -f ${PID}_R1.fastq ] && [ ! -f -f ${PID}_R1.fastq ]; then
+	echo "bash ${SDIR}/Gz_extraction.sh $ARG"
+	bash ${SDIR}/Gz_extraction.sh $ARG # Output: ${PID}_R1.fastq ${PID}_R2.fastq
+else
+	echo "${PID}_R1.fastq and ${PID}_R2.fastq already existing, pass"
+fi
+echo "------ /Extract .gz ------"
 
