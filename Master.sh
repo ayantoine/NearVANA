@@ -43,11 +43,11 @@ fi
 echo "------ /Extract .gz ------"
 
 echo "------ Demultiplexing reads ------"
-if [ ! -f ${PID}_R1.fastq ] && [ ! -f ${PID}_R1.fastq ]; then
+if [ ! -f ${PID}_Hyper_Identified.tab ] && [ ! -f ${PID}_Demultiplexing_Hyper.tab ] && [ ! -f ${PID}_Demultiplexing_Hyper_Distribution.tab ]; then
 	echo "$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing_Illumina_pe_V5.e -o Demultiplexing_Illumina_pe_V5.o ${SDIR}/Demultiplexing_Illumina_pe_V5.sh $ARG"
 	$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing_Illumina_pe_V5.e -o Demultiplexing_Illumina_pe_V5.o ${SDIR}/Demultiplexing_Illumina_pe_V5.sh $ARG # Input: ${PID}_R1.fastq ${PID}_R2.fastq $MID $PID $SDIR # Output: ${PID}_Demultiplexing.tab ${PID}_Demultiplexing_Distribution.tab ${PID}_Hyper_Identified.tab ${PID}_Hypo_1_Identified.tab ${PID}_Hypo_2_Identified.tab ${PID}_Ambiguous.tab ${PID}_Unidentified.tab
 else
-	echo "${PID}_R1.fastq and ${PID}_R2.fastq already existing, pass"
+	echo "${PID}_Hyper_Identified.tab, ${PID}_Demultiplexing_Hyper.tab and ${PID}_Demultiplexing_Hyper_Distribution.tab already existing, pass"
 fi
 echo "------ Demultiplexing reads Launched------"
 
