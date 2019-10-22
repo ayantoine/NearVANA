@@ -117,6 +117,7 @@ def AssignSample(sString,dKmer,dEndIndex):
 	dPresentKmer={}
 	sAssignation=SAMPLENONE
 	sEndIndex=INDEXNONE
+	print("-----")
 	#For bigger size of kmer to lower
 	for iKmerSize in sorted(dKmer, reverse=True):
 		#For all specific kmer
@@ -126,6 +127,7 @@ def AssignSample(sString,dKmer,dEndIndex):
 				iKmerStart=sString.find(sKmer)
 				iKmerEnd=iKmerStart+len(sKmer)-1
 				iEndSignal=iKmerEnd+dEndIndex[sKmer]
+				print(sKmer,iKmerStart,iKmerEnd,iEndSignal)
 				try:
 					dPresentKmer[dKmer[iKmerSize][sKmer]].append(iEndSignal)
 				except KeyError:
@@ -136,8 +138,9 @@ def AssignSample(sString,dKmer,dEndIndex):
 				except KeyError:
 					dAssignation[dKmer[iKmerSize][sKmer]]=1
 		##DEBUG
-		print(dAssignation)
-		print(dPresentKmer)
+		if len(dAssignation)>2:
+			print(dAssignation)
+			print(dPresentKmer)
 		#If many Sample, clean all weigth 1
 		if len(dAssignation)>1:
 			if min(dAssignation.values())!=max(dAssignation.values()):
@@ -156,7 +159,7 @@ def AssignSample(sString,dKmer,dEndIndex):
 		#Else, pursue with lower Kmer
 	return sAssignation,sEndIndex
 	
-def ProcessFastq2(dKmer,sFastq,dSeq1):
+def ProcessFastq2(dKmer,dEndIndex,sFastq,dSeq1):
 	HYPERPATH=open(sHyperName,"w")
 	HYP01PATH=open(sHypo1Name,"w")
 	HYP02PATH=open(sHypo2Name,"w")
