@@ -18,7 +18,7 @@ for i in "${LIST_FILE[@]}"; do
 done
 
 List_NONFILE=(ID R1 R2 ADAP DODE META SUBS NUCACC NUCDEF PROACC PRODEF DBLINEAGE CONF)
-for i in "${LIST_PARAM[@]}"; do
+for i in "${List_NONFILE[@]}"; do
 	echo "$i: ${!i}"
 done
 
