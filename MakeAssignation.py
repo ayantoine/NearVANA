@@ -117,7 +117,6 @@ def AssignSample(sString,dKmer,dEndIndex):
 	dPresentKmer={}
 	sAssignation=SAMPLENONE
 	sEndIndex=INDEXNONE
-	print("-----")
 	#For bigger size of kmer to lower
 	for iKmerSize in sorted(dKmer, reverse=True):
 		#For all specific kmer
@@ -127,7 +126,6 @@ def AssignSample(sString,dKmer,dEndIndex):
 				iKmerStart=sString.find(sKmer)
 				iKmerEnd=iKmerStart+len(sKmer)-1
 				iEndSignal=iKmerEnd+dEndIndex[sKmer]
-				print(sKmer,iKmerEnd,iEndSignal,dEndIndex[sKmer],dKmer[iKmerSize][sKmer])
 				try:
 					dPresentKmer[dKmer[iKmerSize][sKmer]].append(iEndSignal)
 				except KeyError:
