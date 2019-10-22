@@ -53,10 +53,11 @@ def ReadLinkerFile(sString,sPrefix):
 			# bHeader=False
 			# continue
 		sLine=sNewLine.strip()
-		tLine=sNewLine.split("\t")
+		tLine=sLine.split("\t")
 		sRef=sPrefix+"_"+tLine[0]
 		sSeq=tLine[1]+tLine[2]
 		dResult[sRef]=sSeq
+		print(sRef,sSeq)
 	return dResult
 
 def GetKmerRef(dDict):
