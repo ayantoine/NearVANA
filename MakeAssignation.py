@@ -151,7 +151,7 @@ def AssignSample(sString,dKmer,dEndIndex):
 		#If kmer of only one sample, assign sequence to this sample
 		if len(dAssignation)==1:
 			sAssignation=list(dAssignation.keys())[0]
-			sEndIndex=str(max(dPresentKmer[dKmer[iKmerSize][sKmer]]))
+			sEndIndex=str(max(dPresentKmer[sAssignation]))
 			break
 		#Else, pursue with lower Kmer
 	return sAssignation,sEndIndex
