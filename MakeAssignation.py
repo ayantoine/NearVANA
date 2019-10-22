@@ -127,7 +127,7 @@ def AssignSample(sString,dKmer,dEndIndex):
 				iKmerStart=sString.find(sKmer)
 				iKmerEnd=iKmerStart+len(sKmer)-1
 				iEndSignal=iKmerEnd+dEndIndex[sKmer]
-				print(sKmer,iKmerStart,iKmerEnd,iEndSignal)
+				print(sKmer,iKmerEnd,iEndSignal,dEndIndex[sKmer],dKmer[iKmerSize][sKmer])
 				try:
 					dPresentKmer[dKmer[iKmerSize][sKmer]].append(iEndSignal)
 				except KeyError:
