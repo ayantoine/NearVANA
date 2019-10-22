@@ -5,13 +5,15 @@
 import time
 from optparse import OptionParser
 
-sCurrentVersionScript="v2"
+sCurrentVersionScript="v3"
 iTime1=time.time()
 ########################################################################
 '''
+V3-2019/10/22
+Keep IndexEnd value, the index to the end of the linker signals
+
 V2-2019/10/22
 No more header in dodeca/midfile
-
 V1-2019/07/01
 Create list of specific Kmer from MID_file
 
@@ -75,10 +77,12 @@ def GetKmerRef(dDict):
 		#For each sequence, store each kmer
 		for sSeqId in dDict:
 			for i in range(0,iMaxSeqSize+1-iKmerSize):
+				iEndIndex=iMaxSeqSize-(i+iKmerSize)
+				# print(dDict[sSeqId][i:i+iKmerSize],dDict[sSeqId],iEndIndex)
 				try:
-					dKmer2Ref[dDict[sSeqId][i:i+iKmerSize]].append(sSeqId)
+					dKmer2Ref[dDict[sSeqId][i:i+iKmerSize]].append((sSeqId,iEndIndex))
 				except KeyError:
-					dKmer2Ref[dDict[sSeqId][i:i+iKmerSize]]=[sSeqId]
+					dKmer2Ref[dDict[sSeqId][i:i+iKmerSize]]=[(sSeqId,iEndIndex)]
 		#Keep only kmer that are specific
 		for sKmer in dKmer2Ref:
 			if len(dKmer2Ref[sKmer])==1:
@@ -88,16 +92,19 @@ def GetKmerRef(dDict):
 			del dResult[iKmerSize]
 			break
 		#If kmer specific don't cover all ref, remove
-		if len(set(dResult[iKmerSize].values()))!=iNbrRef:
+		dTemp={}
+		for dbValues in dResult[iKmerSize].values():
+			dTemp[dbValues[0]]=1
+		if len(dTemp)!=iNbrRef:
 			del dResult[iKmerSize]
 	
 	return dResult
 
-def WriteKmerList(dDict,sString):
-	FILE=open(sString,"w")
+def WriteKmerList(dDict,sPath):
+	FILE=open(sPath,"w")
 	for iValue in dDict:
 		for sString in dDict[iValue]:
-			FILE.write(sString+"\t"+dDict[iValue][sString]+"\n")
+			FILE.write(sString+"\t"+dDict[iValue][sString][0]+"\t"+str(dDict[iValue][sString][1])+"\n")
 	FILE.close()
 	
 ########################################################################

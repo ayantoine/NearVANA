@@ -51,18 +51,18 @@ else
 fi
 echo "------ Demultiplexing reads Launched------"
 
-echo "------ Trim adapters ------"
-if [ ! -f ${PID}_R1.Trimmed.fastq ] || [ ! -f ${PID}_R2.Trimmed.fastq ]; then
-	echo $SCALL $SPARAM $SRENAME ${PID}_Cleaning -e Cleaning.e -o Cleaning.o ${SDIR}/Cleaning.sh $ARG
-	$SCALL $SPARAM $SRENAME ${PID}_Cleaning -e Cleaning.e -o Cleaning.o ${SDIR}/Cleaning.sh $ARG # Input: ${PID}_R1.fastq ${PID}_R2.fastq $MID $PID Output: ${PID}_R1.Trimmed.fastq ${PID}_R2.Trimmed.fastq
-else
-	echo "${PID}_R1.Trimmed.fastq and ${PID}_R2.Trimmed.fastq  already existing, pass"
-fi
-while [ ! -e ${PID}_Cleaning.ok ]; do sleep 60 ; done
-echo "------ /Trim adapters ------"
+#echo "------ Trim adapters ------"
+#if [ ! -f ${PID}_R1.Trimmed.fastq ] || [ ! -f ${PID}_R2.Trimmed.fastq ]; then
+	#echo $SCALL $SPARAM $SRENAME ${PID}_Cleaning -e Cleaning.e -o Cleaning.o ${SDIR}/Cleaning.sh $ARG
+	#$SCALL $SPARAM $SRENAME ${PID}_Cleaning -e Cleaning.e -o Cleaning.o ${SDIR}/Cleaning.sh $ARG # Input: ${PID}_R1.fastq ${PID}_R2.fastq $MID $PID Output: ${PID}_R1.Trimmed.fastq ${PID}_R2.Trimmed.fastq
+#else
+	#echo "${PID}_R1.Trimmed.fastq and ${PID}_R2.Trimmed.fastq  already existing, pass"
+#fi
+#while [ ! -e ${PID}_Cleaning.ok ]; do sleep 60 ; done
+#echo "------ /Trim adapters ------"
 
 
 
-echo "------ Waiting demultiplexing reads results------"
-while [ ! -e ${PID}_Demultiplexing.ok ]; do sleep 60 ; done
-echo "------ /Demultiplexing reads ------"
+#echo "------ Waiting demultiplexing reads results------"
+#while [ ! -e ${PID}_Demultiplexing.ok ]; do sleep 60 ; done
+#echo "------ /Demultiplexing reads ------"

@@ -43,9 +43,6 @@ cat ${PID}_Cleaning/*R1.Trim1.fastq > ${PID}_R1.Trimmed.fastq
 cat ${PID}_Cleaning/*R2.Trim1.fastq > ${PID}_R2.Trimmed.fastq
 echo "------ /Merge subdata ------"
 
-rm ${MID}.C.tab
-rm ${PID}_TempC1.tab
-
 rm ${PID}_Cleaning/*Clean_*
 rm ${PID}_Cleaning/*Trim1*
 

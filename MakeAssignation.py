@@ -30,6 +30,7 @@ AMBIGUOUS2_SUFFIX="Ambiguous_2.tab"
 UNIDENTIFIED_SUFFIX="Unidentified.tab"
 
 SAMPLENONE="..."
+INDEXNONE="."
 
 SEARCHWINDOWS_SIZE=30
 ########################################################################
@@ -78,19 +79,22 @@ sUnidentifiedName=sWorkDir+"/"+sFastq+"_"+UNIDENTIFIED_SUFFIX
 #Function 	
 def LoadKmerFile(sPath):
 	dDict={}
+	dOtherDict={}
 	for sNewLine in open(sPath):
 		sLine=sNewLine.strip()
 		tLine=sLine.split()
 		sKmer=tLine[0]
 		iKmer=len(sKmer)
 		sSample=tLine[1]
+		iEndIndex=str(tLine[2])
 		try:
 			dDict[iKmer][sKmer]=sSample
 		except KeyError:
 			dDict[iKmer]={sKmer:sSample}
-	return dDict
+		dOtherDict[sKmer]=iEndIndex
+	return dDict, dOtherDict
 	
-def ProcessFastq1(dKmer,sFastq):
+def ProcessFastq1(dKmer,dEndIndex,sFastq):
 	dResult={}
 	iCount=0
 	
@@ -103,20 +107,29 @@ def ProcessFastq1(dKmer,sFastq):
 			sSeqSuffix=sSeqId.split(" ")[1]
 		if iCount%4==2:
 			sSeq=sLine[:SEARCHWINDOWS_SIZE] #Search linker only on the first nt
-			sSample=AssignSample(sSeq,dKmer)
-			dResult[sSeqCommonId]={"SUFFIX":sSeqSuffix, "SAMPLE":sSample}	
+			sSample,sEndIndex=AssignSample(sSeq,dKmer,dEndIndex)
+			dResult[sSeqCommonId]={"SUFFIX":sSeqSuffix, "SAMPLE":sSample, "END":sEndIndex}	
 	return dResult
 
 	
-def AssignSample(sString,dKmer):
+def AssignSample(sString,dKmer,dEndIndex):
 	dAssignation={}
 	sAssignation=SAMPLENONE
+	sEndIndex=INDEXNONE
 	#For bigger size of kmer to lower
 	for iKmerSize in sorted(dKmer, reverse=True):
 		#For all specific kmer
+		dPresentKmer={}
 		for sKmer in dKmer[iKmerSize]:
 			#Check if kmer is present
 			if sKmer in sString:
+				iKmerStart=sString.find(sKmer)
+				iKmerEnd=iKmerStart+len(sKmer)-1
+				iEndSignal=iKmerEnd+dEndIndex[sKmer]
+				try:
+					dPresentKmer[dKmer[iKmerSize][sKmer]].append(iEndSignal)
+				except KeyError:
+					dPresentKmer[dKmer[iKmerSize][sKmer]]=[iEndSignal]
 				#Increase Sample weight
 				try:
 					dAssignation[dKmer[iKmerSize][sKmer]]+=1
@@ -134,9 +147,10 @@ def AssignSample(sString,dKmer):
 		#If kmer of only one sample, assign sequence to this sample
 		if len(dAssignation)==1:
 			sAssignation=list(dAssignation.keys())[0]
+			sEndIndex=str(max(iEndSignal))
 			break
 		#Else, pursue with lower Kmer
-	return sAssignation
+	return sAssignation,sEndIndex
 	
 def ProcessFastq2(dKmer,sFastq,dSeq1):
 	HYPERPATH=open(sHyperName,"w")
@@ -156,31 +170,31 @@ def ProcessFastq2(dKmer,sFastq,dSeq1):
 			sSeqSuffix=sSeqId.split(" ")[1]
 		if iCount%4==2:
 			sSeq=sLine[:SEARCHWINDOWS_SIZE] #Search linker only on the first nt
-			sSample=AssignSample(sSeq,dKmer)
+			sSample, sEndIndex=AssignSample(sSeq,dKmer,dEndIndex)
 			
 			#Same assignation
 			if sSample==dSeq1[sSeqCommonId]["SAMPLE"]:
 				#Same sample
 				if sSample!=SAMPLENONE:
-					HYPERPATH.write(sSeqCommonId+" "+dSeq1[sSeqCommonId]["SUFFIX"]+"\t"+dSeq1[sSeqCommonId]["SAMPLE"]+"\n")
-					HYPERPATH.write(sSeqId+"\t"+sSample+"\n")
+					HYPERPATH.write(sSeqCommonId+" "+dSeq1[sSeqCommonId]["SUFFIX"]+"\t"+dSeq1[sSeqCommonId]["SAMPLE"]+"\t"+dSeq1[sSeqCommonId]["END"]+"\n")
+					HYPERPATH.write(sSeqId+"\t"+sSample+"\t"+sEndIndex+"\n")
 				else:
 					#No sample for both
-					UNIDENTIFIEDPATH.write(sSeqCommonId+" "+dSeq1[sSeqCommonId]["SUFFIX"]+"\t"+dSeq1[sSeqCommonId]["SAMPLE"]+"\n")
-					UNIDENTIFIEDPATH.write(sSeqId+"\t"+sSample+"\n")
+					UNIDENTIFIEDPATH.write(sSeqCommonId+" "+dSeq1[sSeqCommonId]["SUFFIX"]+"\t"+dSeq1[sSeqCommonId]["SAMPLE"]+"\t"+dSeq1[sSeqCommonId]["END"]+"\n")
+					UNIDENTIFIEDPATH.write(sSeqId+"\t"+sSample+"\t"+sEndIndex+"\n")
 			else:
 				#One assignation and one without
 				if sSample==SAMPLENONE or dSeq1[sSeqCommonId]["SAMPLE"]==SAMPLENONE:
-					HYP01PATH.write(sSeqCommonId+" "+dSeq1[sSeqCommonId]["SUFFIX"]+"\t"+dSeq1[sSeqCommonId]["SAMPLE"]+"\n")
-					HYP01PATH.write(sSeqId+"\t"+sSample+"\n")
-					HYP02PATH.write(sSeqCommonId+" "+dSeq1[sSeqCommonId]["SUFFIX"]+"\t"+SAMPLENONE+"\n")
-					HYP02PATH.write(sSeqId+"\t"+SAMPLENONE+"\n")
+					HYP01PATH.write(sSeqCommonId+" "+dSeq1[sSeqCommonId]["SUFFIX"]+"\t"+dSeq1[sSeqCommonId]["SAMPLE"]+"\t"+dSeq1[sSeqCommonId]["END"]+"\n")
+					HYP01PATH.write(sSeqId+"\t"+sSample+"\t"+sEndIndex+"\n")
+					HYP02PATH.write(sSeqCommonId+" "+dSeq1[sSeqCommonId]["SUFFIX"]+"\t"+SAMPLENONE+"\t"+dSeq1[sSeqCommonId]["END"]+"\n")
+					HYP02PATH.write(sSeqId+"\t"+SAMPLENONE+"\t"+sEndIndex+"\n")
 				else:
 					#Both assigned to sample, but not the same
-					AMBIGUOUS1PATH.write(sSeqCommonId+" "+dSeq1[sSeqCommonId]["SUFFIX"]+"\t"+dSeq1[sSeqCommonId]["SAMPLE"]+"\n")
-					AMBIGUOUS1PATH.write(sSeqId+"\t"+sSample+"\n")
-					AMBIGUOUS2PATH.write(sSeqCommonId+" "+dSeq1[sSeqCommonId]["SUFFIX"]+"\t"+SAMPLENONE+"\n")
-					AMBIGUOUS2PATH.write(sSeqId+"\t"+SAMPLENONE+"\n")
+					AMBIGUOUS1PATH.write(sSeqCommonId+" "+dSeq1[sSeqCommonId]["SUFFIX"]+"\t"+dSeq1[sSeqCommonId]["SAMPLE"]+"\t"+dSeq1[sSeqCommonId]["END"]+"\n")
+					AMBIGUOUS1PATH.write(sSeqId+"\t"+sSample+"\t"+sEndIndex+"\n")
+					AMBIGUOUS2PATH.write(sSeqCommonId+" "+dSeq1[sSeqCommonId]["SUFFIX"]+"\t"+SAMPLENONE+"\t"+dSeq1[sSeqCommonId]["END"]+"\n")
+					AMBIGUOUS2PATH.write(sSeqId+"\t"+SAMPLENONE+"\t"+sEndIndex+"\n")
 			
 	HYPERPATH.close()
 	HYP01PATH.close()
@@ -196,9 +210,9 @@ def CreateTag(sName):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	dKmerRef=LoadKmerFile(sKmerList)
-	dSeqId2Sample=ProcessFastq1(dKmerRef,sWorkDir+"/"+sFastq1)
-	ProcessFastq2(dKmerRef,sWorkDir+"/"+sFastq2,dSeqId2Sample)
+	dKmerRef, dKmerEndIndex=LoadKmerFile(sKmerList)
+	dSeqId2Sample=ProcessFastq1(dKmerRef,dKmerEndIndex,sWorkDir+"/"+sFastq1)
+	ProcessFastq2(dKmerRef,dKmerEndIndex,sWorkDir+"/"+sFastq2,dSeqId2Sample)
 	CreateTag(sTagFile)
 
 ########################################################################    
