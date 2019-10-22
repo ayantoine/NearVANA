@@ -1,0 +1,29 @@
+#Warning! Do not change variable name
+#Project id
+PID=
+#R1.fastq.gz
+R1=
+#R2.fastq.gz
+R2=
+#Adaptator file
+ADAP=
+#Dodeca file
+DODE=
+#Metadata file
+META=
+#Substractive library (PhiX)
+SUBS=PhiX.fa
+#Script Dir
+SDIR=
+#Path to nucl_gb.accession2taxid
+NUCACC=
+#Path to to file with definition for nuc
+NUCDEF=
+#Path to prot.accession2taxid
+PROACC=
+#Path to to file with definition for prot
+PRODEF=
+#Path to fullnamelineage.dmp
+DBLINEAGE=
+#Cluster Conffile
+CONF=
