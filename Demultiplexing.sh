@@ -7,7 +7,7 @@ source $ARG
 source $CONF
 
 echo "------ Create Kmer library ------"
-python ${SDIR}/CreateKmerList.py -m ${MID} -o ${MID}.kmer.tab -p ${PID}
+python ${SDIR}/CreateKmerList.py -m ${DODE} -o ${DODE}.kmer.tab -p ${PID}
 echo "------ /Create Kmer library ------"
 
 echo "------ Split fastq ------"
@@ -20,7 +20,7 @@ mv 1R* ${PID}_Demultiplexing/
 mv 2R* ${PID}_Demultiplexing/
 
 echo "------ Make assignation ------"
-python ${SDIR}/QsubAssignation.py -s ${SDIR} -k ${MID}.kmer.tab -d ${PID}_Demultiplexing -o QsubAssignation.sh -c ${CONF}
+python ${SDIR}/QsubAssignation.py -s ${SDIR} -k ${DODE}.kmer.tab -d ${PID}_Demultiplexing -o QsubAssignation.sh -c ${CONF}
 bash ./QsubAssignation.sh
 echo "------ /Make assignation ------"
 
