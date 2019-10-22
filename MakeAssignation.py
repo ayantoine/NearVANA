@@ -86,7 +86,7 @@ def LoadKmerFile(sPath):
 		sKmer=tLine[0]
 		iKmer=len(sKmer)
 		sSample=tLine[1]
-		iEndIndex=str(tLine[2])
+		iEndIndex=int(tLine[2])
 		try:
 			dDict[iKmer][sKmer]=sSample
 		except KeyError:

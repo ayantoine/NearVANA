@@ -63,6 +63,6 @@ echo "------ Demultiplexing reads Launched------"
 
 
 
-#echo "------ Waiting demultiplexing reads results------"
-#while [ ! -e ${PID}_Demultiplexing.ok ]; do sleep 60 ; done
-#echo "------ /Demultiplexing reads ------"
+echo "------ Waiting demultiplexing reads results------"
+while [ ! -e ${PID}_Demultiplexing.ok ]; do sleep 60 ; done
+echo "------ /Demultiplexing reads ------"
