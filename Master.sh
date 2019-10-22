@@ -42,3 +42,16 @@ else
 fi
 echo "------ /Extract .gz ------"
 
+echo "------ Demultiplexing reads ------"
+if [ ! -f ${PID}_R1.fastq ] && [ ! -f ${PID}_R1.fastq ]; then
+	echo "$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing_Illumina_pe_V5.e -o Demultiplexing_Illumina_pe_V5.o ${SDIR}/Demultiplexing_Illumina_pe_V5.sh $ARG"
+	$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing_Illumina_pe_V5.e -o Demultiplexing_Illumina_pe_V5.o ${SDIR}/Demultiplexing_Illumina_pe_V5.sh $ARG # Input: ${PID}_R1.fastq ${PID}_R2.fastq $MID $PID $SDIR # Output: ${PID}_Demultiplexing.tab ${PID}_Demultiplexing_Distribution.tab ${PID}_Hyper_Identified.tab ${PID}_Hypo_1_Identified.tab ${PID}_Hypo_2_Identified.tab ${PID}_Ambiguous.tab ${PID}_Unidentified.tab
+else
+	echo "${PID}_R1.fastq and ${PID}_R2.fastq already existing, pass"
+fi
+echo "------ Demultiplexing reads Launched------"
+
+
+echo "------ Waiting demultiplexing reads results------"
+while [ ! -e ${PID}_Demultiplexing.ok ]; do sleep 60 ; done
+echo "------ /Demultiplexing reads ------"
