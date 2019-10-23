@@ -7,8 +7,7 @@ source $ARG
 source $CONF
 
 FASTQ=$2
-TASK=$3
-PAIR=$4
+PAIR=$3
 
 echo "------ Get Sample list ------"
 declare -a SAMPLE_LIST
@@ -24,9 +23,9 @@ echo "------ Split fastq by sample ------"
 python ${SDIR}/SplitReads.py -f ${FASTQ} -r ${PID}_Hyper_Identified.tab -s ${SAMPLE} -p ${PID} -i ${PAIR}
 echo "------ /Split fastq by sample ------"
 
-touch SplitReads${PAIR}_Ok/${TASK}.SplitReads${PAIR}.ok
+touch SplitReads${PAIR}_Ok/${PAIR}.SplitReads${PAIR}.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
-echo "Time Demultiplexing: "$delta > Time03.txt
+echo "Time Demultiplexing: "$delta
 
