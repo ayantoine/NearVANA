@@ -62,7 +62,7 @@ echo "------ /Demultiplexing reads -----"
 
 echo "------ Cleaning ------"
 if [ ! -f ${PID}_R1.Cleaned.fastq ] || [ ! -f ${PID}_R2.Cleaned.fastq ]; then
-	for sampleId in "${!SAMPLE_LIST[@]}"; do
+	for sampleId in "${SAMPLE_LIST[@]}"; do
 		echo $sampleId
 		mkdir $sampleId	
 	done
