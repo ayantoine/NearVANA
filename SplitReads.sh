@@ -17,7 +17,7 @@ done < ${DODE}
 echo "${SAMPLE_LIST[@]}"
 echo "------ /Get Sample list ------"
 
-SAMPLE=${SAMPLE_LIST[${STASKID}]}
+SAMPLE=${SAMPLE_LIST[${STASKID}-1]}
 
 echo "------ Split fastq by sample ------"
 python ${SDIR}/SplitReads.py -f ${FASTQ} -r ${PID}_Hyper_Identified.tab -s ${SAMPLE} -p ${PID} -i ${PAIR}
