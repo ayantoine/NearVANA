@@ -106,7 +106,7 @@ def WriteSplitFastq(sPath,dList,sSID):
 	except KeyError:
 		pass
 	
-	print(sSID+"/"+sSID+"_"+sPath+"."+SPLIT_TAG" contains "+str(iSeqAssociated)+" sequences")
+	print(sSID+"/"+sSID+"_"+sPath+"."+SPLIT_TAG+" contains "+str(iSeqAssociated)+" sequences")
 	FILE.close()
 		
 ########################################################################
