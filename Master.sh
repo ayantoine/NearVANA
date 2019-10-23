@@ -36,7 +36,7 @@ echo "------ Get Sample list ------"
 declare -a SAMPLE_LIST
 while read c1 leftovers; do
 	SAMPLE_LIST+=($c1)
-done
+done < ${DODE}
 echo "${SAMPLE_LIST[@]}"
 echo "------ /Get Sample list ------"
 
