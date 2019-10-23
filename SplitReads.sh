@@ -23,7 +23,7 @@ echo "------ Split fastq by sample ------"
 python ${SDIR}/SplitReads.py -f ${FASTQ} -r ${PID}_Hyper_Identified.tab -s ${SAMPLE} -p ${PID} -i ${PAIR}
 echo "------ /Split fastq by sample ------"
 
-touch SplitReads${PAIR}_Ok/${PAIR}.SplitReads${PAIR}.ok
+touch SplitReads${PAIR}_Ok/${PAIR}.SplitReads.${STASKID}.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
