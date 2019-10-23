@@ -33,7 +33,7 @@ while true ; do
 done
 echo "------ /Launch SplitReads array ------"
 
-> ${FASTQ}.split.ok
+touch ${FASTQ}.split.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))

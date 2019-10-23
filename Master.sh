@@ -65,20 +65,21 @@ if [ ! -f ${PID}_R1.Cleaned.fastq ] || [ ! -f ${PID}_R2.Cleaned.fastq ]; then
 	for sampleId in "${SAMPLE_LIST[@]}"; do
 		mkdir $sampleId	
 	done
-	echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_R1_SplitReads.e -o Run_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_R1.fastq"
+	echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_R1_SplitReads.e -o Run_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_R1.fastq 1"
 	$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_R1_SplitReads.e -o Run_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_R1.fastq 1 # Input: ${PID}_R1.fastq ${PID}_Hyper_Identified.tab
-	echo "$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_R2_SplitReads.e -o Run_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_R2.fastq"
+	echo "$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_R2_SplitReads.e -o Run_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_R2.fastq 2"
 	$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_R2_SplitReads.e -o Run_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_R2.fastq 2 # Input: ${PID}_R2.fastq ${PID}_Hyper_Identified.tab
 	while [ ! -e ${PID}_R1.fastq.split.ok ]; do sleep 60 ; done
 	while [ ! -e ${PID}_R2.fastq.split.ok ]; do sleep 60 ; done
-	echo "\t- Merge files"
+	rm ${PID}_R1.fastq.split.ok ${PID}_R2.fastq.split.ok
+	echo -e "\t- Merge files"
 	touch ${PID}_R1.Cleaned.fastq
 	touch ${PID}_R2.Cleaned.fastq
 	for sampleId in "${SAMPLE_LIST[@]}"; do
 		cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split >> ${PID}_R1.Cleaned.fastq
 		cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split >> ${PID}_R2.Cleaned.fastq
 	done
-	touch ${PID}_Cleaning.okq
+	touch ${PID}_Cleaning.ok
 else
 	echo "${PID}_R1.Cleaned.fastq and ${PID}_R2.Cleaned.fastq already existing, pass"
 	touch ${PID}_Cleaning.ok
@@ -86,13 +87,22 @@ fi
 echo "------ /Cleaning ------"
 
 
-#echo "------ Trim adapters ------"
-#if [ ! -f ${PID}_R1.Trimmed.fastq ] || [ ! -f ${PID}_R2.Trimmed.fastq ]; then
-	#echo $SCALL $SPARAM $SRENAME ${PID}_Cleaning -e Cleaning.e -o Cleaning.o ${SDIR}/Cleaning.sh $ARG
-	#$SCALL $SPARAM $SRENAME ${PID}_Cleaning -e Cleaning.e -o Cleaning.o ${SDIR}/Cleaning.sh $ARG # Input: ${PID}_R1.fastq ${PID}_R2.fastq $MID $PID Output: ${PID}_R1.Trimmed.fastq ${PID}_R2.Trimmed.fastq
-#else
-	#echo "${PID}_R1.Trimmed.fastq and ${PID}_R2.Trimmed.fastq  already existing, pass"
-#fi
-#while [ ! -e ${PID}_Cleaning.ok ]; do sleep 60 ; done
-#echo "------ /Trim adapters ------"
+echo "------ Trim adapters ------"
+if [ ! -f ${PID}_R1.Trimmed.fastq ] || [ ! -f ${PID}_R2.Trimmed.fastq ]; then
+	echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_CutAdapt -e Run_R1_CutAdapt.e -o Run_R1_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG ${PID}_R1.fastq"
+	$SCALL $SPARAM $SRENAME ${PID}_R1_Run_CutAdapt -e Run_R1_CutAdapt.e -o Run_R1_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG
+	while [ ! -e ${PID}.fastq.trim.ok ]; do sleep 60 ; done
+	rm ${PID}.fastq.trim.ok
+	echo -e "\t- Merge files"
+	touch ${PID}_R1.Trimmed.fastq
+	touch ${PID}_R2.Trimmed.fastq
+	for sampleId in "${SAMPLE_LIST[@]}"; do
+		cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim >> ${PID}_R1.Trimmed.fastq
+		cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim >> ${PID}_R2.Trimmed.fastq
+	done
+	touch ${PID}_Trimming.ok
+else
+	echo "${PID}_R1.Trimmed.fastq and ${PID}_R2.Trimmed.fastq  already existing, pass"
+fi
+echo "------ /Trim adapters ------"
 
