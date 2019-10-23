@@ -32,6 +32,13 @@ for i in "${LIST_PARAM[@]}"; do
 done
 echo "------ /Check Input existence ------"
 
+echo "------ Get Sample list ------"
+declare -a SAMPLE_LIST
+while read c1 leftovers; do
+	SAMPLE_LIST+=($c1)
+done
+echo "${SAMPLE_LIST[@]}"
+echo "------ /Get Sample list ------"
 
 echo "------ Extract .gz ------"
 if [ ! -f ${PID}_R1.fastq ] || [ ! -f ${PID}_R1.fastq ]; then
@@ -48,8 +55,16 @@ if [ ! -f ${PID}_Hyper_Identified.tab ] || [ ! -f ${PID}_Demultiplexing_Hyper.ta
 	$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing.e -o Demultiplexing.o ${SDIR}/Demultiplexing.sh $ARG # Input: ${PID}_R1.fastq ${PID}_R2.fastq $MID $PID $SDIR # Output: ${PID}_Demultiplexing.tab ${PID}_Demultiplexing_Distribution.tab ${PID}_Hyper_Identified.tab ${PID}_Hypo_1_Identified.tab ${PID}_Hypo_2_Identified.tab ${PID}_Ambiguous.tab ${PID}_Unidentified.tab
 else
 	echo "${PID}_Hyper_Identified.tab, ${PID}_Demultiplexing_Hyper.tab and ${PID}_Demultiplexing_Hyper_Distribution.tab already existing, pass"
+	touch ${PID}_Demultiplexing.ok
 fi
-echo "------ Demultiplexing reads Launched------"
+while [ ! -e ${PID}_Demultiplexing.ok ]; do sleep 60 ; done
+echo "------ /Demultiplexing reads -----"
+
+echo "------ Split by sample ------"
+
+echo "------ /Split by sample ------"
+
+
 
 #echo "------ Trim adapters ------"
 #if [ ! -f ${PID}_R1.Trimmed.fastq ] || [ ! -f ${PID}_R2.Trimmed.fastq ]; then
@@ -61,8 +76,3 @@ echo "------ Demultiplexing reads Launched------"
 #while [ ! -e ${PID}_Cleaning.ok ]; do sleep 60 ; done
 #echo "------ /Trim adapters ------"
 
-
-
-echo "------ Waiting demultiplexing reads results------"
-while [ ! -e ${PID}_Demultiplexing.ok ]; do sleep 60 ; done
-echo "------ /Demultiplexing reads ------"
