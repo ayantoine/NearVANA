@@ -69,7 +69,7 @@ def LoadRef(sPath,sSample,sPair):
 				tLine=sLine.split("\t")
 				sSeqName=tLine[0]
 				iEndIndex=tLine[2]
-				dResult[sSeqName]=iEndIndex
+				dResult[sSeqName]=int(iEndIndex)
 	return dResult
 
 def WriteSplitFastq(sPath,dList,sSID):
@@ -84,7 +84,12 @@ def WriteSplitFastq(sPath,dList,sSID):
 		iLineCounter+=1
 		if iLineCounter%4==1:
 			try:
-				iEndIndex=dList[sSeqName[1:]] #remove the starting @
+				iEndIndex=dList[sSeqName[1:-1]] #remove starting @ and ending \n
+				# print(iEndIndex)
+				# print(sSeqName)
+				# print(sContent)
+				# print(sInterline)
+				# print(sQuality)
 				FILE.write(sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:])
 				iSeqAssociated+=1
 			except KeyError:
