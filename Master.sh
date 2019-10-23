@@ -86,7 +86,6 @@ else
 fi
 echo "------ /Cleaning ------"
 
-
 echo "------ Trim adapters ------"
 if [ ! -f ${PID}_R1.Trimmed.fastq ] || [ ! -f ${PID}_R2.Trimmed.fastq ]; then
 	echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_CutAdapt -e Run_R1_CutAdapt.e -o Run_R1_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG ${PID}_R1.fastq"
@@ -103,6 +102,7 @@ if [ ! -f ${PID}_R1.Trimmed.fastq ] || [ ! -f ${PID}_R2.Trimmed.fastq ]; then
 	touch ${PID}_Trimming.ok
 else
 	echo "${PID}_R1.Trimmed.fastq and ${PID}_R2.Trimmed.fastq  already existing, pass"
+	touch ${PID}_Trimming.ok
 fi
 echo "------ /Trim adapters ------"
 

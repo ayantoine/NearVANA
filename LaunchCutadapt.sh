@@ -27,7 +27,7 @@ echo "Adapter2: "$adapter2
 echo "------ /Get adaptors ------"
 
 echo "------ Trim adaptors ------"
-cutadapt -a $adapter1 -A $adapter2 -q 30 -O $((${#adapter1}*85/100)) -m 15 -j 0 -o ${SAMPLE}/${SAMPLE}_${PID}_R1.Trim.fastq -p ${SAMPLE}/${SAMPLE}_${PID}_R2.Trim.fastq ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split
+cutadapt -a $adapter1 -A $adapter2 -q 30 -O $((${#adapter1}*85/100)) -m 15 -j 0 -o ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split.trim -p ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split.trim ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split
 echo "------ /Trim adaptors ------"
 
 touch TrimReads_Ok/${STASKID}.TrimReads.ok
