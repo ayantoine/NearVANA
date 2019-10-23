@@ -22,10 +22,10 @@ echo "------ /Get Sample list ------"
 SAMPLE=${SAMPLE_LIST[${TASK}-1]}
 
 echo "------ Split fastq by sample ------"
-python ${SDIR}/SplitRead.py -f ${FASTQ} -r ${PID}_Hyper_Identified.tab -s ${SAMPLE} -p ${PID} -i ${PAIR}
+python ${SDIR}/SplitReads.py -f ${FASTQ} -r ${PID}_Hyper_Identified.tab -s ${SAMPLE} -p ${PID} -i ${PAIR}
 echo "------ /Split fastq by sample ------"
 
-> ${OK_FOLDER}/${TASK}.${FASTQ}.split.ok
+touch ${OK_FOLDER}/${TASK}.${FASTQ}.split.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))

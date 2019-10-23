@@ -63,7 +63,6 @@ echo "------ /Demultiplexing reads -----"
 echo "------ Cleaning ------"
 if [ ! -f ${PID}_R1.Cleaned.fastq ] || [ ! -f ${PID}_R2.Cleaned.fastq ]; then
 	for sampleId in "${SAMPLE_LIST[@]}"; do
-		echo $sampleId
 		mkdir $sampleId	
 	done
 	echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_R1_SplitReads.e -o Run_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_R1.fastq"
