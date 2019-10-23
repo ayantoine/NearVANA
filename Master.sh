@@ -74,7 +74,7 @@ if [ ! -f ${PID}_R1.Cleaned.fastq ] || [ ! -f ${PID}_R2.Cleaned.fastq ]; then
 	echo "\t- Merge files"
 	touch ${PID}_R1.Cleaned.fastq
 	touch ${PID}_R2.Cleaned.fastq
-	for sampleId in "${!SAMPLE_LIST[@]}"; do
+	for sampleId in "${SAMPLE_LIST[@]}"; do
 		cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split >> ${PID}_R1.Cleaned.fastq
 		cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split >> ${PID}_R2.Cleaned.fastq
 	done
