@@ -20,7 +20,7 @@ while true ; do
 		then
 		nbr_ok=0
 	else
-		nbr_ok=$(ls SplitReads${PAIR}_Ok/*_SplitReads${PAIR}.ok | wc -l)
+		nbr_ok=$(ls SplitReads${PAIR}_Ok/*_SplitReads.${PAIR}.ok | wc -l)
 	fi
 	echo ${nbr_ok}
 	echo ${nb_jobs}
