@@ -10,7 +10,7 @@ FASTQ=$2
 PAIR=$3
 
 echo "------ Launch SplitReads array ------"
-nb_jobs=$(cut -f1 ${PID}_Hyper_Identified.tab | wc -l)
+nb_jobs=$(cut -f1 ${DODE} | wc -l)
 if [ ! -d "SplitReads${PAIR}_Ok" ] ; then mkdir "SplitReads${PAIR}_Ok" ; fi
 if [ ! -d ${PID}"_log_SplitReads${PAIR}" ] ; then mkdir ${PID}"_log_SplitReads${PAIR}" ; fi
 echo "$SCALL $SPARAM $SRENAME ${PID}_${TASK}-${PAIR}-SplitReads${TASK} ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_SplitReads${PAIR}"/${PID}_SplitReads${PAIR}.e${SPSEUDOTASKID} -o ${PID}"_log_SplitReads${PAIR}"/${PID}_SplitReads${PAIR}.o${SPSEUDOTASKID} ${SDIR}/SplitReads.sh ${ARG} ${FASTQ} ${PAIR} ${TASK} SplitReads${PAIR}_Ok"
