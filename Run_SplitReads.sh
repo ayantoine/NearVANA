@@ -22,6 +22,8 @@ while true ; do
 	else
 		nbr_ok=$(ls SplitReads${PAIR}_Ok/*_SplitReads${PAIR}.ok | wc -l)
 	fi
+	echo ${nbr_ok}
+	echo ${nb_jobs}
 	if [ "${nbr_ok}" -eq "${nb_jobs}" ]
 		then
 		rm -r SplitReads${PAIR}_Ok
