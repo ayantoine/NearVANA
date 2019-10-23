@@ -60,10 +60,30 @@ fi
 while [ ! -e ${PID}_Demultiplexing.ok ]; do sleep 60 ; done
 echo "------ /Demultiplexing reads -----"
 
-echo "------ Split by sample ------"
-
-echo "------ /Split by sample ------"
-
+echo "------ Cleaning ------"
+if [ ! -f ${PID}_R1.Cleaned.fastq ] || [ ! -f ${PID}_R2.Cleaned.fastq ]; then
+	for sampleId in "${!SAMPLE_LIST[@]}"; do
+		mkdir $sampleId	
+	done
+	echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_R1_SplitReads.e -o Run_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_R1.fastq"
+	$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_R1_SplitReads.e -o Run_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_R1.fastq 1 # Input: ${PID}_R1.fastq ${PID}_Hyper_Identified.tab
+	echo "$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_R2_SplitReads.e -o Run_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_R2.fastq"
+	$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_R2_SplitReads.e -o Run_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_R2.fastq 2 # Input: ${PID}_R2.fastq ${PID}_Hyper_Identified.tab
+	while [ ! -e ${PID}_R1.fastq.split.ok ]; do sleep 60 ; done
+	while [ ! -e ${PID}_R2.fastq.split.ok ]; do sleep 60 ; done
+	echo "\t- Merge files"
+	touch ${PID}_R1.Cleaned.fastq
+	touch ${PID}_R2.Cleaned.fastq
+	for sampleId in "${!SAMPLE_LIST[@]}"; do
+		cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split >> ${PID}_R1.Cleaned.fastq
+		cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split >> ${PID}_R2.Cleaned.fastq
+	done
+	touch ${PID}_Cleaning.ok
+else
+	echo "${PID}_R1.Cleaned.fastq and ${PID}_R2.Cleaned.fastq already existing, pass"
+	touch ${PID}_Cleaning.ok
+fi
+echo "------ /Cleaning ------"
 
 
 #echo "------ Trim adapters ------"
