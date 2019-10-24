@@ -123,7 +123,7 @@ if [ ! -f ${PID}_R1.Substracted.fastq ] || [ ! -f ${PID}_R2.Substracted.fastq ];
 		cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Uncorrected.fastq
 	done
 	echo -e "\t- Substract PhiX"
-	bash ${SDIR}/Susbtraction.sh $ARG
+	bash ${SDIR}/Substraction.sh $ARG
 	touch ${PID}_Substraction.ok
 else
 	echo "${PID}_R1.Substracted.fastq and ${PID}_R2.Substracted.fastq already existing, pass"
