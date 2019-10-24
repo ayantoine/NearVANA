@@ -34,6 +34,8 @@ parser = OptionParser()
 parser.add_option("-i","--input", dest="input")
 parser.add_option("-p","--pid", dest="pid")
 
+(options, args) = parser.parse_args()
+
 sInput=options.input
 if not sInput:
 	exit("Error : no input -i defined, process broken")
