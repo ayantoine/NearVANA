@@ -17,6 +17,7 @@ echo "------ /Get Sample list ------"
 SAMPLE=${SAMPLE_LIST[${STASKID}-1]}
 
 echo "------ Retrieve Pair in sample ------"
+echo "python ${SDIR}/RetrievePair.py -i ${STASKID}/${STASKID}_${PID}_R1.fastq.split.trim -p ${STASKID}/${STASKID}_${PID}_R2.fastq.split.trim"
 python ${SDIR}/RetrievePair.py -i ${STASKID}/${STASKID}_${PID}_R1.fastq.split.trim -p ${STASKID}/${STASKID}_${PID}_R2.fastq.split.trim
 echo "------ /Retrieve Pair in sample ------"
 

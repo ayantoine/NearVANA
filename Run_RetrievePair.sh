@@ -6,18 +6,18 @@ ARG=$1
 source $ARG
 source $CONF
 
-echo "------ Launch RetrivePair array ------"
+echo "------ Launch RetrievePair array ------"
 nb_jobs=$(cut -f1 ${DODE} | wc -l)
-if [ ! -d "RetrivePair_Ok" ] ; then mkdir "RetrivePair_Ok" ; fi
-if [ ! -d ${PID}"_log_RetrivePair" ] ; then mkdir ${PID}"_log_RetrivePair" ; fi
+if [ ! -d "RetrievePair_Ok" ] ; then mkdir "RetrievePair_Ok" ; fi
+if [ ! -d ${PID}"_log_RetrievePair" ] ; then mkdir ${PID}"_log_RetrievePair" ; fi
 echo "$SCALL $SPARAM $SRENAME ${PID}_${PAIR}-RetrievePair ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_RetrievePair"/${PID}_RetrievePair.e${SPSEUDOTASKID} -o ${PID}"_log_RetrievePair"/${PID}_RetrievePair.o${SPSEUDOTASKID} ${SDIR}/RetrievePair.sh ${ARG}"
 $SCALL $SPARAM $SRENAME ${PID}_${PAIR}-RetrievePair ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_RetrievePair"/${PID}_RetrievePair.e${SPSEUDOTASKID} -o ${PID}"_log_RetrievePair"/${PID}_RetrievePair.o${SPSEUDOTASKID} ${SDIR}/RetrievePair.sh ${ARG}
 while true ; do
-	if [ $(ls RetrivePair_Ok/ | wc -l) -eq 0 ]
+	if [ $(ls RetrievePair_Ok/ | wc -l) -eq 0 ]
 		then
 		nbr_ok=0
 	else
-		nbr_ok=$(ls RetrivePair_Ok/*.RetrivePair.ok | wc -l)
+		nbr_ok=$(ls RetrievePair_Ok/*.RetrievePair.ok | wc -l)
 	fi
 	if [ "${nbr_ok}" -eq "${nb_jobs}" ]
 		then
@@ -26,7 +26,7 @@ while true ; do
 	fi
 	sleep 60
 done
-echo "------ /Launch RetrivePair array ------"
+echo "------ /Launch RetrievePair array ------"
 
 touch ${PID}.fastq.deinterlaced.ok
 
