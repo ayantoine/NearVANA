@@ -86,8 +86,6 @@ def ParseAndWrite(sPath):
 			else:
 				if dbData[0].split("_")[0]==sId.split("_")[0]:
 					#Same pair
-					bFirst=False
-					dbData=None
 					if R1_TAG in sId:
 						R1FILE.write("@"+sId+"\n"+sSeq+"\n+\n"+sQual+"\n")
 						R2FILE.write("@"+dbData[0]+"\n"+dbData[1]+"\n+\n"+dbData[2]+"\n")
@@ -96,6 +94,8 @@ def ParseAndWrite(sPath):
 						R1FILE.write("@"+dbData[0]+"\n"+dbData[1]+"\n+\n"+dbData[2]+"\n")
 					else:
 						exit("Error 96 : FATAL\nUnknown pair type: "+sSeq)
+					bFirst=False
+					dbData=None
 				else:
 					#Stored dbData is solo
 					R0FILE.write("@"+dbData[0]+"\n"+dbData[1]+"\n+\n"+dbData[2]+"\n")
