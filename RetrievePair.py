@@ -48,7 +48,7 @@ if not sR2Fastq:
 def GetRootName(sPath):
 	setName=set()
 	iLineCount=0
-	for sNewLine in sPath:
+	for sNewLine in open(sPath):
 		iLineCount+=1
 		if iLineCount%4==1:
 			sRoot=sNewLine.split(" ")[0]
