@@ -106,30 +106,30 @@ else
 fi
 echo "------ /Trim adapters ------"
 
-echo "------ PhiX Substraction ------"
-if [ ! -f ${PID}_R1.Substracted.fastq ] || [ ! -f ${PID}_R2.Substracted.fastq ] || [ ! -f ${PID}_R0.Substracted.fastq ]; then
-	echo -e "\t- Do deinterlacing"
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Correction -e Run_Correction.e -o Run_Correction.o ${SDIR}/Run_Correction.sh $ARG"
-	$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG
-	while [ ! -e ${PID}.fastq.deinterlaced.ok ]; do sleep 60 ; done
-	rm ${PID}.fastq.deinterlaced.ok
-	echo -e "\t- Merge files"
-	touch ${PID}_R1.Unsubstracted.fastq
-	touch ${PID}_R2.Unsubstracted.fastq
-	touch ${PID}_R0.Unsubstracted.fastq
-	for sampleId in "${SAMPLE_LIST[@]}"; do
-		cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
-		cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
-		cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
-	done
-	echo -e "\t- Substract PhiX"
-	bash ${SDIR}/Substraction.sh $ARG
-	touch ${PID}_Substraction.ok
-else
-	echo "${PID}_R1.Substracted.fastq, ${PID}_R2.Substracted.fastq and ${PID}_R0.Substracted.fastq already existing, pass"
-	touch ${PID}_Substraction.ok
-fi
-echo "------ /PhiX Substraction------"
+#echo "------ PhiX Substraction ------"
+#if [ ! -f ${PID}_R1.Substracted.fastq ] || [ ! -f ${PID}_R2.Substracted.fastq ] || [ ! -f ${PID}_R0.Substracted.fastq ]; then
+	#echo -e "\t- Do deinterlacing"
+	#echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Correction -e Run_Correction.e -o Run_Correction.o ${SDIR}/Run_Correction.sh $ARG"
+	#$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG
+	#while [ ! -e ${PID}.fastq.deinterlaced.ok ]; do sleep 60 ; done
+	#rm ${PID}.fastq.deinterlaced.ok
+	#echo -e "\t- Merge files"
+	#touch ${PID}_R1.Unsubstracted.fastq
+	#touch ${PID}_R2.Unsubstracted.fastq
+	#touch ${PID}_R0.Unsubstracted.fastq
+	#for sampleId in "${SAMPLE_LIST[@]}"; do
+		#cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
+		#cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
+		#cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
+	#done
+	#echo -e "\t- Substract PhiX"
+	#bash ${SDIR}/Substraction.sh $ARG
+	#touch ${PID}_Substraction.ok
+#else
+	#echo "${PID}_R1.Substracted.fastq, ${PID}_R2.Substracted.fastq and ${PID}_R0.Substracted.fastq already existing, pass"
+	#touch ${PID}_Substraction.ok
+#fi
+#echo "------ /PhiX Substraction------"
 
 
 
