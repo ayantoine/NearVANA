@@ -52,6 +52,7 @@ def GetRootName(sPath):
 		iLineCount+=1
 		if iLineCount%4==1:
 			sRoot=sNewLine.split(" ")[0]
+			print(sRoot)
 			setName.add(sRoot)
 	return setName
 
@@ -120,7 +121,7 @@ if __name__ == "__main__":
 	setR2RootName=GetRootName(sR2Fastq)
 	print(len(setR2RootName))
 	setRXRootName_intersection=setR1RootName & setR2RootName
-	print(len(setRXRootName))
+	print(len(setRXRootName_intersection))
 	WriteFile([sR1Fastq,sR2Fastq],setRXRootName_intersection)
 		
 ########################################################################    
