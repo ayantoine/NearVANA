@@ -21,7 +21,7 @@ while true ; do
 	fi
 	if [ "${nbr_ok}" -eq "${nb_jobs}" ]
 		then
-		rm -r RetrivePair_Ok
+		rm -r RetrievePair_Ok
 		break
 	fi
 	sleep 60
