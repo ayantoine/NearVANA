@@ -131,5 +131,13 @@ else
 fi
 echo "------ /PhiX Substraction------"
 
-
+echo "------ Reads correction ------"
+if [ ! -f ${PID}_R1.Corrected.fastq ] || [ ! -f ${PID}_R2.Corrected.fastq ] || [ ! -f ${PID}_R0.Corrected.fastq ]; then
+	bash {SDIR}/Correction.sh
+	touch ${PID}_Correction.ok
+else
+	echo "${PID}_R1.Corrected.fastq, ${PID}_R2.Corrected.fastq and ${PID}_R0.Corrected.fastq already existing, pass"
+	touch ${PID}_Correction.ok
+fi
+echo "------ /Reads correction------"
 

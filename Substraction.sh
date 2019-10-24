@@ -18,6 +18,8 @@ echo "------ Mapping ------"
 python ${SDIR}/MappingExtraction.py -p ${PID} -i ${PID}"_"${SUBS}"_"${PID}_R1.Unsubstracted.fastq"_"${PID}_R2.Unsubstracted.fastq"_bwt_ete.sam"
 echo "------ /Mapping ------"
 
+rm ${PID}"_"${SUBS}"_"${PID}_R1.Unsubstracted.fastq"_"${PID}_R2.Unsubstracted.fastq"_bwt_ete.sam"
+
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
 echo "Time Mapping against PhiX: "$delta > Time06.txt
