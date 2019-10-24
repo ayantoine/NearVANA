@@ -116,8 +116,11 @@ def WriteFile(tListFastq,setCommon):
 #MAIN
 if __name__ == "__main__":
 	setR1RootName=GetRootName(sR1Fastq)
+	print(len(setR1RootName))
 	setR2RootName=GetRootName(sR2Fastq)
+	print(len(setR2RootName))
 	setRXRootName_intersection=setR1RootName & setR2RootName
+	print(len(setRXRootName))
 	WriteFile([sR1Fastq,sR2Fastq],setRXRootName_intersection)
 		
 ########################################################################    
