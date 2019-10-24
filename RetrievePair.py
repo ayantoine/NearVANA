@@ -71,7 +71,7 @@ def WriteFile(tListFastq,setCommon):
 	for iIndex in range(len(tListFastq)):
 		sFastqFile=tListFastq[iIndex]
 		oTarget=tFile[iIndex]
-		iLineCount=0
+		iLineCounter=0
 		iFileCount=0
 		sSeqName=""
 		sContent=""
