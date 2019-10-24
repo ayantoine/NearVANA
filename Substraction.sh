@@ -14,9 +14,9 @@ echo "------ Mapping ------"
 bowtie2 --end-to-end --very-sensitive -x ${SUBS} -1 ${PID}_R1.Unsubstracted.fastq -2 ${PID}_R2.Unsubstracted.fastq -U ${PID}_R0.Unsubstracted.fastq -S ${PID}"_"${SUBS}"_"${PID}_R1.Unsubstracted.fastq"_"${PID}_R2.Unsubstracted.fastq"_bwt_ete.sam"
 echo "------ /Mapping ------"
 
-echo "------ Mapping ------"
+echo "------ Mapping extraction ------"
 python ${SDIR}/MappingExtraction.py -p ${PID} -i ${PID}"_"${SUBS}"_"${PID}_R1.Unsubstracted.fastq"_"${PID}_R2.Unsubstracted.fastq"_bwt_ete.sam"
-echo "------ /Mapping ------"
+echo "------ /Mapping extraction ------"
 
 rm ${PID}"_"${SUBS}"_"${PID}_R1.Unsubstracted.fastq"_"${PID}_R2.Unsubstracted.fastq"_bwt_ete.sam"
 
