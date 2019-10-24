@@ -5,11 +5,14 @@
 import time
 from optparse import OptionParser
 
-sCurrentVersionScript="v1"
+sCurrentVersionScript="v2"
 iTime1=time.time()
 ########################################################################
 '''
-V1-2019/07/01
+V2-2019/10/23
+Add SampleId into name
+
+V1-2019/10/22
 Split fastq by SampleId and store into specific SampleFolder (All SampleFolder
 must be already existing)
 Remove linker during process
@@ -83,33 +86,37 @@ def WriteSplitFastq(sPath,dList,sSID):
 	for sNewLine in open(sPath):
 		iLineCounter+=1
 		if iLineCounter%4==1:
-			try:
-				iEndIndex=dList[sSeqName[1:-1]] #remove starting @ and ending \n
-				# print(iEndIndex)
-				# print(sSeqName)
-				# print(sContent)
-				# print(sInterline)
-				# print(sQuality)
-				FILE.write(sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:])
-				iSeqAssociated+=1
-			except KeyError:
-				pass
+			if sSeqName!="":
+				try:
+					iEndIndex=dList[sSeqName[1:-1]] #remove starting @ and ending \n
+					# print(iEndIndex)
+					# print(sSeqName)
+					# print(sContent)
+					# print(sInterline)
+					# print(sQuality)
+					sSeqName=sSeqName.replace("\n"," "+sSID+"\n") 
+					FILE.write(sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:])
+					iSeqAssociated+=1
+				except KeyError:
+					pass
 			sSeqName=sNewLine
 			sContent=""
 			sInterline=""
 			sQuality=""
 		elif iLineCounter%4==2:
-			sContent=sNewLine
+			sContent+=sNewLine
 		elif iLineCounter%4==3:
-			sInterline=sNewLine
+			sInterline+=sNewLine
 		else:
-			sQuality=sNewLine
-	try:
-		oCrash=dList[sSeqName[1:]] #remove the starting @
-		FILE.write(sSeqName+sContent+sInterline+sQuality)
-		iSeqAssociated+=1
-	except KeyError:
-		pass
+			sQuality+=sNewLine
+	if sSeqName!="":
+		try:
+			oCrash=dList[sSeqName[1:-1]]  #remove starting @ and ending \n
+			sSeqName=sSeqName.replace("\n"," "+sSID+"\n") 
+			FILE.write(sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:])
+			iSeqAssociated+=1
+		except KeyError:
+			pass
 	
 	print(sSID+"/"+sSID+"_"+sPath+"."+SPLIT_TAG+" contains "+str(iSeqAssociated)+" sequences")
 	FILE.close()

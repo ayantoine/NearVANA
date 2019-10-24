@@ -34,4 +34,4 @@ touch TrimReads_Ok/${STASKID}.TrimReads.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
-echo "Time Demultiplexing: "$delta
+echo "Time Cutadapt: "$delta

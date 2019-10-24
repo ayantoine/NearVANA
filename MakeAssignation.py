@@ -135,10 +135,10 @@ def AssignSample(sString,dKmer,dEndIndex):
 					dAssignation[dKmer[iKmerSize][sKmer]]+=1
 				except KeyError:
 					dAssignation[dKmer[iKmerSize][sKmer]]=1
-		##DEBUG
-		if len(dAssignation)>2:
-			print(dAssignation)
-			print(dPresentKmer)
+		# ##DEBUG
+		# if len(dAssignation)>2:
+			# print(dAssignation)
+			# print(dPresentKmer)
 		#If many Sample, clean all weigth 1
 		if len(dAssignation)>1:
 			if min(dAssignation.values())!=max(dAssignation.values()):

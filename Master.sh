@@ -101,8 +101,36 @@ if [ ! -f ${PID}_R1.Trimmed.fastq ] || [ ! -f ${PID}_R2.Trimmed.fastq ]; then
 	done
 	touch ${PID}_Trimming.ok
 else
-	echo "${PID}_R1.Trimmed.fastq and ${PID}_R2.Trimmed.fastq  already existing, pass"
+	echo "${PID}_R1.Trimmed.fastq and ${PID}_R2.Trimmed.fastq already existing, pass"
 	touch ${PID}_Trimming.ok
 fi
 echo "------ /Trim adapters ------"
+
+echo "------ Reads correction ------"
+## Change line after
+if [ ! -f ${PID}_R1.Corrected.fastq ] || [ ! -f ${PID}_R2.Corrected.fastq ] || [ ! -f ${PID}_R0.Corrected.fastq ]; then
+	echo -e "\t- Do deinterlacing"
+	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Correction -e Run_Correction.e -o Run_Correction.o ${SDIR}/Run_Correction.sh $ARG"
+	$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG
+	while [ ! -e ${PID}.fastq.deinterlaced.ok ]; do sleep 60 ; done
+	rm ${PID}.fastq.deinterlaced.ok
+	echo -e "\t- Merge files"
+	touch ${PID}_R1.Corrected.fastq
+	touch ${PID}_R2.Corrected.fastq
+	touch ${PID}_R0.Corrected.fastq
+	for sampleId in "${SAMPLE_LIST[@]}"; do
+		cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim.deinterlaced >> ${PID}_R1.Corrected.fastq
+		cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim.deinterlaced >> ${PID}_R2.Corrected.fastq
+		cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Corrected.fastq
+	done
+	###TODO
+	touch ${PID}_Correction.ok
+else
+	#echo "${PID}_R1.Corrected.fastq, ${PID}_R2.Corrected.fastq and ${PID}_R0.Corrected.fastq already existing, pass"
+	touch ${PID}_Correction.ok
+fi
+
+
+#python {SDIR}/RetrivePair.py -i ${PID}_R1.Trimmed.fastq -p ${PID}_R2.Trimmed.fastq
+echo "------ /Reads correction ------"
 
