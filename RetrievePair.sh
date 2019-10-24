@@ -21,7 +21,7 @@ echo "python ${SDIR}/RetrievePair.py -i ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.spli
 python ${SDIR}/RetrievePair.py -i ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split.trim -p ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split.trim
 echo "------ /Retrieve Pair in sample ------"
 
-touch RetrivePair_Ok/${STASKID}.RetrivePair.ok
+touch RetrievePair_Ok/${STASKID}.RetrievePair.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
