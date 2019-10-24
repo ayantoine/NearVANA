@@ -46,7 +46,7 @@ if not sPID:
 
 #Constant
 R1FILE_NAME=sPID+"_R1.Substracted.fastq"
-R1FILE_NAME=sPID+"_R2.Substracted.fastq"
+R2FILE_NAME=sPID+"_R2.Substracted.fastq"
 R0FILE_NAME=sPID+"_R0.Substracted.fastq"
 R3FILE_NAME=sPID+"_R1.PhiX.fastq"
 R4FILE_NAME=sPID+"_R2.PhiX.fastq"
