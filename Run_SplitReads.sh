@@ -35,5 +35,5 @@ touch ${FASTQ}.split.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
-echo "Time Demultiplexing: "$delta > Time03-${PAIR}.txt
+echo "Time SplitReads & Trim linkers: "$delta > Time03-${PAIR}.txt
 

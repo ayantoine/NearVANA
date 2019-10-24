@@ -10,8 +10,8 @@ echo "------ Launch RetrivePair array ------"
 nb_jobs=$(cut -f1 ${DODE} | wc -l)
 if [ ! -d "RetrivePair_Ok" ] ; then mkdir "RetrivePair_Ok" ; fi
 if [ ! -d ${PID}"_log_RetrivePair" ] ; then mkdir ${PID}"_log_RetrivePair" ; fi
-echo "$SCALL $SPARAM $SRENAME ${PID}_${PAIR}-RetrivePair ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}_log_RetrivePair/${PID}_RetrivePair.e${SPSEUDOTASKID} -o ${PID}_log_RetrivePair/${PID}_RetrivePair.o${SPSEUDOTASKID} ${SDIR}/RetrivePair.sh ${ARG}"
-$SCALL $SPARAM $SRENAME ${PID}_${PAIR}-RetrivePair ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_RetrivePair"/${PID}_RetrivePair.e${SPSEUDOTASKID} -o ${PID}"_log_RetrivePair"/${PID}_RetrivePair.o${SPSEUDOTASKID} ${SDIR}/RetrivePair.sh ${ARG}
+echo "$SCALL $SPARAM $SRENAME ${PID}_${PAIR}-RetrievePair ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_RetrievePair"/${PID}_RetrievePair.e${SPSEUDOTASKID} -o ${PID}"_log_RetrievePair"/${PID}_RetrievePair.o${SPSEUDOTASKID} ${SDIR}/RetrievePair.sh ${ARG}"
+$SCALL $SPARAM $SRENAME ${PID}_${PAIR}-RetrievePair ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_RetrievePair"/${PID}_RetrievePair.e${SPSEUDOTASKID} -o ${PID}"_log_RetrievePair"/${PID}_RetrievePair.o${SPSEUDOTASKID} ${SDIR}/RetrievePair.sh ${ARG}
 while true ; do
 	if [ $(ls RetrivePair_Ok/ | wc -l) -eq 0 ]
 		then
