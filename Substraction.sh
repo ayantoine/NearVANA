@@ -19,6 +19,7 @@ python ${SDIR}/MappingExtraction.py -p ${PID} -i ${PID}"_"${SUBS}"_"${PID}_R1.Un
 echo "------ /Mapping extraction ------"
 
 rm ${PID}"_"${SUBS}"_"${PID}_R1.Unsubstracted.fastq"_"${PID}_R2.Unsubstracted.fastq"_bwt_ete.sam"
+rm *.bt2
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))

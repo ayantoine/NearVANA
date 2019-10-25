@@ -15,6 +15,10 @@ cat ${PID}_log_Correction/corrected/${PID}_R2.Substracted.* > ${PID}_R2.Correcte
 cat ${PID}_log_Correction/corrected/${PID}_R0.Substracted.* > ${PID}_R0.Corrected.fastq
 cat ${PID}_log_Correction/corrected/${PID}_R_unpaired.* >> ${PID}_R0.Corrected.fastq
 
+mv ${PID}"_log_Correction"/corrected/configs/config.info ${PID}"_log_Correction"
+mv ${PID}"_log_Correction"/corrected/corrected.yaml ${PID}"_log_Correction"
+rm -r tmp corrected
+
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
 echo "Time Correction: "$delta > Time07.txt
