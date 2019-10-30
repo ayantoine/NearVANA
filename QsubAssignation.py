@@ -6,10 +6,13 @@ import time
 from optparse import OptionParser
 import os
 
-sCurrentVersionScript="v1"
+sCurrentVersionScript="v2"
 iTime1=time.time()
 ########################################################################
 '''
+V2-2019/10/30
+Work with index on base file instead multiple subfile (decrease memory usage)
+
 V1-2019/07/01
 Prepare Qsub command list for Assignation task
 

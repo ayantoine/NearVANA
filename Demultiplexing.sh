@@ -11,7 +11,8 @@ python ${SDIR}/CreateKmerList.py -m ${DODE} -o ${DODE}.kmer.tab -p ${PID}
 echo "------ /Create Kmer library ------"
 
 echo "------ Count sequences ------"
-NB_SEQ=$(($(sed -n '$=' VP-1_R1.fastq)/4))
+NB_SEQ=$(($(sed -n '$=' ${PID}_R1.fastq)/4))
+echo ${NB_SEQ} " present in ${PID}_R1.fastq"
 echo "------ /Count sequences ------"
 
 mkdir ${PID}_Demultiplexing
@@ -44,7 +45,7 @@ echo "------ /Write output ------"
 rm -r ${PID}_Demultiplexing/
 rm ./QsubAssignation.sh
 
-> ${PID}_Demultiplexing.ok
+> ${PID}.Demultiplexing.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
