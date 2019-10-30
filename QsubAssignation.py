@@ -69,9 +69,9 @@ sConf=options.conf
 if not sConf:
 	exit("Error : no conf -c defined, process broken")
 
-sArg=options.arg
+sArg=options.argfile
 if not sArg:
-	exit("Error : no arg -q defined, process broken")
+	exit("Error : no argfile -q defined, process broken")
 
 sQuantity=options.quantity
 if not sQuantity:
