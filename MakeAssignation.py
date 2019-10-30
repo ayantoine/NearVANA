@@ -75,12 +75,12 @@ try:
 except ValueError:
 	exit("Error : index -i must be an integer, process broken")
 
-sHyperName=sWorkDir+"/"+sFastq+"_"+HYPER_SUFFIX
-sHypo1Name=sWorkDir+"/"+sFastq+"_"+HYPO1_SUFFIX
-sHypo2Name=sWorkDir+"/"+sFastq+"_"+HYPO2_SUFFIX
-sAmbiguous1Name=sWorkDir+"/"+sFastq+"_"+AMBIGUOUS1_SUFFIX
-sAmbiguous2Name=sWorkDir+"/"+sFastq+"_"+AMBIGUOUS2_SUFFIX
-sUnidentifiedName=sWorkDir+"/"+sFastq+"_"+UNIDENTIFIED_SUFFIX
+sHyperName=sWorkDir+"/"+str(iIndex)+"_"+HYPER_SUFFIX
+sHypo1Name=sWorkDir+"/"+str(iIndex)+"_"+HYPO1_SUFFIX
+sHypo2Name=sWorkDir+"/"+str(iIndex)+"_"+HYPO2_SUFFIX
+sAmbiguous1Name=sWorkDir+"/"+str(iIndex)+"_"+AMBIGUOUS1_SUFFIX
+sAmbiguous2Name=sWorkDir+"/"+str(iIndex)+"_"+AMBIGUOUS2_SUFFIX
+sUnidentifiedName=sWorkDir+"/"+str(iIndex)+"_"+UNIDENTIFIED_SUFFIX
 
 ########################################################################
 #Function 	
