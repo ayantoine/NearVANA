@@ -5,7 +5,9 @@ WORKDIR=$2
 SCRIPTDIR=$3
 OKDIR=$4
 CONFFILE=$5
+ARGFILE=$6
 
+source ${ARGFILE}
 source ${CONFFILE}
 
 REALVALUE=$(expr ${STASKID} - 1) #Split start at 0 and Task count start at 1. Substract 1 to Task count to match split name

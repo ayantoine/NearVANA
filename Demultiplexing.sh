@@ -17,7 +17,7 @@ echo "------ /Count sequences ------"
 mkdir ${PID}_Demultiplexing
 
 echo "------ Make assignation ------"
-python ${SDIR}/QsubAssignation.py -s ${SDIR} -k ${DODE}.kmer.tab -d ${PID}_Demultiplexing -o QsubAssignation.sh -c ${CONF} -q ${NB_SEQ}
+python ${SDIR}/QsubAssignation.py -a ${ARG} -s ${SDIR} -k ${DODE}.kmer.tab -d ${PID}_Demultiplexing -o QsubAssignation.sh -c ${CONF} -q ${NB_SEQ}
 bash ./QsubAssignation.sh
 echo "------ /Make assignation ------"
 

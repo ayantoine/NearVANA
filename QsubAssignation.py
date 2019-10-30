@@ -43,6 +43,7 @@ parser.add_option("-d","--workdir", dest="workdir")
 parser.add_option("-o","--output", dest="output")
 parser.add_option("-c","--conffile", dest="conf")
 parser.add_option("-q","--quantity", dest="quantity")
+parser.add_option("-a","--argfile", dest="argfile")
 
 (options, args) = parser.parse_args()
 
@@ -67,6 +68,10 @@ if not sOutput:
 sConf=options.conf
 if not sConf:
 	exit("Error : no conf -c defined, process broken")
+
+sArg=options.arg
+if not sArg:
+	exit("Error : no arg -q defined, process broken")
 
 sQuantity=options.quantity
 if not sQuantity:
@@ -96,10 +101,10 @@ def LoadConfFile(sPath):
 		dDict[tLine[0]]=CONF_STEP.join(tLine[1:])
 	return dDict	
 		
-def WriteBash(iSize,sScriptDir,sKmerPath,sOutputPath,sDir,dCall,sConf):
+def WriteBash(sArg,iSize,sScriptDir,sKmerPath,sOutputPath,sDir,dCall,sConf):
 	FILE=open(sOutputPath,"w")
 	FILE.write("#! /bin/bash\n\n")
-	FILE.write(dCall[KEYCONF_SCALL]+" "+dCall[KEYCONF_SPARAM]+" "+dCall[KEYCONF_STASKARRAY]+"1-"+str(iSize)+dCall[KEYCONF_SMAXTASK]+dCall[KEYCONF_SMAXSIMJOB]+" -e "+BASHSCRIPT.replace(".sh","")+".e"+dCall[KEYCONF_SPSEUDOTASKID]+" -o "+BASHSCRIPT.replace(".sh","")+".o"+dCall[KEYCONF_SPSEUDOTASKID]+" "+sScriptDir+"/"+BASHSCRIPT+" "+sKmerPath+" "+sDir+" "+sScriptDir+" Demultiplexing_Ok "+sConf+"\n")
+	FILE.write(dCall[KEYCONF_SCALL]+" "+dCall[KEYCONF_SPARAM]+" "+dCall[KEYCONF_STASKARRAY]+"1-"+str(iSize)+dCall[KEYCONF_SMAXTASK]+dCall[KEYCONF_SMAXSIMJOB]+" -e "+BASHSCRIPT.replace(".sh","")+".e"+dCall[KEYCONF_SPSEUDOTASKID]+" -o "+BASHSCRIPT.replace(".sh","")+".o"+dCall[KEYCONF_SPSEUDOTASKID]+" "+sScriptDir+"/"+BASHSCRIPT+" "+sKmerPath+" "+sDir+" "+sScriptDir+" Demultiplexing_Ok "+sConf+" "+sArg+"\n")
 	FILE.write("""
 if [ ! -d "Demultiplexing_Ok" ] ; then mkdir "Demultiplexing_Ok" ; fi
 while true ; do
@@ -123,7 +128,7 @@ done\n""")
 #MAIN
 if __name__ == "__main__":
 	dConf=LoadConfFile(sConf)
-	WriteBash(iQuantity,sScript,sKmerList,sOutput,sWorkDir,dConf,sConf)
+	WriteBash(sArg,iQuantity,sScript,sKmerList,sOutput,sWorkDir,dConf,sConf)
 	
 ########################################################################    
 iTime2=time.time()
