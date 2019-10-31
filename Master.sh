@@ -94,6 +94,7 @@ if [ ! -f ${PID}_Cleaning.ok ]; then
 	for sampleId in "${SAMPLE_LIST[@]}"; do
 		rm ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim
 		rm ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim
+	done
 		
 	echo -e "\t- Merge files"
 	touch ${PID}_R1.Unsubstracted.fastq
@@ -105,6 +106,7 @@ if [ ! -f ${PID}_Cleaning.ok ]; then
 		cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
 		cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
 		rm -r ${sampleId}
+	done
 		
 	echo -e "\t- Susbract "${SUBS}
 	echo "$SCALL $SPARAM $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG"
