@@ -24,9 +24,9 @@ echo "------ /SPAdes reverse-mapping ------"
 rm ${PID}_Temp.SPAdes_contigs.fa reads2contigs.sam
 
 echo "------ Compress Corrected.fastq ------"
-gzip ${PID}_R0.Corrected.fastq > ${PID}_R0.Corrected.fastq.gz
-gzip ${PID}_R1.Corrected.fastq > ${PID}_R1.Corrected.fastq.gz
-gzip ${PID}_R2.Corrected.fastq > ${PID}_R2.Corrected.fastq.gz
+gzip -f ${PID}_R0.Corrected.fastq > ${PID}_R0.Corrected.fastq.gz
+gzip -f ${PID}_R1.Corrected.fastq > ${PID}_R1.Corrected.fastq.gz
+gzip -f ${PID}_R2.Corrected.fastq > ${PID}_R2.Corrected.fastq.gz
 echo "------ /Compress Corrected.fastq ------"
 
 echo "------ FLASH ------"
@@ -51,7 +51,7 @@ cat ${PID}_R0.SPAdes_unassembled.fa >> ${PID}_All.fa
 echo "------ /Merge Assembly ------"
 
 rm ${PID}_All.SPAdes_contigs.fa ${PID}_All.FLASH_contigs.fa ${PID}_R1.FLASH_unassembled.fa
-rm ${PID}_R2.FLASH_unassembled.fa ${PID}_R0.SPAdes_unassembled.fastq
+rm ${PID}_R2.FLASH_unassembled.fa ${PID}_R0.SPAdes_unassembled.fa
 
 touch ${PID}.Assembly.ok
 
