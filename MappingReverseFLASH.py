@@ -62,8 +62,8 @@ def ParseAndWrite(sPath):
 			sNewName=CONTIG_BASENAME+"_"+str(iContig)+"_(2)"
 			
 			
-			FILE1.write(sName+"\t"+sNewName+"\t"+sName+"\t"+sSample)
-			FILE1.write(sName.replace(R1_TAG,R2_TAG)+"\t"+sNewName+"\t"+sName+"\t"+sSample)
+			FILE1.write(sName+"\t"+sNewName+"\t"+sName+"\t"+sSample+"\n")
+			FILE1.write(sName.replace(R1_TAG,R2_TAG)+"\t"+sNewName+"\t"+sName+"\t"+sSample+"\n")
 			FILE2.write(">"+sNewName+"\n")
 		elif iLineCounter%4==2:
 			FILE2.write(sNewLine)

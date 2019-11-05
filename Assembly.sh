@@ -38,6 +38,8 @@ echo "------ /FLASH ------"
 
 rm FLASH*
 rm ${PID}_R1.SPAdes_unassembled.fastq ${PID}_R2.SPAdes_unassembled.fastq
+python ${SDIR}/ConvertFastq2Fasta.py -f ${PID}_R0.SPAdes_unassembled.fastq -o ${PID}"_R0.SPAdes_unassembled.fa"
+rm ${PID}_R0.SPAdes_unassembled.fastq
 
 echo "------ Merge Assembly ------"
 touch ${PID}_All.fa
@@ -45,7 +47,7 @@ cat ${PID}_All.SPAdes_contigs.fa >> ${PID}_All.fa
 cat ${PID}_All.FLASH_contigs.fa >> ${PID}_All.fa
 cat ${PID}_R1.FLASH_unassembled.fa >> ${PID}_All.fa
 cat ${PID}_R2.FLASH_unassembled.fa >> ${PID}_All.fa
-cat ${PID}_R0.SPAdes_unassembled.fastq >> ${PID}_All.fa
+cat ${PID}_R0.SPAdes_unassembled.fa >> ${PID}_All.fa
 echo "------ /Merge Assembly ------"
 
 rm ${PID}_All.SPAdes_contigs.fa ${PID}_All.FLASH_contigs.fa ${PID}_R1.FLASH_unassembled.fa
