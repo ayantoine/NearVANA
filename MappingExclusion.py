@@ -13,7 +13,7 @@ iTime1=time.time()
 V1-2019/10/24
 Extract Sequences from Mapping and store them into R1 R2 or R3 data.
 
-python MappingExtraction.py -i INPUT -p PID
+python MappingExclusion.py -i INPUT -p PID
 INPUT: path of the mapping file
 PID: Project id
 '''

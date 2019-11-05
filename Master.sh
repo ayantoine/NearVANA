@@ -41,12 +41,12 @@ echo "${SAMPLE_LIST[@]}"
 echo "------ /Get Sample list ------"
 
 echo "------ Extract .gz ------"
-if [ ! -f ${PID}_R1.fastq ] || [ ! -f ${PID}_R1.fastq ]; then
+if [ ! -f ${PID}.extraction.ok ]; then
 	echo "$SCALL $SPARAM $SRENAME ${PID}_Extraction -e Extraction.e -o Extraction.o ${SDIR}/Gz_extraction.sh $ARG"
 	$SCALL $SPARAM $SRENAME ${PID}_Extraction -e Extraction.e -o Extraction.o ${SDIR}/Gz_extraction.sh $ARG # Output: ${PID}_R1.fastq ${PID}_R2.fastq
 	while [ ! -e ${PID}.extraction.ok ]; do sleep 60 ; done
 else
-	echo "${PID}_R1.fastq and ${PID}_R2.fastq already existing, pass"
+	echo "${PID}.extraction.ok already existing, pass"
 fi
 echo "------ /Extract .gz ------"
 
@@ -56,13 +56,13 @@ if [ ! -f ${PID}.Demultiplexing.ok ]; then
 	$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing.e -o Demultiplexing.o ${SDIR}/Demultiplexing.sh $ARG # Input: ${PID}_R1.fastq ${PID}_R2.fastq $MID $PID $SDIR # Output: ${PID}_Demultiplexing.tab ${PID}_Demultiplexing_Distribution.tab ${PID}_Hyper_Identified.tab ${PID}_Hypo_1_Identified.tab ${PID}_Hypo_2_Identified.tab ${PID}_Ambiguous.tab ${PID}_Unidentified.tab
 	while [ ! -e ${PID}.Demultiplexing.ok ]; do sleep 60 ; done
 else
-	echo "${PID}_Demultiplexing.ok existing, pass"
+	echo "${PID}.Demultiplexing.ok existing, pass"
 fi
 echo "------ /Demultiplexing reads -----"
 
 
 echo "------ Cleaning reads ------"
-if [ ! -f ${PID}_Cleaning.ok ]; then
+if [ ! -f ${PID}.Cleaning.ok ]; then
 	echo -e "\t- Cleaning linkers"
 	for sampleId in "${SAMPLE_LIST[@]}"; do
 		mkdir $sampleId	
@@ -115,22 +115,30 @@ if [ ! -f ${PID}_Cleaning.ok ]; then
 	rm ${PID}_R1.Unsubstracted.fastq ${PID}_R2.Unsubstracted.fastq ${PID}_R0.Unsubstracted.fastq
 	touch ${PID}.Cleaning.ok
 else
-	echo "${PID}_Cleaning.ok already existing, pass"
+	echo "${PID}.Cleaning.ok already existing, pass"
 fi
 echo "------ /Cleaning reads ------"
 
 echo "------ Reads correction ------"
-if [ ! -f ${PID}_Correction.ok ]; then
+if [ ! -f ${PID}.Correction.ok ]; then
 	echo "$SCALL $SPARAM $SRENAME ${PID}_Correction -e Correction.e -o Correction.o ${SDIR}/Correction.sh $ARG"
 	$SCALL $SPARAM $SRENAME ${PID}_Correction -e Correction.e -o Correction.o ${SDIR}/Correction.sh $ARG
 	while [ ! -e ${PID}.Correction.ok ]; do sleep 60 ; done
 	rm ${PID}_R1.Substracted.fastq ${PID}_R2.Substracted.fastq ${PID}_R0.Substracted.fastq
 else
-	echo "${PID}_Correction.ok already existing, pass"
+	echo "${PID}.Correction.ok already existing, pass"
 fi
 echo "------ /Reads correction------"
 
-
+echo "------ Reads assembly ------"
+if [ ! -f ${PID}_Assembly.ok ]; then
+	echo "$SCALL $SPARAM $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG"
+	$SCALL $SPARAM $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG
+	while [ ! -e ${PID}.Assembly.ok ]; do sleep 60 ; done
+else
+	echo "${PID}.Assembly.ok already existing, pass"
+fi
+echo "------ /Reads assembly------"
 
 
 
