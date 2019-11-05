@@ -55,4 +55,4 @@ touch ${PID}.Assembly.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
-echo "Time Correction: "$delta > Time07.txt
+echo "Time Assembly: "$delta > Time08.txt
