@@ -9,6 +9,8 @@ source $CONF
 #N or X
 TASK=$2
 
+nb_jobs=$(ls ${PID}_ToBlast | wc -l)
+
 if [ ${TASK} == N ]; then
     TAXO=${NUCTAXO}
     TIMERID="1"
