@@ -142,7 +142,7 @@ echo "------ /Reads assembly------"
 
 echo "------ Launch Blast ------"
 if [ ! -f ${PID}.Blast.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG"
+	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Blast -e Run_Blast.e -o Run_Blast.o ${SDIR}/Run_Blast.sh $ARG"
 	$SCALL $SPARAM $SRENAME ${PID}_Run_Blast -e Run_Blast.e -o Run_Blast.o ${SDIR}/Run_Blast.sh $ARG
 	while [ ! -e ${PID}.Blast.ok ]; do sleep 60 ; done
 else
@@ -150,7 +150,25 @@ else
 fi
 echo "------ /Launch Blast------"
 
+echo "------ Retrieve Taxonomy data ------"
+if [ ! -f ${PID}.Taxonomy.ok ]; then
+	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG"
+	$SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG
+	while [ ! -e ${PID}.Taxonomy.ok ]; do sleep 60 ; done
+else
+	echo "${PID}.Taxonomy.ok already existing, pass"
+fi
+echo "------ /Retrieve Taxonomy data ------"
 
+echo "------ Create table ------"
+if [ ! -f ${PID}.Table.ok ]; then
+	echo "$SCALL $SPARAM $SRENAME ${PID}_Table -e Table.e -o Table.o ${SDIR}/Run_CreateTable.sh $ARG"
+	$SCALL $SPARAM $SRENAME ${PID}_Table -e Table.e -o Table.o ${SDIR}/Run_CreateTable.sh $ARG
+	while [ ! -e ${PID}.Table.ok ]; do sleep 60 ; done
+else
+	echo "${PID}.Table.ok already existing, pass"
+fi
+echo "------ /Create table ------"
 
 
 
