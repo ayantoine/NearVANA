@@ -22,7 +22,8 @@ for Task in ${TASK_ARRAY[@]}; do
     
     echo "Working on file "${FilePath}
     touch ${FilePath}.taxo
-    for ACC in $(cut -f2 ${FilePath}); do
+    for LINE in $(cut -f2 ${FilePath}); do
+	ACC=$(echo $LINE | cut -d'|' -f4)
 	echo ${ACC}
 	
 	ACCtaxid=$(grep -m 1 -P "^[-A-Za-z0-9_.%]*\t${ACC}" ${DBTARGET} | cut -f3)
@@ -43,18 +44,18 @@ for Task in ${TASK_ARRAY[@]}; do
 		#Second try, on temporary file
 		ACCdefinition=$(grep -m 1 -P "^${ACC}\t" ${TempDefFile} | cut -f2)
 		if [ -z ${ACCdefinition} ] ; then        
-		    echo "Unkown AccID ${ACC} in ${DBLINEAGE}"
+		    echo "Unkown AccID ${ACC} in ${DBDEF}"
 		    echo "Ask ebi"
-		    echo "curl -s https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=${TAG}&id=${ACC}&rettype=gb&retmode=text"
-		    curl -s "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=${TAG}&id=${ACC}&rettype=gb&retmode=text" > ${Acc}.${TAG}.def
-		    ACCdefinition=$(grep -m 1 "DEFINITION" ${Acc}.${TAG}.def | cut -c 13-)
+		    echo "curl -s -N https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=${TAG}&id=${ACC}&rettype=gb&retmode=text"
+		    curl -s -N "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=${TAG}&id=${ACC}&rettype=gb&retmode=text" > ${ACC}.${TAG}.def
+		    ACCdefinition=$(grep -m 1 "DEFINITION" ${ACC}.${TAG}.def | cut -c 13-)
 		    if [ -z ${ACCdefinition} ] ; then
 			echo "Unable to download definition from EBI for ${ACC}"
 			ACCdefinition="#N/D"
 		    else
 			printf "${ACC}\t${ACCdefinition}\n" > ${TempDefFile}
 		    fi
-		    rm ${Acc}.${TAG}.def
+		    rm ${ACC}.${TAG}.def
 		fi
 	    fi
 	fi
