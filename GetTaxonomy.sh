@@ -66,4 +66,4 @@ for Task in ${TASK_ARRAY[@]}; do
     done
 done
 
-touch Blast${TASK}_Ok/${STASKID}_Taxo.ok
+touch Taxo_Ok/${STASKID}_Taxo.ok
