@@ -19,7 +19,7 @@ PID: Plaque Id
 ########################################################################
 #CONSTANT
 HEADER_LIST=["Hit rank","Query Seq-Id","Sample","Read quantity","Sequence length","Location","Date","Host",
-"Individual","Weight(mg)","Subject Seq-Id","Organism","SuperKingdom","Taxonomy","Hit definition","Confidence","Identity",
+"Individual","Weight(mg)","Subject Seq-Id","Organism","SuperKingdom","Taxonomy","Hit definition","Identification","Identity",
 "Query cover","Alignment length","Mismatches","Gap opening","Start alignment query","End alignment query",
 "Start alignment subject","End alignment subject","E-value","Bit score","Query sequences"]
 HEADER="\t".join(HEADER_LIST)+"\n"
@@ -249,13 +249,13 @@ def FusionBlastDict(dBlastN,dBlastX):
 			#Identified only with BlastX
 			for iRank in dBlastX[sKey]:
 				dDict[sKey][iRank]=dBlastX[sKey][iRank]
-				dDict[sKey][iRank]["Confidence"]="Weak (X)"
+				dDict[sKey][iRank]["Confidence"]="Single (X)"
 	
 		elif not bX and bN:
 			#Identified only with BlastN
 			for iRank in dBlastN[sKey]:
 				dDict[sKey][iRank]=dBlastN[sKey][iRank]
-				dDict[sKey][iRank]["Confidence"]="Weak (N)"
+				dDict[sKey][iRank]["Confidence"]="Single (N)"
 				
 		else:
 			dDict[sKey]={}
@@ -266,21 +266,21 @@ def FusionBlastDict(dBlastN,dBlastX):
 			for sKey in dBlastN:
 				for iRank in dBlastN[sKey]:
 					dSubjectId2MaxBitScore[dBlastN[sKey][iRank]["SubjectId"]]=float(dBlastN[sKey][iRank]["BitScore"])
-					dSubjectId2Confidence[dBlastN[sKey][iRank]["SubjectId"]]="Weak (N)"
+					dSubjectId2Confidence[dBlastN[sKey][iRank]["SubjectId"]]="Single (N)"
 					dSubjectId2Coord[dBlastN[sKey][iRank]["SubjectId"]]=("N",iRank)
 			for sKey in dBlastX:
 				for iRank in dBlastX[sKey]:
 					sSubjectId=dBlastX[sKey][iRank]["SubjectId"]
 					fBitScore=float(dBlastX[sKey][iRank]["BitScore"])
 					if sSubjectId in dSubjectId2MaxBitScore:
-						dSubjectId2Confidence[sSubjectId]="Strong"
+						dSubjectId2Confidence[sSubjectId]="Double"
 						# dSubjectId2MaxBitScore[sSubjectId]=max(dSubjectId2MaxBitScore[sSubjectId],fBitScore)
 						if fBitScore>dSubjectId2MaxBitScore[sSubjectId]:
 							dSubjectId2MaxBitScore[sSubjectId]=fBitScore
 							dSubjectId2Coord[dBlastN[sKey][iRank]["SubjectId"]]=("X",iRank)
 					else:
 						dSubjectId2MaxBitScore[dBlastX[sKey][iRank]["SubjectId"]]=float(dBlastX[sKey][iRank]["BitScore"])
-						dSubjectId2Confidence[dBlastX[sKey][iRank]["SubjectId"]]="Weak (X)"
+						dSubjectId2Confidence[dBlastX[sKey][iRank]["SubjectId"]]="Single (X)"
 						dSubjectId2Coord[dBlastN[sKey][iRank]["SubjectId"]]=("X",iRank)
 			dBitScore2SubjectId={}
 			for sKey in dSubjectId2MaxBitScore:

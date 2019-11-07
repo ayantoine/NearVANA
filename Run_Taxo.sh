@@ -12,8 +12,8 @@ if [ ! -d ${PID}"_log_Taxo" ] ; then mkdir ${PID}"_log_Taxo" ; fi
 if [ ! -d "Taxo_Ok" ] ; then mkdir "Taxo_Ok" ; fi
 touch ${PID}_nucleotide_TempDefDb.txt
 touch ${PID}_protein_TempDefDb.txt
-echo "$SCALL $SPARAM $SRENAME ${PID}_Taxo ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Taxo"/${PID}_Blast${TASK}.e${SPSEUDOTASKID} -o ${PID}"_logTaxo"/${PID}_Blast${TASK}.o${SPSEUDOTASKID} ${SDIR}/GetTaxonomy.sh $ARG ${TASK}"
-$SCALL $SPARAM $SRENAME ${PID}_Taxo ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Taxo"/${PID}_Blast${TASK}.e${SPSEUDOTASKID} -o ${PID}"_logTaxo"/${PID}_Blast${TASK}.o${SPSEUDOTASKID} ${SDIR}/GetTaxonomy.sh $ARG ${TASK}
+echo "$SCALL $SPARAM $SRENAME ${PID}_Taxo ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Taxo"/${PID}_Blast${TASK}.e${SPSEUDOTASKID} -o ${PID}"_log_Taxo"/${PID}_Blast${TASK}.o${SPSEUDOTASKID} ${SDIR}/GetTaxonomy.sh $ARG ${TASK}"
+$SCALL $SPARAM $SRENAME ${PID}_Taxo ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Taxo"/${PID}_Blast${TASK}.e${SPSEUDOTASKID} -o ${PID}"_log_Taxo"/${PID}_Blast${TASK}.o${SPSEUDOTASKID} ${SDIR}/GetTaxonomy.sh $ARG ${TASK}
 while true ; do
 	if [ $(ls Taxo_Ok/ | wc -l) -eq 0 ]
 		then
