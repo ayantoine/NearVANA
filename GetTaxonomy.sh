@@ -53,7 +53,7 @@ for Task in ${TASK_ARRAY[@]}; do
 			echo "Unable to download definition from EBI for ${ACC}"
 			ACCdefinition="#N/D"
 		    else
-			printf "${ACC}\t${ACCdefinition}\n" > ${TempDefFile}
+			printf "${ACC}\t${ACCdefinition}\n" >> ${TempDefFile}
 		    fi
 		    rm ${ACC}.${TAG}.def
 		fi
