@@ -263,7 +263,7 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent):
 				sRank=HIT
 			
 			iQuerySize=len(dContent[sQuery])
-			iCoverSize=int(dBlast[sQuery][iRank][QueryEnd])-int(dBlast[sQuery][iRank][QueryStart])
+			iCoverSize=int(dBlast[sQuery][iRank]["QueryEnd"])-int(dBlast[sQuery][iRank]["QueryStart"])
 			fCover=round(float(iCoverSize)/iQuerySize*100,2)
 			
 			try:

@@ -23,7 +23,7 @@ while true ; do
 	fi
 	if [ "${nbr_ok}" -eq "${nb_jobs}" ]
 		then
-		rm -r Blast${TASK}_Ok
+		rm -r Taxo${TASK}_Ok
 		break
 	fi
 	sleep 60
