@@ -5,7 +5,6 @@ source $ARG
 source $CONF
 
 TASK_ARRAY=(N X)
-TargetPath=(${PID}_BlastN/${PID}_All.fa.${STASKID}.BlastN_2.tab ${PID}_BlastX/${PID}_All.fa.${STASKID}.BlastX_2.tab)
 
 for Task in ${TASK_ARRAY[@]}; do
     FilePath=${PID}_Blast${Task}/${PID}_All.fa.${STASKID}.Blast${Task}_2.tab
@@ -21,6 +20,9 @@ for Task in ${TASK_ARRAY[@]}; do
     TempDefFile=${PID}_${TAG}_TempDefDb.txt
     
     echo "Working on file "${FilePath}
+    if [ -e ${FilePath}.taxo ] ; then
+	rm ${FilePath}.taxo
+    fi
     touch ${FilePath}.taxo
     for LINE in $(cut -f2 ${FilePath}); do
 	ACC=$(echo $LINE | cut -d'|' -f4)
