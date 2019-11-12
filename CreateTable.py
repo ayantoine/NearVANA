@@ -58,6 +58,8 @@ TAXO_SUPKINGDOMCOL=2
 TAXO_LINEAGECOL=3
 TAXO_DEFCOL=4
 
+DEFAULT="."
+
 ########################################################################
 #Options
 parser = OptionParser()
@@ -102,15 +104,35 @@ SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
 def LoadMetadata(sFile):
 	dDict={}
 	for sNewLine in open(sFile):
-		sLine=sNewLine.strip()
-		tLine=sLine.split()
+		sLine=sNewLine.replace("\n","")
+		if len(sLine)==0:
+			continue
+		tLine=sLine.split("\t")
+		
+		sHost=DEFAULT
+		if tLine[META_HOSTCOL]!="":
+			sHost=tLine[META_HOSTCOL]
+		sLocation=DEFAULT
+		if tLine[META_LOCATIONCOL]!="":
+			sLocation=tLine[META_LOCATIONCOL]
+		sDate=DEFAULT
+		if tLine[META_DATECOL]!="":
+			sDate=tLine[META_DATECOL]
+		sIndividuals=DEFAULT
+		if tLine[META_INDIVIDUALSCOL]!="":
+			sIndividuals=tLine[META_INDIVIDUALSCOL]
+		sWeight=DEFAULT
+		if tLine[META_WEIGHTCOL]!="":
+			sWeight=tLine[META_WEIGHTCOL]
+		
 		dDict[tLine[META_SAMPLECOL]]={
-			"Host":tLine[META_HOSTCOL],
-			"Location":tLine[META_LOCATIONCOL],
-			"Date":tLine[META_DATECOL],
-			"Individuals":tLine[META_INDIVIDUALSCOL],
-			"Weight":tLine[META_WEIGHTCOL]
+			"Host":sHost,
+			"Location":sLocation,
+			"Date":sDate,
+			"Individuals":sIndividuals,
+			"Weight":sWeight
 			}
+			
 	return dDict
 
 def LoadContigs(sFile,dRef,dDict={}):
@@ -130,12 +152,28 @@ def LoadTaxo(sFile):
 	for sNewLine in open(sFile):
 		sLine=sNewLine.strip()
 		tLine=sLine.split()
+		
+		sOrganism=DEFAULT
+		if tLine[TAXO_ORGANISMCOL]!="":
+			sOrganism=tLine[TAXO_ORGANISMCOL]
+		sSuperkingdom=DEFAULT
+		if tLine[TAXO_SUPKINGDOMCOL]!="":
+			sSuperkingdom=tLine[TAXO_SUPKINGDOMCOL]
+		sLineage=DEFAULT
+		if tLine[TAXO_LINEAGECOL]!="":
+			sLineage=tLine[TAXO_LINEAGECOL]
+		sDefinition=DEFAULT
+		if tLine[TAXO_DEFCOL]!="":
+			sDefinition=tLine[TAXO_DEFCOL]
+		
+		
 		dDict[tLine[TAXO_ACCCOL]]={
-			"Organism":tLine[TAXO_ORGANISMCOL],
-			"Superkingdom":tLine[TAXO_SUPKINGDOMCOL],
-			"Lineage":tLine[TAXO_LINEAGECOL],
-			"Definition":tLine[TAXO_DEFCOL]
+			"Organism":sOrganism,
+			"Superkingdom":sSuperkingdom,
+			"Lineage":sLineage,
+			"Definition":sDefinition
 			}
+			
 	return dDict
 
 def LoadBlast(sFile):
@@ -148,18 +186,53 @@ def LoadBlast(sFile):
 			oCrash=dDict[sQueryId]
 		except KeyError:
 			dDict[sQueryId]={}
+		
+		sSubjectId=DEFAULT
+		if tLine[BLAST_SUBJECTIDCOl]!="":
+			sSubjectId=tLine[BLAST_SUBJECTIDCOl]
+		sIdentity=DEFAULT
+		if tLine[BLAST_IDENTITYCOl]!="":
+			sIdentity=tLine[BLAST_IDENTITYCOl]
+		sLength=DEFAULT
+		if tLine[BLAST_LENGTHCOl]!="":
+			sLength=tLine[BLAST_LENGTHCOl]
+		sMismatch=DEFAULT
+		if tLine[BLAST_MISMATCHCOl]!="":
+			sMismatch=tLine[BLAST_MISMATCHCOl]
+		sGapOpen=DEFAULT
+		if tLine[BLAST_GAPOPENCOl]!="":
+			sGapOpen=tLine[BLAST_GAPOPENCOl]
+		sQueryStart=DEFAULT
+		if tLine[BLAST_QUERYSTARTCOl]!="":
+			sQueryStart=tLine[BLAST_QUERYSTARTCOl]
+		sQueryEnd=DEFAULT
+		if tLine[BLAST_QUERYENDCOl]!="":
+			sQueryEnd=tLine[BLAST_QUERYENDCOl]
+		sSubjectStart=DEFAULT
+		if tLine[BLAST_SUBJECTSTARTCOl]!="":
+			sSubjectStart=tLine[BLAST_SUBJECTSTARTCOl]
+		sSubjectEnd=DEFAULT
+		if tLine[BLAST_SUBJECTENDCOl]!="":
+			sSubjectEnd=tLine[BLAST_SUBJECTENDCOl]
+		sEvalue=DEFAULT
+		if tLine[BLAST_EVALUECOl]!="":
+			sEvalue=tLine[BLAST_EVALUECOl]
+		sBitScore=DEFAULT
+		if tLine[BLAST_BITSCORECOl]!="":
+			sBitScore=tLine[BLAST_BITSCORECOl]
+					
 		dDict[sQueryId][len(dDict[sQueryId])+1]={
-			"SubjectId":tLine[BLAST_SUBJECTIDCOl],
-			"Identity":tLine[BLAST_IDENTITYCOl],
-			"Length":tLine[BLAST_LENGTHCOl],
-			"Mismatch":tLine[BLAST_MISMATCHCOl],
-			"GapOpen":tLine[BLAST_GAPOPENCOl],
-			"QueryStart":tLine[BLAST_QUERYSTARTCOl],
-			"QueryEnd":tLine[BLAST_QUERYENDCOl],
-			"SubjectStart":tLine[BLAST_SUBJECTSTARTCOl],
-			"SubjectEnd":tLine[BLAST_SUBJECTENDCOl],
-			"Evalue":tLine[BLAST_EVALUECOl],
-			"BitScore":tLine[BLAST_BITSCORECOl]
+			"SubjectId":sSubjectId,
+			"Identity":sIdentity,
+			"Length":sLength,
+			"Mismatch":sMismatch,
+			"GapOpen":sGapOpen,
+			"QueryStart":sQueryStart,
+			"QueryEnd":sQueryEnd,
+			"SubjectStart":sSubjectStart,
+			"SubjectEnd":sSubjectEnd,
+			"Evalue":sEvalue,
+			"BitScore":sBitScore
 			}
 	return dDict
 
