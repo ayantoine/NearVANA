@@ -190,6 +190,8 @@ def LoadBlast(sFile):
 		sSubjectId=DEFAULT
 		if tLine[BLAST_SUBJECTIDCOl]!="":
 			sSubjectId=tLine[BLAST_SUBJECTIDCOl]
+			tSubjectId=sSubjectId.split("|")
+			sSubjectId=tSubjectId[3]
 		sIdentity=DEFAULT
 		if tLine[BLAST_IDENTITYCOl]!="":
 			sIdentity=tLine[BLAST_IDENTITYCOl]
