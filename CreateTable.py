@@ -272,14 +272,15 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent):
 				tSample=[sQuery.split("_")[-1]]
 			
 			sReadQuantity=sQuery.split("(")[-1].split(")")[0]
+			sSubjectId=dBlast[sQuery][iRank]["SubjectId"]
 				
 			for sSample in tSample:
 				tLine=[sRank,sQuery,sSample,sReadQuantity,str(iQuerySize),
 				dMetadata[sSample]["Location"],dMetadata[sSample]["Date"],
 				dMetadata[sSample]["Host"],dMetadata[sSample]["Individuals"],
-				dMetadata[sSample]["Weight"],dBlast[sQuery][iRank]["SubjectId"],
-				dTaxo[sQuery]["Organism"],dTaxo[sQuery]["Superkingdom"],
-				dTaxo[sQuery]["Taxonomy"],dTaxo[sQuery]["Definition"],dBlast[sQuery][iRank]["Identity"],
+				dMetadata[sSample]["Weight"],sSubjectId,
+				dTaxo[sSubjectId]["Organism"],dTaxo[sSubjectId]["Superkingdom"],
+				dTaxo[sSubjectId]["Taxonomy"],dTaxo[sSubjectId]["Definition"],dBlast[sQuery][iRank]["Identity"],
 				str(fCover),dBlast[sQuery][iRank]["Length"],dBlast[sQuery][iRank]["Mismatch"],
 				dBlast[sQuery][iRank]["GapOpen"],dBlast[sQuery][iRank]["QueryStart"],
 				dBlast[sQuery][iRank]["QueryEnd"],dBlast[sQuery][iRank]["SubjectStart"],
