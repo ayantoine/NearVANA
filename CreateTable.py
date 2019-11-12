@@ -282,7 +282,7 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent):
 				dMetadata[sSample]["Host"],dMetadata[sSample]["Individuals"],
 				dMetadata[sSample]["Weight"],sSubjectId,
 				dTaxo[sSubjectId]["Organism"],dTaxo[sSubjectId]["Superkingdom"],
-				dTaxo[sSubjectId]["Taxonomy"],dTaxo[sSubjectId]["Definition"],dBlast[sQuery][iRank]["Identity"],
+				dTaxo[sSubjectId]["Lineage"],dTaxo[sSubjectId]["Definition"],dBlast[sQuery][iRank]["Identity"],
 				str(fCover),dBlast[sQuery][iRank]["Length"],dBlast[sQuery][iRank]["Mismatch"],
 				dBlast[sQuery][iRank]["GapOpen"],dBlast[sQuery][iRank]["QueryStart"],
 				dBlast[sQuery][iRank]["QueryEnd"],dBlast[sQuery][iRank]["SubjectStart"],
