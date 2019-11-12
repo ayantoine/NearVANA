@@ -275,9 +275,9 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent):
 				
 			for sSample in tSample:
 				tLine=[sRank,sQuery,sSample,sReadQuantity,str(iQuerySize),
-				dMetadata[sQuery]["Location"],dMetadata[sQuery]["Date"],
-				dMetadata[sQuery]["Host"],dMetadata[sQuery]["Individuals"],
-				dMetadata[sQuery]["Weight"],dBlast[sQuery][iRank]["SubjectId"],
+				dMetadata[sSample]["Location"],dMetadata[sSample]["Date"],
+				dMetadata[sSample]["Host"],dMetadata[sSample]["Individuals"],
+				dMetadata[sSample]["Weight"],dBlast[sSample][iRank]["SubjectId"],
 				dTaxo[sQuery]["Organism"],dTaxo[sQuery]["Superkingdom"],
 				dTaxo[sQuery]["Taxonomy"],dTaxo[sQuery]["Definition"],dBlast[sQuery][iRank]["Identity"],
 				str(fCover),dBlast[sQuery][iRank]["Length"],dBlast[sQuery][iRank]["Mismatch"],
