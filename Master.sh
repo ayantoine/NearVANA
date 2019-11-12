@@ -9,7 +9,7 @@ if [ ! -d $SDIR ] ; then
 	echo "Directory SDIR ${SDIR} does not exists"
 	exit 1
 fi
-LIST_FILE=($R1 $R2 $ADAP $DODE $META $SUBS $NUCACC $NUCDEF $PROACC $PRODEF $DBLINEAGE $CONF)
+LIST_FILE=($R1 $R2 $ADAP $DODE $META $SUBS $NUCACC $NUCDEF $PROACC $PRODEF $DBLINEAGE $VIRMINLEN $CONF)
 for i in "${LIST_FILE[@]}"; do
 	if [ ! -f $i ]; then
 		echo "File $i does not exists"
@@ -18,7 +18,7 @@ for i in "${LIST_FILE[@]}"; do
 done
 
 echo "> Args details"
-List_NONFILE=(PID R1 R2 ADAP DODE META SUBS NUCACC NUCDEF PROACC PRODEF DBLINEAGE CONF)
+List_NONFILE=(PID R1 R2 ADAP DODE META SUBS NUCACC NUCDEF PROACC PRODEF DBLINEAGE VIRMINLEN CONF)
 for i in "${List_NONFILE[@]}"; do
 	echo "$i: ${!i}"
 done

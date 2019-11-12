@@ -19,9 +19,10 @@ PID: Plaque Id
 ########################################################################
 #CONSTANT
 HEADER_LIST=["Hit rank","Query Seq-Id","Sample","Read quantity","Sequence length","Location","Date","Host",
-"Individual","Weight(mg)","Subject Seq-Id","Organism","SuperKingdom","Taxonomy","Hit definition","Identification","Identity",
+"Individual","Weight(mg)","Subject Seq-Id","Organism","SuperKingdom","Taxonomy","Hit definition","Identification","% Fragment","Identity",
 "Query cover","Alignment length","Mismatches","Gap opening","Start alignment query","End alignment query",
 "Start alignment subject","End alignment subject","E-value","Bit score","Query sequences"]
+
 HEADER="\t".join(HEADER_LIST)+"\n"
 
 BEST_HIT="Best hit"
@@ -63,6 +64,7 @@ parser = OptionParser()
 parser.add_option("-j","--jobs", dest="jobs")
 parser.add_option("-p","--pid", dest="pid")
 parser.add_option("-m","--meta", dest="meta")
+parser.add_option("-l","--length", dest="length")
 
 (options, args) = parser.parse_args()
 
@@ -81,6 +83,11 @@ if not sPID:
 sMeta=options.meta
 if not sMeta:
 	sys.exit("Error : no meta -m defined, process broken")
+
+
+sLengthFile=options.length
+if not sLengthFile:
+	exit("Error : no length -l defined, process broken")
 
 #Half-constant
 BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
@@ -181,7 +188,7 @@ def LoadQuery(sFile):
 			dDict[sSeqName]=sSeqContent
 	return dDict
 
-def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent):
+def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 	for sQuery in dBlast:
 		for iRank in dBlast[sQuery]:
 			
@@ -200,14 +207,29 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent):
 				tSample=[sQuery.split("_")[-1]]
 			
 			sReadQuantity=sQuery.split("(")[-1].split(")")[0]
+			sSubjectId=dBlast[sQuery][iRank]["SubjectId"]
+			
+			sTaxo=dTaxo[sSubjectId]["Lineage"]
+			tTaxo=sTaxo.replace("; ",";").split(";")
+			iMinSize=0
+			for oTaxo in tTaxo:
+				try:
+					iMinSize=dLength[oTaxo]
+				except KeyError:
+					continue
+			if iMinSize==0:
+				fFragment="N/A"
+			else:
+				fFragment=round(float(iQuerySize)/iMinSize*100,2)
 				
 			for sSample in tSample:
 				tLine=[sRank,sQuery,sSample,sReadQuantity,str(iQuerySize),
-				dMetadata[sQuery]["Location"],dMetadata[sQuery]["Date"],
-				dMetadata[sQuery]["Host"],dMetadata[sQuery]["Individuals"],
-				dMetadata[sQuery]["Weight"],dBlast[sQuery][iRank]["SubjectId"],
-				dTaxo[sQuery]["Organism"],dTaxo[sQuery]["Superkingdom"],
-				dTaxo[sQuery]["Taxonomy"],dTaxo[sQuery]["Definition"],dBlast[sQuery][iRank]["Confidence"],dBlast[sQuery][iRank]["Identity"],
+				dMetadata[sSample]["Location"],dMetadata[sSample]["Date"],
+				dMetadata[sSample]["Host"],dMetadata[sSample]["Individuals"],
+				dMetadata[sSample]["Weight"],sSubjectId,
+				dTaxo[sSubjectId]["Organism"],dTaxo[sSubjectId]["Superkingdom"],
+				dTaxo[sSubjectId]["Lineage"],dTaxo[sSubjectId]["Definition"],dBlast[sQuery][iRank]["Confidence"],
+				str(fFragment),dBlast[sQuery][iRank]["Identity"],
 				str(fCover),dBlast[sQuery][iRank]["Length"],dBlast[sQuery][iRank]["Mismatch"],
 				dBlast[sQuery][iRank]["GapOpen"],dBlast[sQuery][iRank]["QueryStart"],
 				dBlast[sQuery][iRank]["QueryEnd"],dBlast[sQuery][iRank]["SubjectStart"],
@@ -217,7 +239,7 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent):
 				FILE.write("\t".join(tLine)+"\n")
 						
 # HEADER_LIST=["Hit rank","Query Seq-Id","Sample","Read quantity","Sequence length","Location","Date","Host",
-# "Individual","Weight(mg)","Subject Seq-Id","Organism","SuperKingdom","Taxonomy","Hit definition","Identity",
+# "Individual","Weight(mg)","Subject Seq-Id","Organism","SuperKingdom","Taxonomy","Hit definition","Identification","% Fragment","Identity",
 # "Query cover","Alignment length","Mismatches","Gap opening","Start alignment query","End alignment query",
 # "Start alignment subject","End alignment subject","E-value","Bit score","Query sequences"]
 
@@ -300,25 +322,36 @@ def FusionBlastDict(dBlastN,dBlastX):
 					dDict[sKey][iNewRank]["Confidence"]=dSubjectId2Confidence[sSubjectId]
 					
 	return dDict
-					
+
+def LoadLength(sFile):
+	print("Loading file "+str(sFile))
+	dDict={}
+	for sNewLine in open(sFile):
+		sLine=sNewLine.strip()
+		tLine=sLine.split()
+		sFamily=tLine[0]
+		iMinSize=int(tLine[1])
+		dDict[sFamily]=iMinSize
+	return dDict					
 
 ########################################################################
 #MAIN
 if __name__ == "__main__":
 	dMetadata=LoadMetadata(sMeta)
-	dQuery2Content=LoadQuery(BLAST_INPUT)
+	dLength=LoadLength(sLengthFile)
 	dContigs2Sample=LoadContigs(SHORTSPADES,dQuery2Size)
 	dContigs2Sample=LoadContigs(SHORTFLASH,dQuery2Size,dContigs2Sample)
 	FILE=open(BLAST_OUTPUT,"w")
 	FILE.write(HEADER)
 	for iIndex in range(1,iJobs+1):
+		dQuery2Content=LoadQuery(BLAST_FOLDER+"/"+BLAST_INPUT.replace(REPLACEME,str(iIndex)))
 		dTaxoN=LoadTaxo(BLASTN_FOLDER+"/"+TAXON_FILE.replace(REPLACEME,str(iIndex)))
 		dTaxoX=LoadTaxo(BLASTX_FOLDER+"/"+TAXOX_FILE.replace(REPLACEME,str(iIndex)))
 		dBlastN=LoadBlast(BLASTN_FOLDER+"/"+BLASTN_FILE.replace(REPLACEME,str(iIndex)))
 		dBlastX=LoadBlast(BLASTX_FOLDER+"/"+BLASTX_FILE.replace(REPLACEME,str(iIndex)))
 		dTaxo=FusionTaxoDict(dTaxoN,dTaxoX)
 		dBlast=FusionBlastDict(dBlastN,dBlastX)
-		WriteData(FILE,dBlast,dTaxo,dContigs2Sample,dMetadata,dQuery2Content)
+		WriteData(FILE,dBlast,dTaxo,dContigs2Sample,dMetadata,dQuery2Content,dLength)
 	FILE.close()
 	
 ########################################################################    
