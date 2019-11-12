@@ -303,6 +303,7 @@ if __name__ == "__main__":
 	FILE=open(BLAST_OUTPUT,"w")
 	FILE.write(HEADER)
 	for iIndex in range(1,iJobs+1):
+		print("Working on index "+str(iIndex))
 		dQuery2Content=LoadQuery(BLAST_FOLDER+"/"+BLAST_INPUT.replace(REPLACEME,str(iIndex)))
 		dContigs2Sample=LoadContigs(SHORTSPADES,dQuery2Content)
 		dContigs2Sample=LoadContigs(SHORTFLASH,dQuery2Content,dContigs2Sample)
