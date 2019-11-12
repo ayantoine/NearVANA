@@ -140,7 +140,7 @@ def LoadContigs(sFile,dRef,dDict={}):
 	print("Loading file "+str(sFile))
 	for sNewLine in open(sFile):
 		sLine=sNewLine.strip()
-		tLine=sLine.split()
+		tLine=sLine.split("\t")
 		sName=tLine[0]
 		try:
 			oCrash=dRef[sName]
@@ -154,8 +154,9 @@ def LoadTaxo(sFile):
 	dDict={}
 	for sNewLine in open(sFile):
 		sLine=sNewLine.strip()
-		tLine=sLine.split()
+		tLine=sLine.split("\t")
 		
+		print(tLine)
 		sOrganism=DEFAULT
 		if tLine[TAXO_ORGANISMCOL]!="":
 			sOrganism=tLine[TAXO_ORGANISMCOL]
@@ -184,7 +185,7 @@ def LoadBlast(sFile):
 	dDict={}
 	for sNewLine in open(sFile):
 		sLine=sNewLine.strip()
-		tLine=sLine.split()
+		tLine=sLine.split("\t")
 		sQueryId=tLine[BLAST_QUERYIDCOl]
 		try:
 			oCrash=dDict[sQueryId]
@@ -257,7 +258,6 @@ def LoadQuery(sFile):
 			sSeqContent+=sNewLine[:-1] #:-1, for \n char
 	if sSeqName!="":
 		dDict[sSeqName]=sSeqContent
-	print(dDict.keys())
 	return dDict
 
 def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent):
