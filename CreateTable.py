@@ -102,6 +102,7 @@ SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
 ########################################################################
 #Function 	
 def LoadMetadata(sFile):
+	print("Loading file "+str(sFile))
 	dDict={}
 	for sNewLine in open(sFile):
 		sLine=sNewLine.replace("\n","")
@@ -136,6 +137,7 @@ def LoadMetadata(sFile):
 	return dDict
 
 def LoadContigs(sFile,dRef,dDict={}):
+	print("Loading file "+str(sFile))
 	for sNewLine in open(sFile):
 		sLine=sNewLine.strip()
 		tLine=sLine.split()
@@ -148,6 +150,7 @@ def LoadContigs(sFile,dRef,dDict={}):
 	return dDict
 
 def LoadTaxo(sFile):
+	print("Loading file "+str(sFile))
 	dDict={}
 	for sNewLine in open(sFile):
 		sLine=sNewLine.strip()
@@ -177,6 +180,7 @@ def LoadTaxo(sFile):
 	return dDict
 
 def LoadBlast(sFile):
+	print("Loading file "+str(sFile))
 	dDict={}
 	for sNewLine in open(sFile):
 		sLine=sNewLine.strip()
@@ -239,6 +243,7 @@ def LoadBlast(sFile):
 	return dDict
 
 def LoadQuery(sFile):
+	print("Loading file "+str(sFile))
 	dDict={}
 	sSeqContent=""
 	sSeqName=""
@@ -250,9 +255,9 @@ def LoadQuery(sFile):
 			sSeqContent=""
 		else:
 			sSeqContent+=sNewLine[:-1] #:-1, for \n char
-	if ">"==sNewLine[0]:
-		if sSeqName!="":
-			dDict[sSeqName]=sSeqContent
+	if sSeqName!="":
+		dDict[sSeqName]=sSeqContent
+	print(dDict.keys())
 	return dDict
 
 def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent):
