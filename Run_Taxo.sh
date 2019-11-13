@@ -8,6 +8,8 @@ source $CONF
 
 nb_jobs=$(ls ${PID}_BlastX/*_2.tab | wc -l)
 
+echo "DEFINITION" > DEFINITION.txt
+
 if [ ! -d ${PID}"_log_Taxo" ] ; then mkdir ${PID}"_log_Taxo" ; fi
 if [ ! -d "Taxo_Ok" ] ; then mkdir "Taxo_Ok" ; fi
 touch ${PID}_nucleotide_TempDefDb.txt
@@ -34,6 +36,7 @@ cat ${PID}_protein_TempDefDb.txt > ${PRODEF}
 
 rm ${PID}_nucleotide_TempDefDb.txt
 rm ${PID}_protein_TempDefDb.txt
+rm DEFINITION.txt
 
 touch ${PID}.Taxonomy.ok
 

@@ -27,11 +27,18 @@ for Task in ${TASK_ARRAY[@]}; do
     for LINE in $(cut -f2 ${FilePath}); do
 	ACC=$(echo $LINE | cut -d'|' -f4)
 	echo ${ACC}
+	echo ^${ACC} > ${ACC}.target.txt
 	
-	ACCtaxid=$(grep -m 1 -P "^[-A-Za-z0-9_.%]*\t${ACC}" ${DBTARGET} | cut -f3)
-	ACCorganism=$(grep -m 1 -P "^${ACCtaxid}\t" ${DBLINEAGE} | cut -f2)
-	ACClineage=$(grep -m 1 -P "^${ACCtaxid}\t" ${DBLINEAGE} | cut -f3)
+	#ACCtaxid=$(grep -m 1 -P "^[-A-Za-z0-9_.%]*\t${ACC}" ${DBTARGET} | cut -f3)
+	#ACCorganism=$(grep -m 1 -P "^${ACCtaxid}\t" ${DBLINEAGE} | cut -f2)
+	#ACClineage=$(grep -m 1 -P "^${ACCtaxid}\t" ${DBLINEAGE} | cut -f3)
+	#ACCsupKingdom=$(echo ${ACClineage} | cut -d ';' -f1)
+	grep -m 1 -f ${ACC}.target.txt ${DBTARGET} | cut -f3 > ${ACC}.taxid.txt
+	grep -m 1 -f ${ACC}.taxid.txt ${DBLINEAGE} > ${ACC}.lineage.txt
+	ACCorganism=$(cut -f2 ${ACC}.lineage.txt)
+	ACClineage=$(cut -f3 ${ACC}.lineage.txt)
 	ACCsupKingdom=$(echo ${ACClineage} | cut -d ';' -f1)
+	
 	# Viruses = first element of the lineage. But for others, its "cellular organisms"
 	if [ "${ACCsupKingdom}" == "cellular organisms"  ]; then
 	    ACClineage=$(echo ${ACClineage} | cut -d ';' -f2-)
@@ -41,16 +48,17 @@ for Task in ${TASK_ARRAY[@]}; do
 	ACCdefinition="."
 	if [ "${ACCsupKingdom}" == "Viruses"  ]; then
 	    #First try, on persistant file
-	    ACCdefinition=$(grep -m 1 -P "^${ACC}\t" ${DBDEF} | cut -f2)
+	    ACCdefinition=$(grep -m 1 -f ${ACC}.target.txt ${DBDEF} | cut -f2)
+	    #ACCdefinition=$(grep -m 1 -P "^${ACC}\t" ${DBDEF} | cut -f2)
 	    if [ -z ${ACCdefinition} ] ; then
 		#Second try, on temporary file
-		ACCdefinition=$(grep -m 1 -P "^${ACC}\t" ${TempDefFile} | cut -f2)
+		ACCdefinition=$(grep -m 1 -f ${ACC}.target.txt ${TempDefFile} | cut -f2)
 		if [ -z ${ACCdefinition} ] ; then        
 		    echo "Unkown AccID ${ACC} in ${DBDEF}"
 		    echo "Ask ebi"
 		    echo "curl -s -N https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=${TAG}&id=${ACC}&rettype=gb&retmode=text"
 		    curl -s -N "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=${TAG}&id=${ACC}&rettype=gb&retmode=text" > ${ACC}.${TAG}.def
-		    ACCdefinition=$(grep -m 1 "DEFINITION" ${ACC}.${TAG}.def | cut -c 13-)
+		    ACCdefinition=$(grep -m 1 -f DEFINITION.txt ${ACC}.${TAG}.def | cut -c 13-)
 		    if [ -z ${ACCdefinition} ] ; then
 			echo "Unable to download definition from EBI for ${ACC}"
 			ACCdefinition="#N/D"

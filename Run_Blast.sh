@@ -7,7 +7,9 @@ source $ARG
 source $CONF
 
 echo "------ Configure job array ------"
-nb_seq=$(grep -c "^>" ${PID}_All.fa)
+SEQMARKER="^>"
+echo ${SEQMARKER} > Target.txt
+nb_seq=$(grep -c -f Target.txt ${PID}_All.fa)
 nb_task=${SMAXSIMJOB}
 v_nb_seq_split=1000
 let $[ nb_seq_split=$nb_seq/$nb_task ]
@@ -25,11 +27,12 @@ mv ${PID}_All.fa.* ${PID}_ToBlast
 nb_jobs=$(ls ${PID}_ToBlast | wc -l)
 
 echo "Number of initial sequences: "$nb_seq
-echo "Number of final sequences: "$(cat ${PID}"_ToBlast"/* | grep -c "^>")
+echo "Number of final sequences: "$(cat ${PID}"_ToBlast"/* | grep -c -f Target.txt)
 echo "Number of sequences per job: "$nb_seq_split
 echo "Number of generated jobs: "$nb_jobs
 echo "Number of tasks: "$nb_task
 echo "------ /Configure job array ------"
+rm Target.txt
 
 
 echo "------ Launch Blast by task ------"
