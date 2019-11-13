@@ -96,6 +96,7 @@ def LoadConfFile(sPath):
 		# sLine=sNewLine.strip()
 		sLine=sNewLine.replace("\n","")
 		sLine=sLine.replace("\\","")
+		sLine=sLine.replace('"','')
 		if len(sLine)==0:
 			continue
 		if sLine[0]==CONF_COMMENT:
