@@ -32,6 +32,7 @@ for Task in ${TASK_ARRAY[@]}; do
 	
 	TAXID=$(grep -m 1 -f ${ACC}.target.txt ${DBTARGET} | cut -f2)
 	echo "^"${TAXID}"\t" > ${ACC}.taxid.txt 
+	while [ ! -e ${ACC}.taxid.txt ]; do sleep 1 ; done
 	grep -m 1 -P -f ${ACC}.taxid.txt ${DBLINEAGE} > ${ACC}.lineage.txt
 	while [ ! -e ${ACC}.lineage.txt ]; do sleep 1 ; done
 	ACCorganism=$(cut -f2 ${ACC}.lineage.txt)
