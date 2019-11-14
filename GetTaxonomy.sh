@@ -49,16 +49,16 @@ for Task in ${TASK_ARRAY[@]}; do
 	if [ "${ACCsupKingdom}" == "Viruses"  ]; then
 	    #First try, on persistant file
 	    ACCdefinition=$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBDEF} | cut -f2)
-	    if [ ! -n ${ACCdefinition} ] ; then
+	    if [ ! -z "${ACCdefinition}" ] ; then
 		#Second try, on temporary file
 		ACCdefinition=$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${TempDefFile} | cut -f2)
-		if [ ! -n ${ACCdefinition} ] ; then        
+		if [ ! -z "${ACCdefinition}" ] ; then        
 		    echo "Unkown AccID ${ACC} in ${DBDEF}"
 		    echo "Ask ebi"
 		    echo "curl -s -N https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=${TAG}&id=${ACC}&rettype=gb&retmode=text"
 		    curl -s -N "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=${TAG}&id=${ACC}&rettype=gb&retmode=text" > ${STASKID}.${ACC}.${TAG}.def
 		    ACCdefinition=$(grep -m 1 -f DEFINITION.txt ${STASKID}.${ACC}.${TAG}.def | cut -c 13-)
-		    if [ ! -n ${ACCdefinition} ] ; then
+		    if [ ! -z "${ACCdefinition}" ] ; then
 			echo "Unable to download definition from EBI for ${ACC}"
 			ACCdefinition="#N/D"
 		    else
