@@ -28,14 +28,12 @@ for Task in ${TASK_ARRAY[@]}; do
 	ACC=$(echo $LINE | cut -d'|' -f4)
 	echo ${ACC}
 	echo ^${ACC} > ${ACC}.target.txt
+	while [ ! -e ${ACC}.target.txt ]; do sleep 1 ; done
 	
-	#ACCtaxid=$(grep -m 1 -P "^[-A-Za-z0-9_.%]*\t${ACC}" ${DBTARGET} | cut -f3)
-	#ACCorganism=$(grep -m 1 -P "^${ACCtaxid}\t" ${DBLINEAGE} | cut -f2)
-	#ACClineage=$(grep -m 1 -P "^${ACCtaxid}\t" ${DBLINEAGE} | cut -f3)
-	#ACCsupKingdom=$(echo ${ACClineage} | cut -d ';' -f1)
 	TAXID=$(grep -m 1 -f ${ACC}.target.txt ${DBTARGET} | cut -f2)
 	echo "^"${TAXID}"\t" > ${ACC}.taxid.txt 
 	grep -m 1 -P -f ${ACC}.taxid.txt ${DBLINEAGE} > ${ACC}.lineage.txt
+	while [ ! -e ${ACC}.lineage.txt ]; do sleep 1 ; done
 	ACCorganism=$(cut -f2 ${ACC}.lineage.txt)
 	ACClineage=$(cut -f3 ${ACC}.lineage.txt)
 	ACCsupKingdom=$(echo ${ACClineage} | cut -d ';' -f1)
@@ -50,17 +48,16 @@ for Task in ${TASK_ARRAY[@]}; do
 	if [ "${ACCsupKingdom}" == "Viruses"  ]; then
 	    #First try, on persistant file
 	    ACCdefinition=$(grep -m 1 -f ${ACC}.target.txt ${DBDEF} | cut -f2)
-	    #ACCdefinition=$(grep -m 1 -P "^${ACC}\t" ${DBDEF} | cut -f2)
-	    if [ -z ${ACCdefinition} ] ; then
+	    if [ ! -n ${ACCdefinition} ] ; then
 		#Second try, on temporary file
 		ACCdefinition=$(grep -m 1 -f ${ACC}.target.txt ${TempDefFile} | cut -f2)
-		if [ -z ${ACCdefinition} ] ; then        
+		if [ ! -n ${ACCdefinition} ] ; then        
 		    echo "Unkown AccID ${ACC} in ${DBDEF}"
 		    echo "Ask ebi"
 		    echo "curl -s -N https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=${TAG}&id=${ACC}&rettype=gb&retmode=text"
 		    curl -s -N "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=${TAG}&id=${ACC}&rettype=gb&retmode=text" > ${ACC}.${TAG}.def
 		    ACCdefinition=$(grep -m 1 -f DEFINITION.txt ${ACC}.${TAG}.def | cut -c 13-)
-		    if [ -z ${ACCdefinition} ] ; then
+		    if [ ! -n ${ACCdefinition} ] ; then
 			echo "Unable to download definition from EBI for ${ACC}"
 			ACCdefinition="#N/D"
 		    else
