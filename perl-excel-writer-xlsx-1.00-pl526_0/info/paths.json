@@ -1,0 +1,411 @@
+{
+  "paths": [
+    {
+      "_path": "bin/extract_vba",
+      "file_mode": "text",
+      "path_type": "hardlink",
+      "prefix_placeholder": "/opt/anaconda1anaconda2anaconda3",
+      "sha256": "0a58908e54e8a3df6edbde4220912875ef283842d92a90a65f143eaced7367c9",
+      "size_in_bytes": 3092
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX.pm",
+      "path_type": "hardlink",
+      "sha256": "bb0803d778d3a6dc507a8751454055191270500fb083af3e435a76b2c2bf0199",
+      "size_in_bytes": 276050
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Chart.pm",
+      "path_type": "hardlink",
+      "sha256": "584e8699bfda6d1ba4a7cedcd25efe2e851e1af8927242b63da0ba5cb5f3ce17",
+      "size_in_bytes": 215369
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Chart/Area.pm",
+      "path_type": "hardlink",
+      "sha256": "4ff3920a7e610bfd0f4075bbf0f3f86d012da8397b361f6e14e5297752ce274b",
+      "size_in_bytes": 6444
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Chart/Bar.pm",
+      "path_type": "hardlink",
+      "sha256": "1ac88984954c309954bd6ff622a6c45e1737cb8af8b60c14fb560350cba371dd",
+      "size_in_bytes": 8824
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Chart/Column.pm",
+      "path_type": "hardlink",
+      "sha256": "333aeb6967eaea5d55d4d46e4b776e93a2c25a6f02fa25288fd6e8a2a41992db",
+      "size_in_bytes": 7719
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Chart/Doughnut.pm",
+      "path_type": "hardlink",
+      "sha256": "d951427aeb5a692375572367c53c81741c8f1d8a787751dc02c5c91c6059b60b",
+      "size_in_bytes": 7946
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Chart/Line.pm",
+      "path_type": "hardlink",
+      "sha256": "c74e454f2fb84f22084d8afde741cd354708d0b2d0bb374dc9abb3120b8ed183",
+      "size_in_bytes": 7293
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Chart/Pie.pm",
+      "path_type": "hardlink",
+      "sha256": "f5cb9743fbf766f3aecfd3950280f3774cdf218f408e9cb1e0e0097f0c4a5143",
+      "size_in_bytes": 12312
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Chart/Radar.pm",
+      "path_type": "hardlink",
+      "sha256": "2ed9c0856ffa06d1b3acaa7b2d0198d78cf57a0a25684ec1f83137abc7789c71",
+      "size_in_bytes": 6770
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Chart/Scatter.pm",
+      "path_type": "hardlink",
+      "sha256": "1b0ecca6745aebfa776d137f1263c322cccadbd02e00776423c342d86ab70244",
+      "size_in_bytes": 14031
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Chart/Stock.pm",
+      "path_type": "hardlink",
+      "sha256": "968dce938f10580f81921c16d016d48fef70c503ae1132ae90c43de86681ac08",
+      "size_in_bytes": 7989
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Chartsheet.pm",
+      "path_type": "hardlink",
+      "sha256": "6e724c36282aec262a43ab9280d3168d8b207a10c5283429d48563067d6ada33",
+      "size_in_bytes": 8124
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Drawing.pm",
+      "path_type": "hardlink",
+      "sha256": "ab5997e135eccbcc19cd4243a77b5fc22377bae90bf95ccffc0a35fa6bce2503",
+      "size_in_bytes": 31053
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Examples.pm",
+      "path_type": "hardlink",
+      "sha256": "c6a596eebf6f21c7075271ba125577009414d8d459676a6f30a8cb290b6f9000",
+      "size_in_bytes": 335150
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Format.pm",
+      "path_type": "hardlink",
+      "sha256": "d85b34579c16865b04fc3d7ef32e736acc16e458ba8066c51938c0736e34fdf3",
+      "size_in_bytes": 20346
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Package/App.pm",
+      "path_type": "hardlink",
+      "sha256": "0df58711b6ba3e377b3e7f6f273d6955ef49edc19c4dda1d9771cfe03cba894d",
+      "size_in_bytes": 9404
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Package/Comments.pm",
+      "path_type": "hardlink",
+      "sha256": "ab2cc6620a0b492c56033ed32a60acbd665166fd19406b7f57d35e0c15805dab",
+      "size_in_bytes": 8652
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Package/ContentTypes.pm",
+      "path_type": "hardlink",
+      "sha256": "62ca54ac22ff50dc4c56ab732462f7309ab2fef82e6a30d23727d816d595802a",
+      "size_in_bytes": 10801
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Package/Core.pm",
+      "path_type": "hardlink",
+      "sha256": "0370ea2195b853b06ce65714604185ed87075f4a924833afcafce9c4859ba181",
+      "size_in_bytes": 8208
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Package/Custom.pm",
+      "path_type": "hardlink",
+      "sha256": "d7fcbae8be10700bc304138763f596d9c4353cc6abc4387da758c61272a12ac5",
+      "size_in_bytes": 6063
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Package/Packager.pm",
+      "path_type": "hardlink",
+      "sha256": "44af4330b441c053e099a1f18cdc29c4c63c10ea2a48439c2ecab9e11fc3a147",
+      "size_in_bytes": 26431
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Package/Relationships.pm",
+      "path_type": "hardlink",
+      "sha256": "3e9ff375700d6edfc468d06f36a4af74954dc53259d8da643fe005cc74fd9574",
+      "size_in_bytes": 5403
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Package/SharedStrings.pm",
+      "path_type": "hardlink",
+      "sha256": "7eeab774b7b2ceca99f1c20ce30014822c7829c43bda1a2a457e1be476bc6aa7",
+      "size_in_bytes": 5555
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Package/Styles.pm",
+      "path_type": "hardlink",
+      "sha256": "245476b0c66106d3efbeca864b9bc871604658b8e081beba07490ef5212eb5a9",
+      "size_in_bytes": 27700
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Package/Table.pm",
+      "path_type": "hardlink",
+      "sha256": "ed0a3540f743c2c8531e1148ab731ba9254b7bc79bafc46c90b8696563a93199",
+      "size_in_bytes": 7478
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Package/Theme.pm",
+      "path_type": "hardlink",
+      "sha256": "a91b0c5e3db4a841a521f4e2fefddd276fa87224786c99b8b6f9a60acdc4d8bd",
+      "size_in_bytes": 26226
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Package/VML.pm",
+      "path_type": "hardlink",
+      "sha256": "0d0f943ff5bdaab049cafae6b1b16ab4ffede3836a6d92ade5bf93a1230796df",
+      "size_in_bytes": 26348
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Package/XMLwriter.pm",
+      "path_type": "hardlink",
+      "sha256": "61325ccab7e3a49c83ac30b04a9a9d76a622ca4b94358860f499f32f1ad6c72d",
+      "size_in_bytes": 11103
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Shape.pm",
+      "path_type": "hardlink",
+      "sha256": "3e0b7f66d194c8d9446f8b8c5be636fd5f5e4470158f5f546dfb7c28fd8b1ee1",
+      "size_in_bytes": 20170
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Utility.pm",
+      "path_type": "hardlink",
+      "sha256": "1e6ce2b8778d6c10454296a510a0518e5cd69663d7f9a09e949b5131e1f0e6be",
+      "size_in_bytes": 29494
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Workbook.pm",
+      "path_type": "hardlink",
+      "sha256": "0a8251cc3dc42d9ee19eae75115decd667785a6709bc3256d189ddeefa874a17",
+      "size_in_bytes": 73211
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/Excel/Writer/XLSX/Worksheet.pm",
+      "path_type": "hardlink",
+      "sha256": "b4fa05d8f5e4019a709aaedd436409cd227a5bdefa85f3814096f6e2e7903f6f",
+      "size_in_bytes": 276222
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/x86_64-linux-thread-multi/auto/Excel/Writer/XLSX/.packlist",
+      "file_mode": "text",
+      "path_type": "hardlink",
+      "prefix_placeholder": "/opt/anaconda1anaconda2anaconda3",
+      "sha256": "a96d67c0f883a403e59057ba620143cd52f306f179f4ba1c04b16d92ca546026",
+      "size_in_bytes": 10026
+    },
+    {
+      "_path": "man/man1/extract_vba.1",
+      "path_type": "hardlink",
+      "sha256": "3f38ed27a96d4bd080bd1e1d3c9b5302324cd9d391d4d1ed17d6f2b291fa46dc",
+      "size_in_bytes": 3934
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX.3",
+      "path_type": "hardlink",
+      "sha256": "722ec13f225adbbd78acfdbefa1831fe4d05a4bbb0804ab52b831718ca9720c7",
+      "size_in_bytes": 335916
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Chart.3",
+      "path_type": "hardlink",
+      "sha256": "57eeb3706666ea4c7352441bfec8d3952a697a150f716420b2e4b7a271524336",
+      "size_in_bytes": 80067
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Chart::Area.3",
+      "path_type": "hardlink",
+      "sha256": "2f270c4e1d4b50eb289412ea691730b5ea954d33a202dee1c0a37b19c2767812",
+      "size_in_bytes": 6481
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Chart::Bar.3",
+      "path_type": "hardlink",
+      "sha256": "17df511de632b6f32a00e3ea2ae49a3790d8f02d8b686599ce45745f46c63b13",
+      "size_in_bytes": 6471
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Chart::Column.3",
+      "path_type": "hardlink",
+      "sha256": "65f4f37aa69d3365c5fcf5f8fd85ccaef8727f99105e5897d3497771aae4850c",
+      "size_in_bytes": 6508
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Chart::Doughnut.3",
+      "path_type": "hardlink",
+      "sha256": "5cad8d493c6d283ba0739bca8761bd3e379ad9451eb276a5cb810356b7cf16e8",
+      "size_in_bytes": 8077
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Chart::Line.3",
+      "path_type": "hardlink",
+      "sha256": "59ad5a9c841790e861e5869f280853f3abb11a2669d9a388be41b12dce21e6a5",
+      "size_in_bytes": 6248
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Chart::Pie.3",
+      "path_type": "hardlink",
+      "sha256": "7b73fea1a0b221b165732e5a30a6a5a80207374d75bd73ff74a5815f3b17aa0a",
+      "size_in_bytes": 7685
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Chart::Radar.3",
+      "path_type": "hardlink",
+      "sha256": "277a799b5306b98862f37aea94c60902f61b23130d53d1a03b16967027310658",
+      "size_in_bytes": 6487
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Chart::Scatter.3",
+      "path_type": "hardlink",
+      "sha256": "440f6245ebed7146167d10ad2e0bc9ee2aa9e02da5d8c00ec851c31bd3cc8ef9",
+      "size_in_bytes": 6639
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Chart::Stock.3",
+      "path_type": "hardlink",
+      "sha256": "1787057356e53fec02f25b149468e9fe5d669164ead575fa08ebbfead8db1f71",
+      "size_in_bytes": 6822
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Chartsheet.3",
+      "path_type": "hardlink",
+      "sha256": "6720a12ef5834ebb9e574a6ff0a1e26a97984dd1feef286006498a11a40d0a2d",
+      "size_in_bytes": 2991
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Drawing.3",
+      "path_type": "hardlink",
+      "sha256": "eddc5276a94ac13e9ba2f626b2da43a7df1b1fb40a464ca78ffe7b21d8d102d8",
+      "size_in_bytes": 2982
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Examples.3",
+      "path_type": "hardlink",
+      "sha256": "a2dadce5dee3c94ef157388c133f228289b9d5da9ee140b884d297792a72e6c7",
+      "size_in_bytes": 368948
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Format.3",
+      "path_type": "hardlink",
+      "sha256": "f2b3c6fce001b31a0872603b7f7a4f187d9a883394b09760076c4bb754330c25",
+      "size_in_bytes": 2666
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Package::App.3",
+      "path_type": "hardlink",
+      "sha256": "0e842973a3f6fe02c6372a8f1431ca90b31ab7693eb5ae3786bac0dbd35b7f91",
+      "size_in_bytes": 2984
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Package::Comments.3",
+      "path_type": "hardlink",
+      "sha256": "e626a2dbd3cbb1f60792dd977ed6105278548ce50a839b1943a83c94c0e8e45a",
+      "size_in_bytes": 3001
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Package::ContentTypes.3",
+      "path_type": "hardlink",
+      "sha256": "7d5187b3f30aade1da99ee72f81f8dea329fab6121577a2d16c30e7b337306d5",
+      "size_in_bytes": 3049
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Package::Core.3",
+      "path_type": "hardlink",
+      "sha256": "25127df383472bfbf6bf79d8f33498d6737e017e64d178d05fc7ae3ca3516ea1",
+      "size_in_bytes": 2988
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Package::Custom.3",
+      "path_type": "hardlink",
+      "sha256": "f96699c293b732f2b761bf8777f0685bf3bba56cd7be819a2dead90d4e883fd4",
+      "size_in_bytes": 2996
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Package::Packager.3",
+      "path_type": "hardlink",
+      "sha256": "be6857f7952b9fdc0de45489c60eaefbfaf0e7991c9baeca8f57c400b262d13b",
+      "size_in_bytes": 4167
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Package::Relationships.3",
+      "path_type": "hardlink",
+      "sha256": "f8dc2259965a14d1e3bc9ab2de3a89ec244d182c84a568b106c09e2275c64348",
+      "size_in_bytes": 3011
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Package::SharedStrings.3",
+      "path_type": "hardlink",
+      "sha256": "7dd539063a513189aef17c85abab294f87e2202cfa0d8872ed22fba1b9779fac",
+      "size_in_bytes": 3024
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Package::Styles.3",
+      "path_type": "hardlink",
+      "sha256": "cd1b24a50f1d8100a276e87126226737102a2b82e10911bf018c08795cb4343f",
+      "size_in_bytes": 2992
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Package::Table.3",
+      "path_type": "hardlink",
+      "sha256": "5b213a36a5dea1c5b5c13170f772ef5a524d7d30ea47cc1cb247705c8f0d4f20",
+      "size_in_bytes": 2988
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Package::Theme.3",
+      "path_type": "hardlink",
+      "sha256": "73a7b842cbe4c77fbd3a5429d8b4544b7aa0b164355542f7b48da814aecd848a",
+      "size_in_bytes": 2988
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Package::VML.3",
+      "path_type": "hardlink",
+      "sha256": "a1b835fcd5289e29005f2967983361e74b327eafa93d2a5079ebcd1c78127578",
+      "size_in_bytes": 2981
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Package::XMLwriter.3",
+      "path_type": "hardlink",
+      "sha256": "b8af05046622ad28c8a82144bc87d299dcdf5c20ccfba7005135794db048f55a",
+      "size_in_bytes": 3323
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Shape.3",
+      "path_type": "hardlink",
+      "sha256": "52cb9a522c80faa04d17273c66f3422349acc0bf77b6d82b13ee3880424b5c13",
+      "size_in_bytes": 17258
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Utility.3",
+      "path_type": "hardlink",
+      "sha256": "9217c7ad45fa3a6a69ed530e0cf65500ef5229c13c0bada60854ac6ddb29924e",
+      "size_in_bytes": 25212
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Workbook.3",
+      "path_type": "hardlink",
+      "sha256": "695d18c71b490605db9392ce203eff0200bdf02ac61d5dd86b2e5890bcc52aa8",
+      "size_in_bytes": 2670
+    },
+    {
+      "_path": "man/man3/Excel::Writer::XLSX::Worksheet.3",
+      "path_type": "hardlink",
+      "sha256": "66a5d6f87e7ba0e0eccd7293a27af17437d4166a4a8d0f404274696d470797a3",
+      "size_in_bytes": 2674
+    }
+  ],
+  "paths_version": 1
+}
