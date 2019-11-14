@@ -33,8 +33,9 @@ for Task in ${TASK_ARRAY[@]}; do
 	#ACCorganism=$(grep -m 1 -P "^${ACCtaxid}\t" ${DBLINEAGE} | cut -f2)
 	#ACClineage=$(grep -m 1 -P "^${ACCtaxid}\t" ${DBLINEAGE} | cut -f3)
 	#ACCsupKingdom=$(echo ${ACClineage} | cut -d ';' -f1)
-	grep -m 1 -f ${ACC}.target.txt ${DBTARGET} | cut -f2 > ${ACC}.taxid.txt
-	grep -m 1 -f ${ACC}.taxid.txt ${DBLINEAGE} > ${ACC}.lineage.txt
+	TAXID=$(grep -m 1 -f ${ACC}.target.txt ${DBTARGET} | cut -f2)
+	echo "^"${TAXID}"\t" > ${ACC}.taxid.txt 
+	grep -m 1 -P -f ${ACC}.taxid.txt ${DBLINEAGE} > ${ACC}.lineage.txt
 	ACCorganism=$(cut -f2 ${ACC}.lineage.txt)
 	ACClineage=$(cut -f3 ${ACC}.lineage.txt)
 	ACCsupKingdom=$(echo ${ACClineage} | cut -d ';' -f1)
