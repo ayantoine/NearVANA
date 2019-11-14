@@ -1,0 +1,45 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: linux-64
+@EXPLICIT
+https://conda.anaconda.org/bioconda/linux-64/spades-3.6.2-0.tar.bz2
+https://repo.anaconda.com/pkgs/main/linux-64/_libgcc_mutex-0.1-main.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/ca-certificates-2019.9.11-hecc5488_0.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/icu-56.1-4.tar.bz2
+https://repo.anaconda.com/pkgs/main/linux-64/libstdcxx-ng-9.1.0-hdf63c60_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/linux-64/libgcc-ng-9.1.0-hdf63c60_0.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/bzip2-1.0.8-h516909a_1.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/libffi-3.2.1-he1b5a44_1006.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/ncurses-6.1-hf484d3e_1002.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/openssl-1.0.2t-h14c3975_0.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/perl-5.26.2-h516909a_1006.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/xz-5.2.4-h14c3975_1001.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/zlib-1.2.11-h516909a_1006.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/flash-1.2.11-hed695b0_5.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/perl-app-cpanminus-1.7044-pl526_1.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/perl-compress-raw-zlib-2.087-pl526hc9558a2_0.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/perl-constant-1.33-pl526_1.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/perl-exporter-5.72-pl526_1.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/perl-extutils-makemaker-7.36-pl526_1.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/perl-parent-0.236-pl526_1.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/pigz-2.3.4-0.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/readline-7.0-hf8c457e_1001.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/tk-8.6.9-hed695b0_1003.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/perl-carp-1.38-pl526_3.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/perl-file-path-2.16-pl526_0.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/sqlite-3.28.0-h8b20d00_0.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/perl-file-temp-0.2304-pl526_2.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/perl-time-local-1.28-pl526_1.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/python-3.5.5-h5001a0f_2.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/boost-1.60.0-py35_3.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/bowtie2-2.3.4.3-py35h2d50403_0.tar.bz2
+https://conda.anaconda.org/conda-forge/noarch/bz2file-0.98-py_0.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/certifi-2018.8.24-py35_1001.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/perl-archive-zip-1.64-pl526_0.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/blast-2.2.31-boost1.60_2.tar.bz2
+https://conda.anaconda.org/bioconda/noarch/perl-excel-writer-xlsx-1.00-pl526_0.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/setuptools-40.4.3-py35_0.tar.bz2
+https://conda.anaconda.org/bioconda/noarch/xopen-0.7.3-py_0.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/cutadapt-1.18-py35_0.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/wheel-0.32.0-py35_1000.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/pip-18.0-py35_1001.tar.bz2
