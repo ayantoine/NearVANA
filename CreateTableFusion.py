@@ -424,7 +424,7 @@ def FusionBlastDict(dBlastN,dBlastX):
 if __name__ == "__main__":
 	dMetadata=LoadMetadata(sMeta)
 	dLength=LoadLength(sLengthFile)
-	FILE=open(BLAST_OUTPUT,"w")
+	FILE=open(BLASTALL_OUTPUT,"w")
 	FILE.write(HEADER)
 	for iIndex in range(1,iJobs+1):
 		dQuery2Content=LoadQuery(BLAST_FOLDER+"/"+BLAST_INPUT.replace(REPLACEME,str(iIndex)))
