@@ -126,6 +126,7 @@ def FusionBlastDict(dBlastN,dBlastX):
 	tKey=list(set(list(dBlastN.keys())+list(dBlastX.keys())))
 	
 	for sBaseKey in tKey:
+		dDict[sBaseKey]={}
 		bX=True
 		bN=True
 		try:
@@ -150,7 +151,6 @@ def FusionBlastDict(dBlastN,dBlastX):
 				dDict[sBaseKey][iRank]["Confidence"]="Single (N)"
 				
 		else:
-			dDict[sBaseKey]={}
 			#Identified with both BlastX and BlastN
 			dSubjectId2MaxBitScore={}
 			dSubjectId2Confidence={}
