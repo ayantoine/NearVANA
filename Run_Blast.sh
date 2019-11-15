@@ -46,6 +46,10 @@ echo "------ /Launch Blast by task ------"
 
 rm -r ${PID}_ToBlast
 
+echo "------ Compress All.fa ------"
+gzip -f ${PID}_All.fa > ${PID}_All.fa.gz
+echo "------ /Compress All.fa ------"
+
 touch ${PID}.Blast.ok
 
 datetime2=$(date +%s)
