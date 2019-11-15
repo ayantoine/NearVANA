@@ -125,32 +125,32 @@ def FusionBlastDict(dBlastN,dBlastX):
 	dDict={}
 	tKey=list(set(list(dBlastN.keys())+list(dBlastX.keys())))
 	
-	for sKey in tKey:
+	for sBaseKey in tKey:
 		bX=True
 		bN=True
 		try:
-			dX=dBlastX[sKey]
+			dX=dBlastX[sBaseKey]
 		except KeyError:
 			bX=False
 		try:
-			dN=dBlastN[sKey]
+			dN=dBlastN[sBaseKey]
 		except KeyError:
 			bN=False
 			
 		if bX and not bN:
 			#Identified only with BlastX
-			for iRank in dBlastX[sKey]:
-				dDict[sKey][iRank]=dBlastX[sKey][iRank]
-				dDict[sKey][iRank]["Confidence"]="Single (X)"
+			for iRank in dBlastX[sBaseKey]:
+				dDict[sBaseKey][iRank]=dBlastX[sBaseKey][iRank]
+				dDict[sBaseKey][iRank]["Confidence"]="Single (X)"
 	
 		elif not bX and bN:
 			#Identified only with BlastN
-			for iRank in dBlastN[sKey]:
-				dDict[sKey][iRank]=dBlastN[sKey][iRank]
-				dDict[sKey][iRank]["Confidence"]="Single (N)"
+			for iRank in dBlastN[sBaseKey]:
+				dDict[sBaseKey][iRank]=dBlastN[sBaseKey][iRank]
+				dDict[sBaseKey][iRank]["Confidence"]="Single (N)"
 				
 		else:
-			dDict[sKey]={}
+			dDict[sBaseKey]={}
 			#Identified with both BlastX and BlastN
 			dSubjectId2MaxBitScore={}
 			dSubjectId2Confidence={}
@@ -183,13 +183,13 @@ def FusionBlastDict(dBlastN,dBlastX):
 				dbCoord=dSubjectId2Coord[sSubjectId]
 				iRank=dbCoord[1]
 				if dbCoord[0]=="X":
-					iNewRank=len(dDict[sKey])+1
-					dDict[sKey][iNewRank]=dBlastX[sSubjectId][iRank]
-					dDict[sKey][iNewRank]["Confidence"]=dSubjectId2Confidence[sSubjectId]
+					iNewRank=len(dDict[sBaseKey])+1
+					dDict[sBaseKey][iNewRank]=dBlastX[sSubjectId][iRank]
+					dDict[sBaseKey][iNewRank]["Confidence"]=dSubjectId2Confidence[sSubjectId]
 				else:
-					iNewRank=len(dDict[sKey])+1
-					dDict[sKey][iNewRank]=dBlastN[sSubjectId][iRank]
-					dDict[sKey][iNewRank]["Confidence"]=dSubjectId2Confidence[sSubjectId]
+					iNewRank=len(dDict[sBaseKey])+1
+					dDict[sBaseKey][iNewRank]=dBlastN[sSubjectId][iRank]
+					dDict[sBaseKey][iNewRank]["Confidence"]=dSubjectId2Confidence[sSubjectId]
 					
 	return dDict				
 
