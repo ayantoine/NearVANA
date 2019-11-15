@@ -173,7 +173,7 @@ def FusionBlastDict(dBlastN,dBlastX):
 					else:
 						dSubjectId2MaxBitScore[dBlastX[sKey][iRank]["SubjectId"]]=float(dBlastX[sKey][iRank]["BitScore"])
 						dSubjectId2Confidence[dBlastX[sKey][iRank]["SubjectId"]]="Single (X)"
-						dSubjectId2Coord[dBlastN[sKey][iRank]["SubjectId"]]=("X",iRank)
+						dSubjectId2Coord[dBlastX[sKey][iRank]["SubjectId"]]=("X",iRank)
 			dBitScore2SubjectId={}
 			for sKey in dSubjectId2MaxBitScore:
 				dBitScore2SubjectId[dSubjectId2MaxBitScore[sKey]]=sKey
