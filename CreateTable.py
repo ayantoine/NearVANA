@@ -62,47 +62,48 @@ DEFAULT="."
 
 ########################################################################
 #Options
-parser = OptionParser()
-parser.add_option("-t","--task", dest="task")
-parser.add_option("-j","--jobs", dest="jobs")
-parser.add_option("-p","--pid", dest="pid")
-parser.add_option("-m","--meta", dest="meta")
-parser.add_option("-l","--length", dest="length")
+if __name__ == "__main__":
+	parser = OptionParser()
+	parser.add_option("-t","--task", dest="task")
+	parser.add_option("-j","--jobs", dest="jobs")
+	parser.add_option("-p","--pid", dest="pid")
+	parser.add_option("-m","--meta", dest="meta")
+	parser.add_option("-l","--length", dest="length")
 
-(options, args) = parser.parse_args()
+	(options, args) = parser.parse_args()
 
-sTask=options.task
-if not sTask:
-	exit("Error : no task -t defined, process broken")
+	sTask=options.task
+	if not sTask:
+		exit("Error : no task -t defined, process broken")
 
-sJobs=options.jobs
-if not sJobs:
-	exit("Error : no jobs -j defined, process broken")
-try:
-	iJobs=int(sJobs)
-except KeyError:
-	exit("Error : jobs -j must be an integer, process broken")
-	
-sPID=options.pid
-if not sPID:
-	exit("Error : no pid -p defined, process broken")
+	sJobs=options.jobs
+	if not sJobs:
+		exit("Error : no jobs -j defined, process broken")
+	try:
+		iJobs=int(sJobs)
+	except KeyError:
+		exit("Error : jobs -j must be an integer, process broken")
+		
+	sPID=options.pid
+	if not sPID:
+		exit("Error : no pid -p defined, process broken")
 
-sMeta=options.meta
-if not sMeta:
-	exit("Error : no meta -m defined, process broken")
+	sMeta=options.meta
+	if not sMeta:
+		exit("Error : no meta -m defined, process broken")
 
-sLengthFile=options.length
-if not sLengthFile:
-	exit("Error : no length -l defined, process broken")
+	sLengthFile=options.length
+	if not sLengthFile:
+		exit("Error : no length -l defined, process broken")
 
-#Half-constant
-BLAST_OUTPUT=sPID+"_Blast"+sTask+"_results.tab"
-BLAST_FOLDER=sPID+"_Blast"+sTask
-BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
-BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab"
-TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab.taxo"
-SHORTSPADES=sPID+"_All.SPAdes.contigs2sample.tsv"
-SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
+	#Half-constant
+	BLAST_OUTPUT=sPID+"_Blast"+sTask+"_results.tab"
+	BLAST_FOLDER=sPID+"_Blast"+sTask
+	BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
+	BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab"
+	TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab.taxo"
+	SHORTSPADES=sPID+"_All.SPAdes.contigs2sample.tsv"
+	SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
 
 ########################################################################
 #Function 	
@@ -283,7 +284,10 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 			except KeyError:
 				tSample=[sQuery.split("_")[-1]]
 			
-			sReadQuantity=sQuery.split("(")[-1].split(")")[0]
+			if CONTIG in sQuery:
+				sReadQuantity=sQuery.split("(")[-1].split(")")[0]
+			else:
+				sReadQuantity="1"
 			sSubjectId=dBlast[sQuery][iRank]["SubjectId"]
 			
 			sTaxo=dTaxo[sSubjectId]["Lineage"]
