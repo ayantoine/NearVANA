@@ -60,6 +60,8 @@ TAXO_DEFCOL=4
 
 DEFAULT="."
 
+EMPTY=""
+
 ########################################################################
 #Options
 if __name__ == "__main__":
@@ -161,7 +163,10 @@ def LoadTaxo(sFile):
 	for sNewLine in open(sFile):
 		sLine=sNewLine.strip()
 		tLine=sLine.split("\t")
+		if len(tLine)!=5:
+			continue
 		
+		# print(sFile)
 		# print(tLine)
 		sOrganism=DEFAULT
 		if tLine[TAXO_ORGANISMCOL]!="":
@@ -203,6 +208,8 @@ def LoadBlast(sFile):
 			sSubjectId=tLine[BLAST_SUBJECTIDCOl]
 			tSubjectId=sSubjectId.split("|")
 			sSubjectId=tSubjectId[3]
+			if sSubjectId==EMPTY:
+				continue
 		sIdentity=DEFAULT
 		if tLine[BLAST_IDENTITYCOl]!="":
 			sIdentity=tLine[BLAST_IDENTITYCOl]

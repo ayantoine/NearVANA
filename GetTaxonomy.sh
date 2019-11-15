@@ -41,7 +41,7 @@ for Task in ${TASK_ARRAY[@]}; do
 	
 	# Viruses = first element of the lineage. But for others, its "cellular organisms"
 	if [ "${ACCsupKingdom}" == "cellular organisms"  ]; then
-	    ACClineage=$(echo ${ACClineage} | cut -d ';' -f2-)
+	    ACClineage=$(echo ${ACClineage} | cut -d ';' -f2- | sed -e 's/^ //')
 	    ACCsupKingdom=$(echo ${ACClineage} | cut -d ';' -f1)
 	fi
 	

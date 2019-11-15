@@ -22,47 +22,11 @@ PID: Plaque Id
 '''
 ########################################################################
 #CONSTANT
-# HEADER_LIST=["Hit rank","Query Seq-Id","Sample","Read quantity","Sequence length","Location","Date","Host",
-# "Individual","Weight(mg)","Subject Seq-Id","Organism","SuperKingdom","Taxonomy","Hit definition","% Fragment","Identity",
-# "Query cover","Alignment length","Mismatches","Gap opening","Start alignment query","End alignment query",
-# "Start alignment subject","End alignment subject","E-value","Bit score","Query sequences"]
-
-# HEADER="\t".join(HEADER_LIST)+"\n"
-
-# BEST_HIT="Best hit"
-# HIT="."
-
-# REPLACEME="REPLACE-ME"
-# SAMPLE_SEPARATOR="-"
-# CONTIG="Contig"
-
-# META_SAMPLECOL=0
-# META_HOSTCOL=1
-# META_LOCATIONCOL=3
-# META_DATECOL=6
-# META_INDIVIDUALSCOL=7
-# META_WEIGHTCOL=8
-
-# BLAST_QUERYIDCOl=0
-# BLAST_SUBJECTIDCOl=1
-# BLAST_IDENTITYCOl=2
-# BLAST_LENGTHCOl=3
-# BLAST_MISMATCHCOl=4
-# BLAST_GAPOPENCOl=5
-# BLAST_QUERYSTARTCOl=6
-# BLAST_QUERYENDCOl=7
-# BLAST_SUBJECTSTARTCOl=8
-# BLAST_SUBJECTENDCOl=9
-# BLAST_EVALUECOl=10
-# BLAST_BITSCORECOl=11
-
-# TAXO_ACCCOL=0
-# TAXO_ORGANISMCOL=1
-# TAXO_SUPKINGDOMCOL=2
-# TAXO_LINEAGECOL=3
-# TAXO_DEFCOL=4
-
-# DEFAULT="."
+HEADER_LIST=["Hit rank","Query Seq-Id","Sample","Read quantity","Sequence length","Location","Date","Host",
+"Individual","Weight(mg)","Subject Seq-Id","Validation","Organism","SuperKingdom","Taxonomy","Hit definition","% Fragment","Identity",
+"Query cover","Alignment length","Mismatches","Gap opening","Start alignment query","End alignment query",
+"Start alignment subject","End alignment subject","E-value","Bit score","Query sequences"]
+HEADER="\t".join(HEADER_LIST)+"\n"
 
 ########################################################################
 #Options
@@ -125,73 +89,144 @@ def FusionBlastDict(dBlastN,dBlastX):
 	dDict={}
 	tKey=list(set(list(dBlastN.keys())+list(dBlastX.keys())))
 	
-	for sBaseKey in tKey:
-		dDict[sBaseKey]={}
+	for sQueryId in tKey:
+		dDict[sQueryId]={}
 		bX=True
 		bN=True
 		try:
-			dX=dBlastX[sBaseKey]
+			dX=dBlastX[sQueryId]
 		except KeyError:
 			bX=False
 		try:
-			dN=dBlastN[sBaseKey]
+			dN=dBlastN[sQueryId]
 		except KeyError:
 			bN=False
-			
+		
 		if bX and not bN:
 			#Identified only with BlastX
-			for iRank in dBlastX[sBaseKey]:
-				dDict[sBaseKey][iRank]=dBlastX[sBaseKey][iRank]
-				dDict[sBaseKey][iRank]["Confidence"]="Single (X)"
-	
+			for iRank in dBlastX[sQueryId]:
+				dDict[sQueryId][iRank]=dBlastX[sQueryId][iRank]
+				dDict[sQueryId][iRank]["Confidence"]="Single (X)"
 		elif not bX and bN:
 			#Identified only with BlastN
-			for iRank in dBlastN[sBaseKey]:
-				dDict[sBaseKey][iRank]=dBlastN[sBaseKey][iRank]
-				dDict[sBaseKey][iRank]["Confidence"]="Single (N)"
-				
+			for iRank in dBlastN[sQueryId]:
+				dDict[sQueryId][iRank]=dBlastN[sQueryId][iRank]
+				dDict[sQueryId][iRank]["Confidence"]="Single (N)"
 		else:
 			#Identified with both BlastX and BlastN
 			dSubjectId2MaxBitScore={}
 			dSubjectId2Confidence={}
 			dSubjectId2Coord={}
-			for sKey in dBlastN:
-				for iRank in dBlastN[sKey]:
-					dSubjectId2MaxBitScore[dBlastN[sKey][iRank]["SubjectId"]]=float(dBlastN[sKey][iRank]["BitScore"])
-					dSubjectId2Confidence[dBlastN[sKey][iRank]["SubjectId"]]="Single (N)"
-					dSubjectId2Coord[dBlastN[sKey][iRank]["SubjectId"]]=("N",iRank)
-			for sKey in dBlastX:
-				for iRank in dBlastX[sKey]:
-					sSubjectId=dBlastX[sKey][iRank]["SubjectId"]
-					fBitScore=float(dBlastX[sKey][iRank]["BitScore"])
-					if sSubjectId in dSubjectId2MaxBitScore:
-						dSubjectId2Confidence[sSubjectId]="Double"
-						# dSubjectId2MaxBitScore[sSubjectId]=max(dSubjectId2MaxBitScore[sSubjectId],fBitScore)
-						if fBitScore>dSubjectId2MaxBitScore[sSubjectId]:
-							dSubjectId2MaxBitScore[sSubjectId]=fBitScore
-							dSubjectId2Coord[dBlastN[sKey][iRank]["SubjectId"]]=("X",iRank)
-					else:
-						dSubjectId2MaxBitScore[dBlastX[sKey][iRank]["SubjectId"]]=float(dBlastX[sKey][iRank]["BitScore"])
-						dSubjectId2Confidence[dBlastX[sKey][iRank]["SubjectId"]]="Single (X)"
-						dSubjectId2Coord[dBlastX[sKey][iRank]["SubjectId"]]=("X",iRank)
+			for iRank in dBlastN[sQueryId]:
+				sSubjectId=dBlastN[sQueryId][iRank]["SubjectId"]
+				dSubjectId2MaxBitScore[sSubjectId]=float(dBlastN[sQueryId][iRank]["BitScore"])
+				dSubjectId2Confidence[sSubjectId]="Single (N)"
+				dSubjectId2Coord[sSubjectId]=("N",iRank)
+			for iRank in dBlastX[sQueryId]:
+				sSubjectId=dBlastX[sQueryId][iRank]["SubjectId"]
+				fBitScore=float(dBlastX[sQueryId][iRank]["BitScore"])
+				if sSubjectId in dSubjectId2MaxBitScore: #In BlastX and BlastN
+					dSubjectId2Confidence[sSubjectId]="Double"
+					if fBitScore>dSubjectId2MaxBitScore[sSubjectId]:
+						dSubjectId2MaxBitScore[sSubjectId]=fBitScore
+						dSubjectId2Coord[sSubjectId]=("X",iRank)
+				else: #Only in BlastX
+					dSubjectId2MaxBitScore[sSubjectId]=fBitScore
+					dSubjectId2Confidence[sSubjectId]="Single (X)"
+					dSubjectId2Coord[sSubjectId]=("X",iRank)
+			
+			#Order bitscore
 			dBitScore2SubjectId={}
-			for sKey in dSubjectId2MaxBitScore:
-				dBitScore2SubjectId[dSubjectId2MaxBitScore[sKey]]=sKey
+			for sSubjectId in dSubjectId2MaxBitScore:
+				if sSubjectId=="":
+					print(sQueryId)
+					print(dBlastN[sQueryId])
+					print(dBlastX[sQueryId])
+				try:
+					dBitScore2SubjectId[dSubjectId2MaxBitScore[sSubjectId]].append(sSubjectId)
+				except KeyError:
+					dBitScore2SubjectId[dSubjectId2MaxBitScore[sSubjectId]]=[sSubjectId]
+			#Reorder equal bitScore by Double or Single for the BestHit position
 			for fBitScore in sorted(dBitScore2SubjectId,reverse=True):
-				sSubjectId=dBitScore2SubjectId[fBitScore]
-				sConfidence=dSubjectId2Confidence[sSubjectId]
-				dbCoord=dSubjectId2Coord[sSubjectId]
-				iRank=dbCoord[1]
-				if dbCoord[0]=="X":
-					iNewRank=len(dDict[sBaseKey])+1
-					dDict[sBaseKey][iNewRank]=dBlastX[sSubjectId][iRank]
-					dDict[sBaseKey][iNewRank]["Confidence"]=dSubjectId2Confidence[sSubjectId]
-				else:
-					iNewRank=len(dDict[sBaseKey])+1
-					dDict[sBaseKey][iNewRank]=dBlastN[sSubjectId][iRank]
-					dDict[sBaseKey][iNewRank]["Confidence"]=dSubjectId2Confidence[sSubjectId]
+				if len(dBitScore2SubjectId[fBitScore])!=1:
+					tKeepDouble=[X for X in dBitScore2SubjectId[fBitScore] if dSubjectId2Confidence[X]=="Double"]
+					tAll=list(tKeepDouble)+[X for X in dBitScore2SubjectId[fBitScore] if dSubjectId2Confidence[X]!="Double"]
+					dBitScore2SubjectId[fBitScore]=list(tAll)
+				break 
+			
+			#Fuuuuusion !
+			for fBitScore in sorted(dBitScore2SubjectId,reverse=True):
+				for sSubjectId in dBitScore2SubjectId[fBitScore]:
+					sConfidence=dSubjectId2Confidence[sSubjectId]
+					dbCoord=dSubjectId2Coord[sSubjectId]
+					iOldRank=dbCoord[1]
+					if dbCoord[0]=="X":
+						iNewRank=len(dDict[sQueryId])+1
+						dDict[sQueryId][iNewRank]=dBlastX[sQueryId][iOldRank]
+						dDict[sQueryId][iNewRank]["Confidence"]=dSubjectId2Confidence[sSubjectId]
+					else:
+						iNewRank=len(dDict[sQueryId])+1
+						dDict[sQueryId][iNewRank]=dBlastN[sQueryId][iOldRank]
+						dDict[sQueryId][iNewRank]["Confidence"]=dSubjectId2Confidence[sSubjectId]
+				
+			# print(dSubjectId2MaxBitScore)
+			# print(dSubjectId2Confidence)
+			# print(dSubjectId2Coord)
+			# print(dDict[sQueryId])
 					
 	return dDict				
+
+def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
+	for sQuery in dBlast:
+		for iRank in dBlast[sQuery]:
+			
+			if iRank==1:
+				sRank=BEST_HIT
+			else:
+				sRank=HIT
+			
+			iQuerySize=len(dContent[sQuery])
+			iCoverSize=int(dBlast[sQuery][iRank]["QueryEnd"])-int(dBlast[sQuery][iRank]["QueryStart"])
+			fCover=round(float(iCoverSize)/iQuerySize*100,2)
+			
+			try:
+				tSample=dContigs[sQuery]
+			except KeyError:
+				tSample=[sQuery.split("_")[-1]]
+			
+			if CONTIG in sQuery:
+				sReadQuantity=sQuery.split("(")[-1].split(")")[0]
+			else:
+				sReadQuantity="1"
+			sSubjectId=dBlast[sQuery][iRank]["SubjectId"]
+			sTaxo=dTaxo[sSubjectId]["Lineage"]
+			tTaxo=sTaxo.replace("; ",";").split(";")
+			iMinSize=0
+			for oTaxo in tTaxo:
+				try:
+					iMinSize=dLength[oTaxo]
+				except KeyError:
+					continue
+			if iMinSize==0:
+				fFragment="N/A"
+			else:
+				fFragment=round(float(iQuerySize)/iMinSize*100,2)
+				
+			for sSample in tSample:
+				tLine=[sRank,sQuery,sSample,sReadQuantity,str(iQuerySize),
+				dMetadata[sSample]["Location"],dMetadata[sSample]["Date"],
+				dMetadata[sSample]["Host"],dMetadata[sSample]["Individuals"],
+				dMetadata[sSample]["Weight"],sSubjectId,dBlast[sQuery][iRank]["Confidence"],
+				dTaxo[sSubjectId]["Organism"],dTaxo[sSubjectId]["Superkingdom"],
+				dTaxo[sSubjectId]["Lineage"],dTaxo[sSubjectId]["Definition"],str(fFragment),
+				dBlast[sQuery][iRank]["Identity"],
+				str(fCover),dBlast[sQuery][iRank]["Length"],dBlast[sQuery][iRank]["Mismatch"],
+				dBlast[sQuery][iRank]["GapOpen"],dBlast[sQuery][iRank]["QueryStart"],
+				dBlast[sQuery][iRank]["QueryEnd"],dBlast[sQuery][iRank]["SubjectStart"],
+				dBlast[sQuery][iRank]["SubjectEnd"],dBlast[sQuery][iRank]["Evalue"],
+				dBlast[sQuery][iRank]["BitScore"],dContent[sQuery]
+				]
+				FILE.write("\t".join(tLine)+"\n")
 
 ########################################################################
 #MAIN
