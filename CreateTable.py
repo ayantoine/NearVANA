@@ -161,7 +161,7 @@ def LoadTaxo(sFile):
 		sLine=sNewLine.strip()
 		tLine=sLine.split("\t")
 		
-		print(tLine)
+		# print(tLine)
 		sOrganism=DEFAULT
 		if tLine[TAXO_ORGANISMCOL]!="":
 			sOrganism=tLine[TAXO_ORGANISMCOL]
