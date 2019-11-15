@@ -59,7 +59,7 @@ for Task in ${TASK_ARRAY[@]}; do
 		    echo "Ask ebi"
 		    echo "curl -s -N https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=${TAG}&id=${ACC}&rettype=gb&retmode=text"
 		    curl -s -N "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=${TAG}&id=${ACC}&rettype=gb&retmode=text" > ${STASKID}.${ACC}.${TAG}.def
-		    ACCdefinition=$(grep -m 1 -f DEFINITION.txt ${STASKID}.${ACC}.${TAG}.def | grep -v -f ACCESSION.txt | cut -c 13-)
+		    ACCdefinition=$(grep -A 1 -m 1 -f DEFINITION.txt ${STASKID}.${ACC}.${TAG}.def | grep -v -f ACCESSION.txt | cut -c 13- | tr '\n' ' ')
 		    ACCsize=${#ACCdefinition}
 		    if [ "$ACCsize" -le 1 ] ; then #less than or equal to
 			echo "Unable to download definition from EBI for ${ACC}"

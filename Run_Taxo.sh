@@ -32,8 +32,8 @@ while true ; do
 	sleep 60
 done
 
-cat ${PID}_nucleotide_TempDefDb.txt > ${NUCDEF}
-cat ${PID}_protein_TempDefDb.txt > ${PRODEF}
+cat ${PID}_nucleotide_TempDefDb.txt >> ${NUCDEF}
+cat ${PID}_protein_TempDefDb.txt >> ${PRODEF}
 
 rm ${PID}_nucleotide_TempDefDb.txt
 rm ${PID}_protein_TempDefDb.txt

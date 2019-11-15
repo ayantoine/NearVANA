@@ -336,13 +336,13 @@ def LoadLength(sFile):
 if __name__ == "__main__":
 	dMetadata=LoadMetadata(sMeta)
 	dLength=LoadLength(sLengthFile)
-	dContigs2Sample=LoadContigs(SHORTSPADES,dQuery2Content)
-	dContigs2Sample=LoadContigs(SHORTFLASH,dQuery2Content,dContigs2Sample)
 	FILE=open(BLAST_OUTPUT,"w")
 	FILE.write(HEADER)
 	for iIndex in range(1,iJobs+1):
 		print("Working on index "+str(iIndex))
 		dQuery2Content=LoadQuery(BLAST_FOLDER+"/"+BLAST_INPUT.replace(REPLACEME,str(iIndex)))
+		dContigs2Sample=LoadContigs(SHORTSPADES,dQuery2Content)
+		dContigs2Sample=LoadContigs(SHORTFLASH,dQuery2Content,dContigs2Sample)
 		dTaxo=LoadTaxo(BLAST_FOLDER+"/"+TAXO_FILE.replace(REPLACEME,str(iIndex)))
 		dBlast=LoadBlast(BLAST_FOLDER+"/"+BLAST_FILE.replace(REPLACEME,str(iIndex)))
 		WriteData(FILE,dBlast,dTaxo,dContigs2Sample,dMetadata,dQuery2Content,dLength)
