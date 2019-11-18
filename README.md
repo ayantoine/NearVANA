@@ -1,11 +1,11 @@
-# NirVANA
+# NearVANA
 Analyze Illumina pair-end sequencing data and identify virus sequence (blastN &amp; BlastX)
 
 # Installation
 - Clone git repository
 - Create a dedicated environment conda
-conda env create --name NirVANA-env --file NirVANA-env.spec-file.txt
-(<NirVANA-env> can be replaced by any name)
+conda env create --name NearVANA-env --file NearVANA-env.spec-file.txt
+(<NearVANA-env> can be replaced by any name)
 
 # Prerequisite I - Cluster conf file
 Cluster conffile contains data to launch job on your cluster. The file must contains the following informations
@@ -44,7 +44,7 @@ VIRPTDB=/work/BANK/biomaj/nr_vir/current/blast/nr_vir
 ALLPTDB=/work/BANK/biomaj/nr/current/flat/nr
 
 # Prerequisite II - Taxonomy and definition file
-NirVANA need some files from NCBI to determine the taxonomy of a hit. This files are named :
+NearVANA need some files from NCBI to determine the taxonomy of a hit. This files are named :
 - fullnamelineage.dmp
 - nucl_gb.accession2taxid
 - prot.accession2taxid
@@ -58,14 +58,14 @@ In addition, TINAP need to acces two file that contains hit definitions.
 These file can be empty at begining, they will be completed progressively among analyses.
 
 # Prerequisite III - Reference size for family virus
-NirVANA compare contigs size to reference genome to help users to determine interesting fragment. The file must lead the following organization:
+NearVANA compare contigs size to reference genome to help users to determine interesting fragment. The file must lead the following organization:
 
 Famility MinSize
 
 Data are facultative but, even empty, the file must exist.
 
 # Prerequisite IV - TINAP conf file
-NirVANA conffile contains data that are specific for 1 analysis. The file must contains the following informations
+NearVANA conffile contains data that are specific for 1 analysis. The file must contains the following informations
 
 #Warning! Do not change variable name
 #Project id
