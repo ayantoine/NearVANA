@@ -67,7 +67,8 @@ def GetKmerRef(dDict):
 	iMaxSeqSize=len(dDict[list(dDict.keys())[0]])
 	dResult={}
 	#For each kmer size avalaible
-	for iKmerSize in range(0,iMaxSeqSize+1):
+	for iKmerSize in reversed(range(0,iMaxSeqSize+1)):
+		print("Kmer",iKmerSize)
 		dResult[iKmerSize]={}
 		dKmer2Ref={}
 		#If kmer size combination inferior than NbrRef, pass
@@ -83,10 +84,14 @@ def GetKmerRef(dDict):
 					dKmer2Ref[dDict[sSeqId][i:i+iKmerSize]].append((sSeqId,iEndIndex))
 				except KeyError:
 					dKmer2Ref[dDict[sSeqId][i:i+iKmerSize]]=[(sSeqId,iEndIndex)]
+		print("Kmer present",len(dKmer2Ref))
+		iKeep=0
 		#Keep only kmer that are specific
 		for sKmer in dKmer2Ref:
 			if len(dKmer2Ref[sKmer])==1:
 				dResult[iKmerSize][sKmer]=dKmer2Ref[sKmer][0]
+				iKeep+=1
+		print("Kmer specific",iKeep)
 		#If no kmer specific, break
 		if len(dResult[iKmerSize])==0:
 			del dResult[iKmerSize]
@@ -97,6 +102,7 @@ def GetKmerRef(dDict):
 			dTemp[dbValues[0]]=1
 		if len(dTemp)!=iNbrRef:
 			del dResult[iKmerSize]
+			print("Less kmer than sample, rejected")
 	
 	return dResult
 

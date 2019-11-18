@@ -111,7 +111,7 @@ def WriteSplitFastq(sPath,dList,sSID):
 			sQuality+=sNewLine
 	if sSeqName!="":
 		try:
-			oCrash=dList[sSeqName[1:-1]]  #remove starting @ and ending \n
+			iEndIndex=dList[sSeqName[1:-1]] #remove starting @ and ending \n
 			sSeqName=sSeqName.replace("\n"," "+sSID+"\n") 
 			FILE.write(sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:])
 			iSeqAssociated+=1

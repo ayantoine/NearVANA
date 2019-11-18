@@ -25,12 +25,12 @@ TAGFILE: path of thne tag file, created when correctly ending the script
 '''
 ########################################################################
 #CONSTANT
-HYPER_SUFFIX="Hyper_Identified.tab"
-HYPO1_SUFFIX="Hypo_1_Identified.tab"
-HYPO2_SUFFIX="Hypo_2_Identified.tab"
-AMBIGUOUS1_SUFFIX="Ambiguous_1.tab"
-AMBIGUOUS2_SUFFIX="Ambiguous_2.tab"
-UNIDENTIFIED_SUFFIX="Unidentified.tab"
+HYPER_SUFFIX="Hyper_Identified.tsv"
+HYPO1_SUFFIX="Hypo_1_Identified.tsv"
+HYPO2_SUFFIX="Hypo_2_Identified.tsv"
+AMBIGUOUS1_SUFFIX="Ambiguous_1.tsv"
+AMBIGUOUS2_SUFFIX="Ambiguous_2.tsv"
+UNIDENTIFIED_SUFFIX="Unidentified.tsv"
 
 SAMPLENONE="..."
 INDEXNONE="."
