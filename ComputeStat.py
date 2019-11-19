@@ -114,16 +114,11 @@ def LoadAllSeq(dResult,dDict,sPath):
 def LoadBlastNKeeped(dResult,dDict,sPath):
 	print("Loading "+sPath)
 	dResult["BlastNKeeped"]={}
-	print("oco")
 	for sNewLine in open(sPath):
-	# for sNewLine in open(sPath):
-		print(sNewLine)
 		if ">"==sNewLine[0]:
-			print(sNewLine)
 			sLine=sNewLine.strip()
 			if CONTIG in sLine:
 				sContig=sLine[1:]
-				print(sContig)
 				try:
 					oCrash=dDict[sContig]
 				except KeyError:
@@ -138,7 +133,6 @@ def LoadBlastNKeeped(dResult,dDict,sPath):
 					except KeyError:
 						dResult["BlastNKeeped"][sSample]=dDict[sContig][sSample]
 			else:
-				print("Not a contig")
 				sSample=sLine.split("_")[-1]
 				try:
 					oCrash=dResult["Sample"][sSample]
@@ -154,7 +148,6 @@ def LoadBlastXKeeped(dResult,dDict,sPath):
 	print("Loading "+sPath)
 	dResult["BlastXKeeped"]={}
 	for sNewLine in open(sPath):
-		print(sNewLine)
 		if ">"==sNewLine[0]:
 			sLine=sNewLine.strip()
 			if CONTIG in sLine:
