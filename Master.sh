@@ -60,7 +60,6 @@ else
 fi
 echo "------ /Demultiplexing reads -----"
 
-
 echo "------ Cleaning reads ------"
 if [ ! -f ${PID}.Cleaning.ok ]; then
 	echo -e "\t- Cleaning linkers"
@@ -96,7 +95,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 		rm ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim
 	done
 		
-	echo -e "\t- Merge files"
+	echo -e "\t- PhiX Substraction : Merge deinterlaced subfiles"
 	touch ${PID}_R1.Unsubstracted.fastq
 	touch ${PID}_R2.Unsubstracted.fastq
 	touch ${PID}_R0.Unsubstracted.fastq
@@ -108,7 +107,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 		rm -r ${sampleId}
 	done
 		
-	echo -e "\t- Susbract "${SUBS}
+	echo -e "\t- PhiX Substraction : Susbract "${SUBS}
 	echo "$SCALL $SPARAM $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG"
 	$SCALL $SPARAM $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG
 	while [ ! -e ${PID}.Substraction.ok ]; do sleep 60 ; done
