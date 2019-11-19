@@ -20,8 +20,8 @@ PID: Plaque Id
 DEMULTIPLEXING_SUFFIX="_Demultiplexing_Hyper_Distribution.tsv"
 ALLSEQ_SUFFIX="_All.fa"
 BLASTXKEEPED_SUFFIX="_BlastX.keeped.fa"
-BLASTNKEEPED_SUFFIX="_BlastX.keeped.fa"
-FLASHREVERSE_SUFFIX="_reverseAssembly.tsv"
+BLASTNKEEPED_SUFFIX="_BlastN.keeped.fa"
+FLASHREVERSE_SUFFIX="_All.FLASH_reverseAssembly.tsv"
 SPADESREVERSE_SUFFIX="_All.SPAdes_reverseAssembly.tsv"
 
 STATISTIC_SUFFIX="_Statistic.tsv"
@@ -38,16 +38,17 @@ if __name__ == "__main__":
 
 	(options, args) = parser.parse_args()
 
-	sPID=options.pid
-	if not sPID:
+	sPid=options.pid
+	if not sPid:
 		exit("Error : no pid -p defined, process broken")
 
 ########################################################################
 #Function 	
-def LoadDecomplexing(sPid):
+def LoadDecomplexing(sPid,sPath):
 	dResult={"Demultiplexing":{},"Sample":{}}
 	bHeader=True
-	for sNewLine in open(sPid+DEMULTIPLEXING_SUFFIX):
+	print("Loading "+sPath)
+	for sNewLine in open(sPath):
 		if bHeader:
 			bHeader=False
 			continue
@@ -60,6 +61,7 @@ def LoadDecomplexing(sPid):
 	return dResult
 		
 def LoadReverseMapping(sPath,dDict={}):
+	print("Loading "+sPath)
 	for sNewLine in open(sPath):
 		sLine=sNewLine.strip()
 		tLine=sLine.split("\t")
@@ -77,6 +79,7 @@ def LoadReverseMapping(sPath,dDict={}):
 	return dDict
 
 def LoadAllSeq(dResult,dDict,sPath):
+	print("Loading "+sPath)
 	dResult["AllSeq"]={}
 	for sNewLine in open(sPath):
 		if ">"==sNewLine[0]:
@@ -109,12 +112,18 @@ def LoadAllSeq(dResult,dDict,sPath):
 	return dResult
 	
 def LoadBlastNKeeped(dResult,dDict,sPath):
+	print("Loading "+sPath)
 	dResult["BlastNKeeped"]={}
+	print("oco")
 	for sNewLine in open(sPath):
+	# for sNewLine in open(sPath):
+		print(sNewLine)
 		if ">"==sNewLine[0]:
+			print(sNewLine)
 			sLine=sNewLine.strip()
 			if CONTIG in sLine:
 				sContig=sLine[1:]
+				print(sContig)
 				try:
 					oCrash=dDict[sContig]
 				except KeyError:
@@ -129,6 +138,7 @@ def LoadBlastNKeeped(dResult,dDict,sPath):
 					except KeyError:
 						dResult["BlastNKeeped"][sSample]=dDict[sContig][sSample]
 			else:
+				print("Not a contig")
 				sSample=sLine.split("_")[-1]
 				try:
 					oCrash=dResult["Sample"][sSample]
@@ -141,8 +151,10 @@ def LoadBlastNKeeped(dResult,dDict,sPath):
 	return dResult
 	
 def LoadBlastXKeeped(dResult,dDict,sPath):
+	print("Loading "+sPath)
 	dResult["BlastXKeeped"]={}
 	for sNewLine in open(sPath):
+		print(sNewLine)
 		if ">"==sNewLine[0]:
 			sLine=sNewLine.strip()
 			if CONTIG in sLine:
@@ -176,7 +188,7 @@ def WriteStat(dResult,sPath):
 	FILE=open(sPath,"w")
 	tCategorie=["Sample","Demultiplexing","AllSeq","BlastNKeeped","BlastXKeeped"]
 	FILE.write("\t".join(tCategorie)+"\n")
-	for sSample in sorted(tCategorie[0]):
+	for sSample in sorted(dResult[tCategorie[0]]):
 		FILE.write(sSample)
 		for sCategorie in tCategorie[1:]:
 			FILE.write("\t")
@@ -193,10 +205,10 @@ def WriteStat(dResult,sPath):
 if __name__ == "__main__":
 	dReverseMapping=LoadReverseMapping(sPid+SPADESREVERSE_SUFFIX)
 	dReverseMapping=LoadReverseMapping(sPid+FLASHREVERSE_SUFFIX,dReverseMapping)
-	dData=LoadDecomplexing(sPid)
+	dData=LoadDecomplexing(sPid,sPid+DEMULTIPLEXING_SUFFIX)
 	dData=LoadAllSeq(dData,dReverseMapping,sPid+ALLSEQ_SUFFIX)
-	dData=LoadBlastNKeeped(dData,dReverseMapping,sPID+BLASTNKEEPED_SUFFIX)
-	dData=LoadBlastXKeeped(dData,dReverseMapping,sPID+BLASTXKEEPED_SUFFIX)
+	dData=LoadBlastNKeeped(dData,dReverseMapping,sPid+BLASTNKEEPED_SUFFIX)
+	dData=LoadBlastXKeeped(dData,dReverseMapping,sPid+BLASTXKEEPED_SUFFIX)
 	WriteStat(dData,sPid+OUTPUT_SUFFIX)
 	
 ########################################################################    
