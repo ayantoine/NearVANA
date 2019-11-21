@@ -47,7 +47,7 @@ parser.add_option("-o","--output", dest="output")
 parser.add_option("-c","--conffile", dest="conf")
 parser.add_option("-q","--quantity", dest="quantity")
 parser.add_option("-a","--argfile", dest="argfile")
-parser.add_option("-po","--pid", dest="pid")
+parser.add_option("-p","--pid", dest="pid")
 
 (options, args) = parser.parse_args()
 
