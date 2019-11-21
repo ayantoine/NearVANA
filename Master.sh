@@ -129,15 +129,15 @@ else
 fi
 echo "------ /Reads correction------"
 
-#echo "------ Reads assembly ------"
-#if [ ! -f ${PID}.Assembly.ok ]; then
-	#echo "$SCALL $SPARAM $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG"
-	# $SCALL $SPARAM $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG
-	#while [ ! -e ${PID}.Assembly.ok ]; do sleep 60 ; done
-#else
-	#echo "${PID}.Assembly.ok already existing, pass"
-#fi
-#echo "------ /Reads assembly------"
+echo "------ Reads assembly ------"
+if [ ! -f ${PID}.Assembly.ok ]; then
+	echo "$SCALL $SPARAM $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG"
+	 $SCALL $SPARAM $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG
+	while [ ! -e ${PID}.Assembly.ok ]; do sleep 60 ; done
+else
+	echo "${PID}.Assembly.ok already existing, pass"
+fi
+echo "------ /Reads assembly------"
 
 #echo "------ Launch Blast ------"
 #if [ ! -f ${PID}.Blast.ok ]; then
