@@ -118,16 +118,16 @@ else
 fi
 echo "------ /Cleaning reads ------"
 
-#echo "------ Reads correction ------"
-#if [ ! -f ${PID}.Correction.ok ]; then
-	#echo "$SCALL $SPARAM $SRENAME ${PID}_Correction -e Correction.e -o Correction.o ${SDIR}/Correction.sh $ARG"
-	# $SCALL $SPARAM $SRENAME ${PID}_Correction -e Correction.e -o Correction.o ${SDIR}/Correction.sh $ARG
-	#while [ ! -e ${PID}.Correction.ok ]; do sleep 60 ; done
-	#rm ${PID}_R1.Substracted.fastq ${PID}_R2.Substracted.fastq ${PID}_R0.Substracted.fastq
-#else
-	#echo "${PID}.Correction.ok already existing, pass"
-#fi
-#echo "------ /Reads correction------"
+echo "------ Reads correction ------"
+if [ ! -f ${PID}.Correction.ok ]; then
+	echo "$SCALL $SPARAM $SRENAME ${PID}_Correction -e Correction.e -o Correction.o ${SDIR}/Correction.sh $ARG"
+	 $SCALL $SPARAM $SRENAME ${PID}_Correction -e Correction.e -o Correction.o ${SDIR}/Correction.sh $ARG
+	while [ ! -e ${PID}.Correction.ok ]; do sleep 60 ; done
+	rm ${PID}_R1.Substracted.fastq ${PID}_R2.Substracted.fastq ${PID}_R0.Substracted.fastq
+else
+	echo "${PID}.Correction.ok already existing, pass"
+fi
+echo "------ /Reads correction------"
 
 #echo "------ Reads assembly ------"
 #if [ ! -f ${PID}.Assembly.ok ]; then
