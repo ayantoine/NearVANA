@@ -47,6 +47,7 @@ parser.add_option("-o","--output", dest="output")
 parser.add_option("-c","--conffile", dest="conf")
 parser.add_option("-q","--quantity", dest="quantity")
 parser.add_option("-a","--argfile", dest="argfile")
+parser.add_option("-po","--pid", dest="pid")
 
 (options, args) = parser.parse_args()
 
@@ -88,6 +89,10 @@ try:
 except ValueError:
 	exit("Error : quantity -q must be an integer, process broken")
 
+sPID=options.pid
+if not sPID:
+	exit("Error : no pid -p defined, process broken")
+
 ########################################################################
 #Function 	
 def LoadConfFile(sPath):
@@ -105,10 +110,12 @@ def LoadConfFile(sPath):
 		dDict[tLine[0]]=CONF_STEP.join(tLine[1:])
 	return dDict	
 		
-def WriteBash(sArg,iSize,sScriptDir,sKmerPath,sOutputPath,sDir,dCall,sConf):
+def WriteBash(sArg,iSize,sScriptDir,sKmerPath,sOutputPath,sDir,dCall,sConf,sPID):
+	sLogDir=sPID+"_log_LaunchAssignation"
 	FILE=open(sOutputPath,"w")
 	FILE.write("#! /bin/bash\n\n")
-	FILE.write(dCall[KEYCONF_SCALL]+" "+dCall[KEYCONF_SPARAM]+" "+dCall[KEYCONF_STASKARRAY]+"1-"+str(iSize)+dCall[KEYCONF_SMAXTASK]+dCall[KEYCONF_SMAXSIMJOB]+" -e "+BASHSCRIPT.replace(".sh","")+".e"+dCall[KEYCONF_SPSEUDOTASKID]+" -o "+BASHSCRIPT.replace(".sh","")+".o"+dCall[KEYCONF_SPSEUDOTASKID]+" "+sScriptDir+"/"+BASHSCRIPT+" "+sKmerPath+" "+sDir+" "+sScriptDir+" Demultiplexing_Ok "+sConf+" "+sArg+"\n")
+	FILE.write("mkdir "+sLogDir)
+	FILE.write(dCall[KEYCONF_SCALL]+" "+dCall[KEYCONF_SPARAM]+" "+dCall[KEYCONF_STASKARRAY]+"1-"+str(iSize)+dCall[KEYCONF_SMAXTASK]+dCall[KEYCONF_SMAXSIMJOB]+" -e "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".e"+dCall[KEYCONF_SPSEUDOTASKID]+" -o "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".o"+dCall[KEYCONF_SPSEUDOTASKID]+" "+sScriptDir+"/"+BASHSCRIPT+" "+sKmerPath+" "+sDir+" "+sScriptDir+" Demultiplexing_Ok "+sConf+" "+sArg+"\n")
 	FILE.write("""
 if [ ! -d "Demultiplexing_Ok" ] ; then mkdir "Demultiplexing_Ok" ; fi
 while true ; do
@@ -132,7 +139,7 @@ done\n""")
 #MAIN
 if __name__ == "__main__":
 	dConf=LoadConfFile(sConf)
-	WriteBash(sArg,iQuantity,sScript,sKmerList,sOutput,sWorkDir,dConf,sConf)
+	WriteBash(sArg,iQuantity,sScript,sKmerList,sOutput,sWorkDir,dConf,sConf,sPID)
 	
 ########################################################################    
 iTime2=time.time()
