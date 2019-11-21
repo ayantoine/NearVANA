@@ -19,7 +19,7 @@ Remove linker during process
 
 python SplitReads.py -f FASTQ -r REFFILE -s SAMPLE -p PID -i PAIRID
 FASTQ: Fastq with all sequences
-REFFILE: ${PID}_Hyper_Identified.tab
+REFFILE: ${PID}_Hyper_Identified.tsv
 SAMPLE: SampleId
 PID: Processus Id
 PAIRID: id of the pair end file

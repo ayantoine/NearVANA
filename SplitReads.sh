@@ -20,7 +20,7 @@ echo "------ /Get Sample list ------"
 SAMPLE=${SAMPLE_LIST[${STASKID}-1]}
 
 echo "------ Split fastq by sample ------"
-python ${SDIR}/SplitReads.py -f ${FASTQ} -r ${PID}_Hyper_Identified.tab -s ${SAMPLE} -p ${PID} -i ${PAIR}
+python ${SDIR}/SplitReads.py -f ${FASTQ} -r ${PID}_Hyper_Identified.tsv -s ${SAMPLE} -p ${PID} -i ${PAIR}
 echo "------ /Split fastq by sample ------"
 
 touch SplitReads${PAIR}_Ok/${STASKID}.SplitReads.${PAIR}.ok
