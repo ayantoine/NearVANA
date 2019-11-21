@@ -139,15 +139,15 @@ else
 fi
 echo "------ /Reads assembly------"
 
-#echo "------ Launch Blast ------"
-#if [ ! -f ${PID}.Blast.ok ]; then
-	#echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Blast -e Run_Blast.e -o Run_Blast.o ${SDIR}/Run_Blast.sh $ARG"
-	# $SCALL $SPARAM $SRENAME ${PID}_Run_Blast -e Run_Blast.e -o Run_Blast.o ${SDIR}/Run_Blast.sh $ARG
-	#while [ ! -e ${PID}.Blast.ok ]; do sleep 60 ; done
-#else
-	#echo "${PID}.Blast.ok already existing, pass"
-#fi
-#echo "------ /Launch Blast------"
+echo "------ Launch Blast ------"
+if [ ! -f ${PID}.Blast.ok ]; then
+	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Blast -e Run_Blast.e -o Run_Blast.o ${SDIR}/Run_Blast.sh $ARG"
+	 $SCALL $SPARAM $SRENAME ${PID}_Run_Blast -e Run_Blast.e -o Run_Blast.o ${SDIR}/Run_Blast.sh $ARG
+	while [ ! -e ${PID}.Blast.ok ]; do sleep 60 ; done
+else
+	echo "${PID}.Blast.ok already existing, pass"
+fi
+echo "------ /Launch Blast------"
 
 #echo "------ Retrieve Taxonomy data ------"
 #if [ ! -f ${PID}.Taxonomy.ok ]; then
