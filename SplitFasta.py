@@ -51,6 +51,7 @@ def SplitFasta(sFolder,sInput):
 				iSeqCount+=1
 				if iSeqCount==CHUNCK:
 					FILE.close()
+					iSeqCount=0
 					iFileNumber+=1
 					FILE=open(sFolder+"/"+sInput+"."+str(iFileNumber),"w")
 				sSeqName=""
