@@ -41,7 +41,7 @@ if not sInput:
 def SplitFasta(sFolder,sInput):
 	iFileNumber=1
 	iSeqCount=0
-	FILE=open(sFolder+"/"+sInput+"."+str(iFileNumber))
+	FILE=open(sFolder+"/"+sInput+"."+str(iFileNumber),"w")
 	sSeqName=""
 	sSeqContent=""
 	for sNewLine in open(sInput):
@@ -52,7 +52,7 @@ def SplitFasta(sFolder,sInput):
 				if iSeqCount==CHUNCK:
 					FILE.close()
 					iFileNumber+=1
-					FILE=open(sFolder+"/"+sInput+"."+str(iFileNumber))
+					FILE=open(sFolder+"/"+sInput+"."+str(iFileNumber),"w")
 				sSeqName=""
 				sSeqContent=""
 			sSeqName=sNewLine
