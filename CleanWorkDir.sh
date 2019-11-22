@@ -9,13 +9,10 @@ source $CONF
 TASKARRAY=("N" "X")
 
 echo "------ Compute stat ------"
+zcat ${PID}_All.fa.gz > ${PID}_All.fa
 python ${SDIR}/ComputeStat.py -p ${PID}
+rm ${PID}_All.fa
 echo "------ Compute stat ------"
-
-
-echo "------ Compress All.fa ------"
-gzip -f ${PID}_All.fa > ${PID}_All.fa.gz
-echo "------ /Compress All.fa ------"
 
 echo "------ Merge and compress rejected sequence ------"
 for TASK in ${TASKARRAY[@]}; do
