@@ -27,6 +27,7 @@ echo "------ Create table ------"
 echo "------ /Create table ------"
 
 echo "------ Xlsx conversion ------"
+cat ${SDIR}/Tab2Xls.pl | wc -l
 perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_BlastN_result.tab ${PID}_BlastN_result.xlsx $((${#PID}+7))
 perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_BlastX_result.tab ${PID}_BlastX_result.xlsx $((${#PID}+7))
 perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_BlastAll_result.tab ${PID}_BlastAll_result.xlsx $((${#PID}+7))
