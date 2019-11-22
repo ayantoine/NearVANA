@@ -24,7 +24,7 @@ for Task in ${TASK_ARRAY[@]}; do
 	rm ${FilePath}.taxo
     fi
     touch ${FilePath}.taxo
-    for LINE in $(cut -f2 ${FilePath}); do
+    for LINE in $(cut -f2 ${FilePath} | sort -u); do
 	ACC=$(echo $LINE | cut -d'|' -f4)
 	echo ${ACC}
 	echo ^${ACC} > ${STASKID}.${ACC}.target.txt
