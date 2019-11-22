@@ -40,9 +40,9 @@ for TASK in ${TASKARRAY[@]}; do
 done
 echo "------ /Merge and compress keeped sequence ------"
 
-for TASK in ${TASKARRAY[@]}; do
-	rm -r ${PID}_Blast${TASK}
-done
+#for TASK in ${TASKARRAY[@]}; do
+	#rm -r ${PID}_Blast${TASK}
+#done
 
 touch ${PID}.Clean.ok
 
