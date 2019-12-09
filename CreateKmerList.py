@@ -74,6 +74,7 @@ def GetKmerRef(dDict):
 		#If kmer size combination inferior than NbrRef, pass
 		if 4**iKmerSize<iNbrRef:
 			del dResult[iKmerSize]
+			print("Kmer too short to allow at least one kmer-specific by sample, reject library")
 			continue
 		#For each sequence, store each kmer
 		for sSeqId in dDict:
@@ -95,6 +96,7 @@ def GetKmerRef(dDict):
 		#If no kmer specific, break
 		if len(dResult[iKmerSize])==0:
 			del dResult[iKmerSize]
+			print("No specific kmer, reject library")
 			break
 		#If kmer specific don't cover all ref, remove
 		dTemp={}
@@ -102,7 +104,7 @@ def GetKmerRef(dDict):
 			dTemp[dbValues[0]]=1
 		if len(dTemp)!=iNbrRef:
 			del dResult[iKmerSize]
-			print("Less kmer than sample, rejected")
+			print("Sample without specific-kmer, reject library")
 	
 	return dResult
 

@@ -1,7 +1,7 @@
-#! /bin/bash
+! /bin/bash
 
 ARG=$1
-#WARNING!! Source file is executed (Security, etc.)
+WARNING!! Source file is executed (Security, etc.)
 source $ARG
 
 echo "------ Check Input existence ------"
@@ -172,7 +172,7 @@ echo "------ /Create table ------"
 #echo "------ Clean workdir ------"
 #if [ ! -f ${PID}.Clean.ok ]; then
 	#echo "$SCALL $SPARAM $SRENAME ${PID}_Clean -e CleanWorkDir.e -o CleanWorkDir.o ${SDIR}/CleanWorkDir.sh $ARG"
-	 #$SCALL $SPARAM $SRENAME ${PID}_Clean -e CleanWorkDir.e -o CleanWorkDir.o ${SDIR}/CleanWorkDir.sh $ARG
+	# $SCALL $SPARAM $SRENAME ${PID}_Clean -e CleanWorkDir.e -o CleanWorkDir.o ${SDIR}/CleanWorkDir.sh $ARG
 	#while [ ! -e ${PID}.Clean.ok ]; do sleep 60 ; done
 #else
 	#echo "${PID}.Clean.ok already existing, pass"
