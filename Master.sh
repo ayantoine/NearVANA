@@ -1,7 +1,7 @@
-! /bin/bash
+#! /bin/bash
 
 ARG=$1
-WARNING!! Source file is executed (Security, etc.)
+#WARNING!! Source file is executed (Security, etc.)
 source $ARG
 
 echo "------ Check Input existence ------"
