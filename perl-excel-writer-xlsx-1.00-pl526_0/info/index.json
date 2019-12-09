@@ -1,0 +1,17 @@
+{
+  "arch": null,
+  "build": "pl526_0",
+  "build_number": 0,
+  "depends": [
+    "perl >=5.26.2,<5.26.3.0a0",
+    "perl-archive-zip",
+    "perl-file-temp"
+  ],
+  "license": "perl_5",
+  "name": "perl-excel-writer-xlsx",
+  "noarch": "generic",
+  "platform": null,
+  "subdir": "noarch",
+  "timestamp": 1560979329946,
+  "version": "1.00"
+}
