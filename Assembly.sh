@@ -7,7 +7,7 @@ source $ARG
 source $CONF
 
 echo "------ SPAdes ------"
-spades.py -k 11,21,33,55,77,99 --only-assembler --pe1-1 ${PID}"_R1.Corrected.fastq" --pe1-2 ${PID}"_R2.Corrected.fastq" --pe1-s ${PID}"_R0.Corrected.fastq" -o ${PID}"_log_Assembly-SPAdes"
+spades.py -k 11,21,33,55,77,99 -t ${MULTICPU} --only-assembler --pe1-1 ${PID}"_R1.Corrected.fastq" --pe1-2 ${PID}"_R2.Corrected.fastq" --pe1-s ${PID}"_R0.Corrected.fastq" -o ${PID}"_log_Assembly-SPAdes"
 echo "------ /SPAdes ------"
 
 mv ${PID}_log_Assembly-SPAdes/contigs.fasta ${PID}_Temp.SPAdes_contigs.fa
@@ -15,8 +15,8 @@ rm -r ${PID}_log_Assembly-SPAdes/K* ${PID}_log_Assembly-SPAdes/misc ${PID}_log_A
 rm ${PID}_log_Assembly-SPAdes/*fast* ${PID}_log_Assembly-SPAdes/*paths
 
 echo "------ SPAdes reverse-mapping ------"
-bowtie2-build ${PID}_Temp.SPAdes_contigs.fa ${PID}_Temp.SPAdes_contigs.fa
-bowtie2 --end-to-end --very-sensitive -x ${PID}_Temp.SPAdes_contigs.fa -1 ${PID}_R1.Corrected.fastq -2 ${PID}_R2.Corrected.fastq -U ${PID}_R0.Corrected.fastq -S reads2contigs.sam
+bowtie2-build --thread ${MULTICPU} ${PID}_Temp.SPAdes_contigs.fa ${PID}_Temp.SPAdes_contigs.fa
+bowtie2 --thread ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.SPAdes_contigs.fa -1 ${PID}_R1.Corrected.fastq -2 ${PID}_R2.Corrected.fastq -U ${PID}_R0.Corrected.fastq -S reads2contigs.sam
 rm *.bt2
 python ${SDIR}/MappingReverseSPAdes.py -p ${PID} -i reads2contigs.sam
 echo "------ /SPAdes reverse-mapping ------"

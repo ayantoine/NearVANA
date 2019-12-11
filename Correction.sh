@@ -7,7 +7,7 @@ source $ARG
 source $CONF
 
 echo "------ Correction ------"
-spades.py --only-error-correction --disable-gzip-output --pe1-1 ${PID}_R1.Substracted.fastq --pe1-2 ${PID}_R2.Substracted.fastq --pe1-s ${PID}_R0.Substracted.fastq -o ${PID}"_log_Correction"
+spades.py -t ${MULTICPU} --only-error-correction --disable-gzip-output --pe1-1 ${PID}_R1.Substracted.fastq --pe1-2 ${PID}_R2.Substracted.fastq --pe1-s ${PID}_R0.Substracted.fastq -o ${PID}"_log_Correction"
 echo "------ /Correction ------"
 
 cat ${PID}_log_Correction/corrected/${PID}_R1.Substracted.* > ${PID}_R1.Corrected.fastq

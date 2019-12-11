@@ -10,8 +10,8 @@ echo "------ Launch Trim array ------"
 nb_jobs=$(cut -f1 ${DODE} | wc -l)
 if [ ! -d "TrimReads_Ok" ] ; then mkdir "TrimReads_Ok" ; fi
 if [ ! -d ${PID}"_log_TrimReads" ] ; then mkdir ${PID}"_log_TrimReads" ; fi
-echo $SCALL $SPARAM $SRENAME ${PID}_Cutadapt ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_TrimReads"/${PID}_Cutadapt.e${SPSEUDOTASKID} -o ${PID}"_log_TrimReads"/${PID}_Cutadapt.o${SPSEUDOTASKID} ${SDIR}/LaunchCutadapt.sh $ARG
-$SCALL $SPARAM $SRENAME ${PID}_Cutadapt ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_TrimReads"/${PID}_Cutadapt.e${SPSEUDOTASKID} -o ${PID}"_log_TrimReads"/${PID}_Cutadapt.o${SPSEUDOTASKID} ${SDIR}/LaunchCutadapt.sh $ARG
+echo $SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Cutadapt ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_TrimReads"/${PID}_Cutadapt.e${SPSEUDOTASKID} -o ${PID}"_log_TrimReads"/${PID}_Cutadapt.o${SPSEUDOTASKID} ${SDIR}/LaunchCutadapt.sh $ARG
+$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Cutadapt ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_TrimReads"/${PID}_Cutadapt.e${SPSEUDOTASKID} -o ${PID}"_log_TrimReads"/${PID}_Cutadapt.o${SPSEUDOTASKID} ${SDIR}/LaunchCutadapt.sh $ARG
 while true ; do
 	if [ $(ls TrimReads_Ok/ | wc -l) -eq 0 ]
 		then

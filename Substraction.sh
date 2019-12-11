@@ -7,11 +7,11 @@ source $ARG
 source $CONF
 
 echo "------ Build Mapping Reference ------"
-bowtie2-build ${SUBS} ${SUBS}
+bowtie2-build --thread ${MULTICPU} ${SUBS} ${SUBS}
 echo "------ /Build Mapping Reference ------"
 
 echo "------ Mapping ------"
-bowtie2 --end-to-end --very-sensitive -x ${SUBS} -1 ${PID}_R1.Unsubstracted.fastq -2 ${PID}_R2.Unsubstracted.fastq -U ${PID}_R0.Unsubstracted.fastq -S ${PID}"_"${SUBS}"_"${PID}_R1.Unsubstracted.fastq"_"${PID}_R2.Unsubstracted.fastq"_bwt_ete.sam"
+bowtie2 --thread ${MULTICPU} --end-to-end --very-sensitive -x ${SUBS} -1 ${PID}_R1.Unsubstracted.fastq -2 ${PID}_R2.Unsubstracted.fastq -U ${PID}_R0.Unsubstracted.fastq -S ${PID}"_"${SUBS}"_"${PID}_R1.Unsubstracted.fastq"_"${PID}_R2.Unsubstracted.fastq"_bwt_ete.sam"
 echo "------ /Mapping ------"
 
 echo "------ Mapping extraction ------"
