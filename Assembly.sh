@@ -15,8 +15,8 @@ rm -r ${PID}_log_Assembly-SPAdes/K* ${PID}_log_Assembly-SPAdes/misc ${PID}_log_A
 rm ${PID}_log_Assembly-SPAdes/*fast* ${PID}_log_Assembly-SPAdes/*paths
 
 echo "------ SPAdes reverse-mapping ------"
-bowtie2-build --thread ${MULTICPU} ${PID}_Temp.SPAdes_contigs.fa ${PID}_Temp.SPAdes_contigs.fa
-bowtie2 --thread ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.SPAdes_contigs.fa -1 ${PID}_R1.Corrected.fastq -2 ${PID}_R2.Corrected.fastq -U ${PID}_R0.Corrected.fastq -S reads2contigs.sam
+bowtie2-build --threads ${MULTICPU} ${PID}_Temp.SPAdes_contigs.fa ${PID}_Temp.SPAdes_contigs.fa
+bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.SPAdes_contigs.fa -1 ${PID}_R1.Corrected.fastq -2 ${PID}_R2.Corrected.fastq -U ${PID}_R0.Corrected.fastq -S reads2contigs.sam
 rm *.bt2
 python ${SDIR}/MappingReverseSPAdes.py -p ${PID} -i reads2contigs.sam
 echo "------ /SPAdes reverse-mapping ------"
