@@ -20,8 +20,8 @@ echo "------ /Get Sample list ------"
 SAMPLE=${SAMPLE_LIST[${STASKID}-1]}
 
 echo "------ Get adaptors ------"
-adapter1=$(cut -f1 Arg_VP-1_Adaptators.tsv)
-adapter2=$(cut -f2 Arg_VP-1_Adaptators.tsv)
+adapter1=$(cut -f1 Arg_${PID}_Adaptators.tsv)
+adapter2=$(cut -f2 Arg_${PID}_Adaptators.tsv)
 echo "Adapter1: "$adapter1
 echo "Adapter2: "$adapter2
 echo "------ /Get adaptors ------"
