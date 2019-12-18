@@ -58,7 +58,7 @@ def SplitFasta(sFolder,sInput):
 				sSeqContent=""
 			sSeqName=sNewLine
 		else:
-			sSeqContent=sNewLine
+			sSeqContent+=sNewLine
 	if sSeqName!="":
 		FILE.write(sSeqName+sSeqContent)
 	FILE.close()
