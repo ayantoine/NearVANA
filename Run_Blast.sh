@@ -29,9 +29,9 @@ rm Target.txt
 
 
 echo "------ Launch Blast by task ------"
-echo "$SCALL $PARAM $SRENAME ${PID}_N_Blast -e Run_BlastN.e -o Run_BlastN.o ${SDIR}/Run_BlastTask.sh $ARG N"
+echo "$SCALL $SPARAM $SRENAME ${PID}_N_Blast -e Run_BlastN.e -o Run_BlastN.o ${SDIR}/Run_BlastTask.sh $ARG N"
 $SCALL $PARAM $SRENAME ${PID}_N_Blast -e Run_BlastN.e -o Run_BlastN.o ${SDIR}/Run_BlastTask.sh $ARG N
-echo "$SCALL $PARAM $SRENAME ${PID}_X_Blast -e Run_BlastX.e -o Run_BlastX.o ${SDIR}/Run_BlastTask.sh $ARG X"
+echo "$SCALL $SPARAM $SRENAME ${PID}_X_Blast -e Run_BlastX.e -o Run_BlastX.o ${SDIR}/Run_BlastTask.sh $ARG X"
 $SCALL $PARAM $SRENAME ${PID}_X_Blast -e Run_BlastX.e -o Run_BlastX.o ${SDIR}/Run_BlastTask.sh $ARG X
 while [ ! -e ${PID}.BlastN.ok ]; do sleep 60 ; done
 while [ ! -e ${PID}.BlastX.ok ]; do sleep 60 ; done
