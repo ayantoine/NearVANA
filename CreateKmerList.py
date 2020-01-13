@@ -57,7 +57,7 @@ def ReadLinkerFile(sString,sPrefix):
 		sLine=sNewLine.strip()
 		tLine=sLine.split("\t")
 		sRef=sPrefix+"_"+tLine[0]
-		sSeq=tLine[1]+tLine[2]
+		sSeq="".join(tLine[1:])
 		dResult[sRef]=sSeq
 		# print(sRef,sSeq)
 	return dResult
