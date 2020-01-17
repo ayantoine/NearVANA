@@ -23,7 +23,11 @@ echo "------ Split fastq by sample ------"
 python ${SDIR}/SplitReads.py -f ${FASTQ} -r ${PID}_Hyper_Identified.tsv -s ${SAMPLE} -p ${PID} -i ${PAIR}
 echo "------ /Split fastq by sample ------"
 
-touch SplitReads${PAIR}_Ok/${STASKID}.SplitReads.${PAIR}.ok
+echo "Creating ok file"
+while [ ! -f SplitReads${PAIR}_Ok/${STASKID}.SplitReads.${PAIR}.ok ]; do
+	touch SplitReads${PAIR}_Ok/${STASKID}.SplitReads.${PAIR}.ok
+	sleep 10
+done
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
