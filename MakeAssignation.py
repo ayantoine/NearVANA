@@ -36,6 +36,8 @@ SAMPLENONE="..."
 INDEXNONE="."
 
 SEQ_BY_TASK=1000000 #Must be similar in QsubAssignation.py
+LINE_BY_FASTQ=4
+LINE_BY_TASK=SEQ_BY_TASK*LINE_BY_FASTQ
 
 SEARCHWINDOWS_SIZE=30
 ########################################################################
@@ -182,9 +184,9 @@ def ProcessFastq2(dKmer,dEndIndex,sFastq,dSeq1,iIndex):
 	iCount=0
 	for sNewLine in open(sFastq):
 		iCount+=1
-		if iCount<iIndex*SEQ_BY_TASK:
+		if iCount<iIndex*LINE_BY_TASK+1:
 			continue
-		elif iCount>=(iIndex+1)*SEQ_BY_TASK:
+		elif iCount>=(iIndex+1)*LINE_BY_TASK+1:
 			break
 		sLine=sNewLine.strip()
 		if iCount%4==1:
