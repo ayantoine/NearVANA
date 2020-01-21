@@ -6,13 +6,15 @@ import time
 from optparse import OptionParser
 import os
 
-sCurrentVersionScript="v2"
+sCurrentVersionScript="v3"
 iTime1=time.time()
 ########################################################################
 '''
+V3-2020/01/21
+Adapt to array wioth limited value
+
 V2-2019/10/30
 Work with index on base file instead multiple subfile (decrease memory usage)
-
 V1-2019/07/01
 Prepare Qsub command list for Assignation task
 
@@ -26,7 +28,7 @@ OUTPUT: Script ready to use
 #CONSTANT
 BASHSCRIPT="LaunchAssignation.sh"
 
-SEQ_BY_TASK=1000000 #Must be similar in MakeAssignation.py
+DEFAULT_SEQ_BY_TASK=1000000 #Must be similar in MakeAssignation.py
 
 CONF_COMMENT="#"
 CONF_STEP="="
@@ -35,6 +37,7 @@ KEYCONF_SPARAM="SPARAM"
 KEYCONF_STASKARRAY="STASKARRAY"
 KEYCONF_SMAXTASK="SMAXTASK"
 KEYCONF_SMAXSIMJOB="SMAXSIMJOB"
+KEYCONF_SMAXARRAYSIZE="SMAXARRAYSIZE"
 KEYCONF_STASKID="STASKID"
 KEYCONF_SPSEUDOTASKID="SPSEUDOTASKID"
 ########################################################################
@@ -82,10 +85,10 @@ if not sQuantity:
 	exit("Error : no quantity -q defined, process broken")
 try:
 	iQuantity=int(sQuantity)
-	if iQuantity%SEQ_BY_TASK==0:
-		iQuantity=iQuantity/SEQ_BY_TASK
-	else:
-		iQuantity=int(round(iQuantity/SEQ_BY_TASK,0))+1
+	# if iQuantity%SEQ_BY_TASK==0:
+		# iQuantity=iQuantity/SEQ_BY_TASK
+	# else:
+		# iQuantity=int(round(iQuantity/SEQ_BY_TASK,0))+1
 except ValueError:
 	exit("Error : quantity -q must be an integer, process broken")
 
@@ -110,12 +113,12 @@ def LoadConfFile(sPath):
 		dDict[tLine[0]]=CONF_STEP.join(tLine[1:])
 	return dDict	
 		
-def WriteBash(sArg,iSize,sScriptDir,sKmerPath,sOutputPath,sDir,dCall,sConf,sPID):
+def WriteBash(sArg,iSize,sScriptDir,sKmerPath,sOutputPath,sDir,dCall,sConf,sPID,iNumberSeq):
 	sLogDir=sPID+"_log_LaunchAssignation"
 	FILE=open(sOutputPath,"w")
 	FILE.write("#! /bin/bash\n\n")
 	FILE.write("mkdir "+sLogDir+"\n")
-	FILE.write(dCall[KEYCONF_SCALL]+" "+dCall[KEYCONF_SPARAM]+" "+dCall[KEYCONF_STASKARRAY]+"1-"+str(iSize)+dCall[KEYCONF_SMAXTASK]+dCall[KEYCONF_SMAXSIMJOB]+" -e "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".e"+dCall[KEYCONF_SPSEUDOTASKID]+" -o "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".o"+dCall[KEYCONF_SPSEUDOTASKID]+" "+sScriptDir+"/"+BASHSCRIPT+" "+sKmerPath+" "+sDir+" "+sScriptDir+" Demultiplexing_Ok "+sConf+" "+sArg+"\n")
+	FILE.write(dCall[KEYCONF_SCALL]+" "+dCall[KEYCONF_SPARAM]+" "+dCall[KEYCONF_STASKARRAY]+"1-"+str(iSize)+dCall[KEYCONF_SMAXTASK]+dCall[KEYCONF_SMAXSIMJOB]+" -e "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".e"+dCall[KEYCONF_SPSEUDOTASKID]+" -o "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".o"+dCall[KEYCONF_SPSEUDOTASKID]+" "+sScriptDir+"/"+BASHSCRIPT+" "+str(iNumberSeq)+" "+sKmerPath+" "+sDir+" "+sScriptDir+" Demultiplexing_Ok "+sConf+" "+sArg+"\n")
 	FILE.write("""
 if [ ! -d "Demultiplexing_Ok" ] ; then mkdir "Demultiplexing_Ok" ; fi
 while true ; do
@@ -134,12 +137,22 @@ while true ; do
 done\n""")
 	FILE.write("echo \""+BASHSCRIPT+"\" DONE\n")
 	FILE.close()
-	
+
+def GetJobByTask(iSeq,iTask):
+	if iTask==0:
+		return DEFAULT_SEQ_BY_TASK
+	if iSeq%iTask==0:
+		iResult=iSeq/iTask
+	else:
+		iResult=int(round(iSeq/iTask,0))+1
+	return iResult
+
 ########################################################################
 #MAIN
 if __name__ == "__main__":
 	dConf=LoadConfFile(sConf)
-	WriteBash(sArg,iQuantity,sScript,sKmerList,sOutput,sWorkDir,dConf,sConf,sPID)
+	iJobByTask=GetJobByTask(iQuantity,dConf[KEYCONF_SMAXARRAYSIZE])
+	WriteBash(sArg,iJobByTask,sScript,sKmerList,sOutput,sWorkDir,dConf,sConf,sPID,iQuantity)
 	
 ########################################################################    
 iTime2=time.time()
