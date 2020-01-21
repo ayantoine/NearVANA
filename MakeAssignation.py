@@ -112,10 +112,14 @@ def ProcessFastq1(dKmer,dEndIndex,sFastq,iIndex):
 	
 	for sNewLine in open(sFastq):
 		iCount+=1
-		if iCount<iIndex*SEQ_BY_TASK:
+		if iCount<iIndex*LINE_BY_TASK+1:
 			continue
-		elif iCount>=(iIndex+1)*SEQ_BY_TASK:
+		elif iCount>=(iIndex+1)*LINE_BY_TASK+1:
 			break
+		# if iCount<iIndex*SEQ_BY_TASK:
+			# continue
+		# elif iCount>=(iIndex+1)*SEQ_BY_TASK:
+			# break
 		sLine=sNewLine.strip()
 		if iCount%4==1:
 			sSeqId=sLine[1:]
