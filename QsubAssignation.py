@@ -151,7 +151,7 @@ def GetJobByTask(iSeq,iTask):
 #MAIN
 if __name__ == "__main__":
 	dConf=LoadConfFile(sConf)
-	iJobByTask=GetJobByTask(iQuantity,dConf[KEYCONF_SMAXARRAYSIZE])
+	iJobByTask=GetJobByTask(iQuantity,int(dConf[KEYCONF_SMAXARRAYSIZE]))
 	WriteBash(sArg,iJobByTask,sScript,sKmerList,sOutput,sWorkDir,dConf,sConf,sPID,iQuantity)
 	
 ########################################################################    
