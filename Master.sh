@@ -120,16 +120,16 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 		echo -e "\t- ${PID}.Substraction-Deinterlacing.ok existing, pas"
 	fi
 	
-	#if [ ! -f ${PID}.Cleaning.ok ]; then
-		#echo -e "\t- PhiX Substraction : Susbract "${SUBS}
-		#echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG"
-		# $SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG
-		#while [ ! -e ${PID}.Substraction.ok ]; do sleep 60 ; done
+	if [ ! -f ${PID}.Cleaning.ok ]; then
+		echo -e "\t- PhiX Substraction : Susbract "${SUBS}
+		echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG"
+		$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG
+		while [ ! -e ${PID}.Substraction.ok ]; do sleep 60 ; done
 		#rm ${PID}_R1.Unsubstracted.fastq ${PID}_R2.Unsubstracted.fastq ${PID}_R0.Unsubstracted.fastq
-		#touch ${PID}.Cleaning.ok
-	#else
-		#echo -e "\t- ${PID}.Cleaning.ok existing, pas"
-	#fi
+		touch ${PID}.Cleaning.ok
+	else
+		echo -e "\t- ${PID}.Cleaning.ok existing, pas"
+	fi
 else
 	echo "${PID}.Cleaning.ok already existing, pass"
 fi
