@@ -23,11 +23,11 @@ echo "------ /SPAdes reverse-mapping ------"
 
 rm ${PID}_Temp.SPAdes_contigs.fa reads2contigs.sam
 
-echo "------ Compress Corrected.fastq ------"
-gzip -f ${PID}_R0.Corrected.fastq > ${PID}_R0.Corrected.fastq.gz
-gzip -f ${PID}_R1.Corrected.fastq > ${PID}_R1.Corrected.fastq.gz
-gzip -f ${PID}_R2.Corrected.fastq > ${PID}_R2.Corrected.fastq.gz
-echo "------ /Compress Corrected.fastq ------"
+#echo "------ Compress Corrected.fastq ------"
+#gzip -f ${PID}_R0.Corrected.fastq > ${PID}_R0.Corrected.fastq.gz
+#gzip -f ${PID}_R1.Corrected.fastq > ${PID}_R1.Corrected.fastq.gz
+#gzip -f ${PID}_R2.Corrected.fastq > ${PID}_R2.Corrected.fastq.gz
+#echo "------ /Compress Corrected.fastq ------"
 
 echo "------ FLASH ------"
 flash -m 15 -M 300 -O ${PID}_R1.SPAdes_unassembled.fastq ${PID}_R2.SPAdes_unassembled.fastq -o FLASH
