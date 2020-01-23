@@ -63,6 +63,7 @@ parser.add_option("-d","--workdir", dest="workdir")
 parser.add_option("-t","--tagfile", dest="tagfile")
 parser.add_option("-i","--index", dest="index")
 parser.add_option("-q","--quantity", dest="quantity")
+parser.add_option("-c","--conffile", dest="conffile")
 
 (options, args) = parser.parse_args()
 
@@ -101,6 +102,10 @@ try:
 	iQuantity=int(sQuantity)
 except ValueError:
 	exit("Error : quantity -q must be an integer, process broken")
+
+sConf=options.conffile
+if not sConf:
+	exit("Error : no conffile -c defined, process broken")
 
 sHyperName=sWorkDir+"/"+str(iIndex)+"_"+HYPER_SUFFIX
 sHypo1Name=sWorkDir+"/"+str(iIndex)+"_"+HYPO1_SUFFIX
