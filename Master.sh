@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -e
+
 ARG=$1
 #WARNING!! Source file is executed (Security, etc.)
 source $ARG

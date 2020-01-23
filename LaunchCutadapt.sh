@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 datetime1=$(date +%s)
 
 ARG=$1

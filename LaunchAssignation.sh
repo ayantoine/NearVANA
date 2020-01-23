@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -e
+
 KMER_FILE=$1
 WORKDIR=$2
 SCRIPTDIR=$3

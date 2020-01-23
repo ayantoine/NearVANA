@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 ARG=$1
 source $ARG
 source $CONF
