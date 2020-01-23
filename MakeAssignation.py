@@ -289,7 +289,7 @@ def GetJobByTask(iSeq,iTask):
 #MAIN
 if __name__ == "__main__":
 	dConf=LoadConfFile(sConf)
-	iJobByTask=GetJobByTask(iQuantity,dConf[KEYCONF_SMAXARRAYSIZE])
+	iJobByTask=GetJobByTask(iQuantity,int(dConf[KEYCONF_SMAXARRAYSIZE]))
 	dKmerRef, dKmerEndIndex=LoadKmerFile(sKmerList)
 	dSeqId2Sample=ProcessFastq1(dKmerRef,dKmerEndIndex,sFastq1,iIndex,iJobByTask)
 	ProcessFastq2(dKmerRef,dKmerEndIndex,sFastq2,dSeqId2Sample,iIndex,iJobByTask)
