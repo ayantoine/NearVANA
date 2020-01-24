@@ -14,15 +14,10 @@ nb_task=${SMAXSIMJOB}
 
 echo "$SMAXARRAYSIZE"
 if [[ $SMAXARRAYSIZE -eq 0 ]]; then
-	echo "ici"
 	CHUNCK=1000
 else
-	echo "la"
 	CHUNCK=$((nb_seq/SMAXARRAYSIZE+1))
-	echo "$CHUNCK"
 fi
-
-
 
 mkdir ${PID}_ToBlast
 
@@ -38,8 +33,6 @@ echo "Number of generated jobs: "$nb_jobs
 echo "Number of simultaneous tasks: "$nb_task
 echo "------ /Configure job array ------"
 rm Target.txt
-
-exit
 
 echo "------ Launch Blast by task ------"
 echo "$SCALL $SPARAM $SRENAME ${PID}_N_Blast -e Run_BlastN.e -o Run_BlastN.o ${SDIR}/Run_BlastTask.sh $ARG N"
