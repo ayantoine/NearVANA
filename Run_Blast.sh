@@ -43,7 +43,7 @@ while [ ! -e ${PID}.BlastN.ok ]; do sleep 60 ; done
 while [ ! -e ${PID}.BlastX.ok ]; do sleep 60 ; done
 echo "------ /Launch Blast by task ------"
 
-#rm -r ${PID}_ToBlast
+rm -r ${PID}_ToBlast
 
 echo "------ Compress All.fa ------"
 gzip -f ${PID}_All.fa > ${PID}_All.fa.gz

@@ -166,15 +166,15 @@ else
 fi
 echo "------ /Launch Blast------"
 
-#echo "------ Retrieve Taxonomy data ------"
-#if [ ! -f ${PID}.Taxonomy.ok ]; then
-	#echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG"
-	# $SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG
-	#while [ ! -e ${PID}.Taxonomy.ok ]; do sleep 60 ; done
-#else
-	#echo "${PID}.Taxonomy.ok already existing, pass"
-#fi
-#echo "------ /Retrieve Taxonomy data ------"
+echo "------ Retrieve Taxonomy data ------"
+if [ ! -f ${PID}.Taxonomy.ok ]; then
+	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG"
+	 $SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG
+	while [ ! -e ${PID}.Taxonomy.ok ]; do sleep 60 ; done
+else
+	echo "${PID}.Taxonomy.ok already existing, pass"
+fi
+echo "------ /Retrieve Taxonomy data ------"
 
 #echo "------ Create table ------"
 #if [ ! -f ${PID}.Table.ok ]; then
