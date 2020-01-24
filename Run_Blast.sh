@@ -1,4 +1,4 @@
-#! /bin/bash
+! /bin/bash
 
 datetime1=$(date +%s)
 
@@ -14,10 +14,12 @@ nb_task=${SMAXSIMJOB}
 
 echo "$SMAXARRAYSIZE"
 if [[ $SMAXARRAYSIZE -eq 0 ]]; then
+	echo "ici"
 	CHUNCK=1000
 else
-	CHUNCK=$(($NB_SEQ/$SMAXARRAYSIZE+1))
-	echo "$CHUNK"
+	echo "la"
+	CHUNCK=$((nb_seq/SMAXARRAYSIZE+1))
+	echo "$CHUNCK"
 fi
 
 
@@ -37,23 +39,24 @@ echo "Number of simultaneous tasks: "$nb_task
 echo "------ /Configure job array ------"
 rm Target.txt
 
+exit
 
 echo "------ Launch Blast by task ------"
 echo "$SCALL $SPARAM $SRENAME ${PID}_N_Blast -e Run_BlastN.e -o Run_BlastN.o ${SDIR}/Run_BlastTask.sh $ARG N"
-# $SCALL $SPARAM $SRENAME ${PID}_N_Blast -e Run_BlastN.e -o Run_BlastN.o ${SDIR}/Run_BlastTask.sh $ARG N
+$SCALL $SPARAM $SRENAME ${PID}_N_Blast -e Run_BlastN.e -o Run_BlastN.o ${SDIR}/Run_BlastTask.sh $ARG N
 echo "$SCALL $SPARAM $SRENAME ${PID}_X_Blast -e Run_BlastX.e -o Run_BlastX.o ${SDIR}/Run_BlastTask.sh $ARG X"
-# $SCALL $SPARAM $SRENAME ${PID}_X_Blast -e Run_BlastX.e -o Run_BlastX.o ${SDIR}/Run_BlastTask.sh $ARG X
-#while [ ! -e ${PID}.BlastN.ok ]; do sleep 60 ; done
-#while [ ! -e ${PID}.BlastX.ok ]; do sleep 60 ; done
+$SCALL $SPARAM $SRENAME ${PID}_X_Blast -e Run_BlastX.e -o Run_BlastX.o ${SDIR}/Run_BlastTask.sh $ARG X
+while [ ! -e ${PID}.BlastN.ok ]; do sleep 60 ; done
+while [ ! -e ${PID}.BlastX.ok ]; do sleep 60 ; done
 echo "------ /Launch Blast by task ------"
 
 rm -r ${PID}_ToBlast
 
 echo "------ Compress All.fa ------"
-#gzip -f ${PID}_All.fa > ${PID}_All.fa.gz
+gzip -f ${PID}_All.fa > ${PID}_All.fa.gz
 echo "------ /Compress All.fa ------"
 
-#touch ${PID}.Blast.ok
+touch ${PID}.Blast.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
