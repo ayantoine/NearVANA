@@ -115,23 +115,25 @@ def WriteBash(sArg,iSize,sScriptDir,sKmerPath,sOutputPath,sDir,dCall,sConf,sPID)
 	FILE=open(sOutputPath,"w")
 	FILE.write("#! /bin/bash\n\n")
 	FILE.write("mkdir "+sLogDir+"\n")
+	FILE.write("mkdir Demultiplexing_Ok\n")
 	FILE.write(dCall[KEYCONF_SCALL]+" "+dCall[KEYCONF_SPARAM]+" "+dCall[KEYCONF_STASKARRAY]+"1-"+str(iSize)+dCall[KEYCONF_SMAXTASK]+dCall[KEYCONF_SMAXSIMJOB]+" -e "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".e"+dCall[KEYCONF_SPSEUDOTASKID]+" -o "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".o"+dCall[KEYCONF_SPSEUDOTASKID]+" "+sScriptDir+"/"+BASHSCRIPT+" "+sKmerPath+" "+sDir+" "+sScriptDir+" Demultiplexing_Ok "+sConf+" "+sArg+"\n")
-	FILE.write("""
-if [ ! -d "Demultiplexing_Ok" ] ; then mkdir "Demultiplexing_Ok" ; fi
-while true ; do
-	if [ $(ls Demultiplexing_Ok/ | wc -l) -eq 0 ]
-		then
-		nbr_ok=0
-	else
-		nbr_ok=$(ls Demultiplexing_Ok/*_MakeAssignation.ok | wc -l)
-	fi
-	if [ "${nbr_ok}" -eq """+str(iSize)+""" ]
-		then
-		rm -r Demultiplexing_Ok
-		break
-	fi
-	sleep 60
-done\n""")
+	# FILE.write("""
+# if [ ! -d "Demultiplexing_Ok" ] ; then mkdir "Demultiplexing_Ok" ; fi
+# while true ; do
+	# if [ $(ls Demultiplexing_Ok/ | wc -l) -eq 0 ]
+		# then
+		# nbr_ok=0
+	# else
+		# nbr_ok=$(ls Demultiplexing_Ok/*_MakeAssignation.ok | wc -l)
+	# fi
+	# if [ "${nbr_ok}" -eq """+str(iSize)+""" ]
+		# then
+		# rm -r Demultiplexing_Ok
+		# break
+	# fi
+	# sleep 60
+# done\n""")
+	FILE.write("rm -r Demultiplexing_Ok\n")
 	FILE.write("echo \""+BASHSCRIPT+"\" DONE\n")
 	FILE.close()
 	

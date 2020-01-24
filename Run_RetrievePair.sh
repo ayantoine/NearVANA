@@ -14,20 +14,21 @@ if [ ! -d "RetrievePair_Ok" ] ; then mkdir "RetrievePair_Ok" ; fi
 if [ ! -d ${PID}"_log_RetrievePair" ] ; then mkdir ${PID}"_log_RetrievePair" ; fi
 echo "$SCALL $SPARAM $SRENAME ${PID}_RetrievePair ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_RetrievePair"/${PID}_RetrievePair.e${SPSEUDOTASKID} -o ${PID}"_log_RetrievePair"/${PID}_RetrievePair.o${SPSEUDOTASKID} ${SDIR}/RetrievePair.sh ${ARG}"
 $SCALL $SPARAM $SRENAME ${PID}_RetrievePair ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_RetrievePair"/${PID}_RetrievePair.e${SPSEUDOTASKID} -o ${PID}"_log_RetrievePair"/${PID}_RetrievePair.o${SPSEUDOTASKID} ${SDIR}/RetrievePair.sh ${ARG}
-while true ; do
-	if [ $(ls RetrievePair_Ok/ | wc -l) -eq 0 ]
-		then
-		nbr_ok=0
-	else
-		nbr_ok=$(ls RetrievePair_Ok/*.RetrievePair.ok | wc -l)
-	fi
-	if [ "${nbr_ok}" -eq "${nb_jobs}" ]
-		then
-		rm -r RetrievePair_Ok
-		break
-	fi
-	sleep 60
-done
+#while true ; do
+	#if [ $(ls RetrievePair_Ok/ | wc -l) -eq 0 ]
+		#then
+		#nbr_ok=0
+	#else
+		#nbr_ok=$(ls RetrievePair_Ok/*.RetrievePair.ok | wc -l)
+	#fi
+	#if [ "${nbr_ok}" -eq "${nb_jobs}" ]
+		#then
+		#rm -r RetrievePair_Ok
+		#break
+	#fi
+	#sleep 60
+#done
+rm -r RetrievePair_Ok
 echo "------ /Launch RetrievePair array ------"
 
 touch ${PID}.Deinterlacing.ok

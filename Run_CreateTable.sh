@@ -22,9 +22,9 @@ echo "------ Create table ------"
 	$SCALL $SPARAM $SRENAME ${PID}_NTable -e Creation_TableN.e -o Creation_TableN.o ${SDIR}/CreateTable.sh $ARG N ${nb_jobs}
 	echo "$SCALL $SPARAM $SRENAME ${PID}_NTable -e Creation_TableAll.e -o Creation_TableAll.o ${SDIR}/CreateTableFusion.sh $ARG ${nb_jobs}"
 	$SCALL $SPARAM $SRENAME ${PID}_AllTable -e Creation_TableAll.e -o Creation_TableAll.o ${SDIR}/CreateTableFusion.sh $ARG ${nb_jobs}
-	while [ ! -e ${PID}.creationN.ok ]; do sleep 60 ; done
-	while [ ! -e ${PID}.creationX.ok ]; do sleep 60 ; done
-	while [ ! -e ${PID}.creationAll.ok ]; do sleep 60 ; done
+	#while [ ! -e ${PID}.creationN.ok ]; do sleep 60 ; done
+	#while [ ! -e ${PID}.creationX.ok ]; do sleep 60 ; done
+	#while [ ! -e ${PID}.creationAll.ok ]; do sleep 60 ; done
 	rm ${PID}.creationN.ok ${PID}.creationX.ok ${PID}.creationAll.ok
 echo "------ /Create table ------"
 

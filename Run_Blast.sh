@@ -35,8 +35,8 @@ echo "$SCALL $SPARAM $SRENAME ${PID}_N_Blast -e Run_BlastN.e -o Run_BlastN.o ${S
 $SCALL $SPARAM $SRENAME ${PID}_N_Blast -e Run_BlastN.e -o Run_BlastN.o ${SDIR}/Run_BlastTask.sh $ARG N
 echo "$SCALL $SPARAM $SRENAME ${PID}_X_Blast -e Run_BlastX.e -o Run_BlastX.o ${SDIR}/Run_BlastTask.sh $ARG X"
 $SCALL $SPARAM $SRENAME ${PID}_X_Blast -e Run_BlastX.e -o Run_BlastX.o ${SDIR}/Run_BlastTask.sh $ARG X
-while [ ! -e ${PID}.BlastN.ok ]; do sleep 60 ; done
-while [ ! -e ${PID}.BlastX.ok ]; do sleep 60 ; done
+#while [ ! -e ${PID}.BlastN.ok ]; do sleep 60 ; done
+#while [ ! -e ${PID}.BlastX.ok ]; do sleep 60 ; done
 echo "------ /Launch Blast by task ------"
 
 rm -r ${PID}_ToBlast
