@@ -29,7 +29,8 @@ echo ${ARGFILE}
 echo ${STASKID}
 
 echo "REALVALUE=$(expr ${STASKID} - 1)"
-REALVALUE=$(expr ${STASKID} - 1) #Split start at 0 and Task count start at 1. Substract 1 to Task count to match split name
+#Split start at 0 and Task count start at 1. Substract 1 to Task count to match split name
+REALVALUE=$(expr ${STASKID} - 1)
 DIGITID="000${REALVALUE}"
 DIGITID="${DIGITID: -3}"
 
