@@ -18,14 +18,6 @@ ARGFILE=$6
 source ${ARGFILE}
 source ${CONFFILE}
 
-
-echo ${KMER_FILE}
-echo ${WORKDIR}
-echo ${SCRIPTDIR}
-echo ${OKDIR}
-echo ${CONFFILE}
-echo ${ARGFILE}
-
 echo ${STASKID}
 
 echo "REALVALUE=$(expr ${STASKID} - 1)"
