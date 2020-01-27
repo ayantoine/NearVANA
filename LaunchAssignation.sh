@@ -18,6 +18,16 @@ ARGFILE=$6
 source ${ARGFILE}
 source ${CONFFILE}
 
+
+echo ${KMER_FILE}
+echo ${WORKDIR}
+echo ${SCRIPTDIR}
+echo ${OKDIR}
+echo ${CONFFILE}
+echo ${ARGFILE}
+
+echo ${STASKID}
+
 REALVALUE=$(expr ${STASKID} - 1) #Split start at 0 and Task count start at 1. Substract 1 to Task count to match split name
 DIGITID="000${REALVALUE}"
 DIGITID="${DIGITID: -3}"
