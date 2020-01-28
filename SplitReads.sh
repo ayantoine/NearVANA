@@ -27,9 +27,12 @@ echo "Creating ok file"
 while [ ! -f SplitReads${PAIR}_Ok/${STASKID}.SplitReads.${PAIR}.ok ]; do
 	touch SplitReads${PAIR}_Ok/${STASKID}.SplitReads.${PAIR}.ok
 	sleep 10
+	if [ ! -d SplitReads${PAIR}_Ok ]; then
+		break
+	fi
 done
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
-echo "Time Demultiplexing: "$delta
+echo "Time SplitReads: "$delta
 

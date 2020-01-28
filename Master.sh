@@ -137,7 +137,7 @@ echo "------ /Cleaning reads ------"
 
 echo "------ Reads correction ------"
 if [ ! -f ${PID}.Correction.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Correction -e Correction.e -o Correction.o ${SDIR}/Correction.sh $ARG"
+	echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Correction -e Correction.e -o Correction.o ${SDIR}/Correction.sh $ARG"
 	$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Correction -e Correction.e -o Correction.o ${SDIR}/Correction.sh $ARG
 	while [ ! -e ${PID}.Correction.ok ]; do sleep 60 ; done
 	rm ${PID}_R1.Substracted.fastq ${PID}_R2.Substracted.fastq ${PID}_R0.Substracted.fastq
@@ -148,7 +148,7 @@ echo "------ /Reads correction------"
 
 echo "------ Reads assembly ------"
 if [ ! -f ${PID}.Assembly.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG"
+	echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG"
 	$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG
 	while [ ! -e ${PID}.Assembly.ok ]; do sleep 60 ; done
 else
@@ -169,7 +169,7 @@ echo "------ /Launch Blast------"
 echo "------ Retrieve Taxonomy data ------"
 if [ ! -f ${PID}.Taxonomy.ok ]; then
 	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG"
-	 $SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG
+	$SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG
 	while [ ! -e ${PID}.Taxonomy.ok ]; do sleep 60 ; done
 else
 	echo "${PID}.Taxonomy.ok already existing, pass"
