@@ -140,19 +140,19 @@ done\n""")
 
 def GetJobByTask(iSeq,iTask):
 	if iTask==0:
-		return DEFAULT_SEQ_BY_TASK
+		return DEFAULT_SEQ_BY_TASK,int(round(iSeq/DEFAULT_SEQ_BY_TASK,0))+1
 	if iSeq%iTask==0:
 		iResult=iSeq/iTask
 	else:
 		iResult=int(round(iSeq/iTask,0))+1
-	return iResult
+	return iResult,iTask
 
 ########################################################################
 #MAIN
 if __name__ == "__main__":
 	dConf=LoadConfFile(sConf)
-	iJobByTask=GetJobByTask(iQuantity,int(dConf[KEYCONF_SMAXARRAYSIZE]))
-	WriteBash(sArg,iJobByTask,sScript,sKmerList,sOutput,sWorkDir,dConf,sConf,sPID,iQuantity)
+	iJobByTask,iTask=GetJobByTask(iQuantity,int(dConf[KEYCONF_SMAXARRAYSIZE]))
+	WriteBash(sArg,iTask,sScript,sKmerList,sOutput,sWorkDir,dConf,sConf,sPID,iJobByTask)
 	
 ########################################################################    
 iTime2=time.time()
