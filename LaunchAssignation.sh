@@ -1,13 +1,5 @@
 #! /bin/bash
 
-set -e
-
-err_report() {
-    echo "Error on line $1"
-}
-
-trap 'err_report $LINENO' ERR
-
 KMER_FILE=$1
 WORKDIR=$2
 SCRIPTDIR=$3
