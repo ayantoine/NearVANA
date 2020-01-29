@@ -15,5 +15,5 @@ REALVALUE=$(expr ${STASKID} - 1) #Split start at 0 and Task count start at 1. Su
 DIGITID="0000${REALVALUE}"
 DIGITID="${DIGITID: -4}"
 
-echo "python ${SCRIPTDIR}/MakeAssignation.py -1 ${PID}_R1.fastq -2 ${PID}_R2.fastq -k ${KMER_FILE} -d ${WORKDIR} -t ${OKDIR}/${DIGITID}_MakeAssignation.ok -i ${DIGITID}"
+echo "python ${SCRIPTDIR}/MakeAssignation.py -q ${SEQ_NUMBER} -1 ${PID}_R1.fastq -2 ${PID}_R2.fastq -k ${KMER_FILE} -d ${WORKDIR} -t ${OKDIR}/${DIGITID}_MakeAssignation.ok -i ${DIGITID}"
 python ${SCRIPTDIR}/MakeAssignation.py -q ${SEQ_NUMBER} -1 ${PID}_R1.fastq -2 ${PID}_R2.fastq -k ${KMER_FILE} -d ${WORKDIR} -t ${OKDIR}/${DIGITID}_MakeAssignation.ok -i ${DIGITID} -c ${CONFFILE}
