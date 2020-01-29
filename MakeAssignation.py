@@ -99,6 +99,7 @@ sQuantity=options.quantity
 if not sQuantity:
 	exit("Error : no quantity -q defined, process broken")
 try:
+	sQuantity=sQuantity.split(".")[0]
 	iQuantity=int(sQuantity)
 except ValueError:
 	exit("Error : quantity -q must be an integer, process broken")
