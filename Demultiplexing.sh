@@ -34,10 +34,18 @@ cat ${PID}_Demultiplexing/*_Unidentified* > ${PID}_Unidentified.tsv
 echo "------ /Merge subdata ------"
 
 echo "------ Write output ------"
-cat ${PID}_Hyper_Identified.tsv ${PID}_Hypo_2_Identified.tsv ${PID}_Ambiguous_2.tsv ${PID}_Unidentified.tsv > ${PID}_Demultiplexing_Hyper.tsv
-cut -f2 ${PID}_Demultiplexing_Hyper.tsv | sort | uniq -c | awk '{print $2"\t"$1}' > ${PID}_Demultiplexing_Hyper_Distribution.tsv
-cat ${PID}_Hyper_Identified.tsv ${PID}_Hypo_1_Identified.tsv ${PID}_Ambiguous_1.tsv ${PID}_Unidentified.tsv > ${PID}_Demultiplexing_Global.tsv
-cut -f2 ${PID}_Demultiplexing_Global.tsv | sort | uniq -c | awk '{print $2"\t"$1}' > ${PID}_Demultiplexing_Global_Distribution.tsv
+#cat ${PID}_Hyper_Identified.tsv ${PID}_Hypo_2_Identified.tsv ${PID}_Ambiguous_2.tsv ${PID}_Unidentified.tsv > ${PID}_Demultiplexing_Hyper.tsv
+echo "python ${SDIR}/ConcatenateFile.py -o ${PID}_Demultiplexing_Hyper.tsv -l ${PID}_Hyper_Identified.tsv,${PID}_Hypo_2_Identified.tsv,${PID}_Ambiguous_2.tsv,${PID}_Unidentified.tsv"
+python ${SDIR}/ConcatenateFile.py -o ${PID}_Demultiplexing_Hyper.tsv -l ${PID}_Hyper_Identified.tsv,${PID}_Hypo_2_Identified.tsv,${PID}_Ambiguous_2.tsv,${PID}_Unidentified.tsv
+#cut -f2 ${PID}_Demultiplexing_Hyper.tsv | sort | uniq -c | awk '{print $2"\t"$1}' > ${PID}_Demultiplexing_Hyper_Distribution.tsv
+echo "python ${SDIR}/CountDistribution.py -i ${PID}_Demultiplexing_Hyper.tsv -o ${PID}_Demultiplexing_Hyper_Distribution.tsv"
+python ${SDIR}/CountDistribution.py -i ${PID}_Demultiplexing_Hyper.tsv -o ${PID}_Demultiplexing_Hyper_Distribution.tsv
+#cat ${PID}_Hyper_Identified.tsv ${PID}_Hypo_1_Identified.tsv ${PID}_Ambiguous_1.tsv ${PID}_Unidentified.tsv > ${PID}_Demultiplexing_Global.tsv
+echo "python ${SDIR}/ConcatenateFile.py -o ${PID}_Demultiplexing_Global.tsv -l ${PID}_Hyper_Identified.tsv,${PID}_Hypo_1_Identified.tsv,${PID}_Ambiguous_1.tsv,${PID}_Unidentified.tsv"
+python ${SDIR}/ConcatenateFile.py -o ${PID}_Demultiplexing_Global.tsv -l ${PID}_Hyper_Identified.tsv,${PID}_Hypo_1_Identified.tsv,${PID}_Ambiguous_1.tsv,${PID}_Unidentified.tsv
+#cut -f2 ${PID}_Demultiplexing_Global.tsv | sort | uniq -c | awk '{print $2"\t"$1}' > ${PID}_Demultiplexing_Global_Distribution.tsv
+echo "python ${SDIR}/CountDistribution.py -i ${PID}_Demultiplexing_Global.tsv -o ${PID}_Demultiplexing_Global_Distribution.tsv"
+python ${SDIR}/CountDistribution.py -i ${PID}_Demultiplexing_Global.tsv -o ${PID}_Demultiplexing_Global_Distribution.tsv
 wc -l ${PID}_Hyper_Identified.tsv ${PID}_Hypo_1_Identified.tsv ${PID}_Hypo_2_Identified.tsv ${PID}_Ambiguous_1.tsv ${PID}_Unidentified.tsv ${PID}_Demultiplexing_Global.tsv | head -n -1
 echo $(expr $(cat ${PID}_R1.fastq ${PID}_R2.fastq | wc -l | cut -d " " -f1) / 4 )" sequences in "${R1}" and "${R2}
 echo "------ /Write output ------"
