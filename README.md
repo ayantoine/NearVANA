@@ -17,6 +17,7 @@ SMAXTASK : keyword to define the maximum amount of parallele task during a task 
 SRENAME : keyword to rename a job
 
 SMAXSIMJOB : integer that define the maximum amount of parallele task during a task array
+SMAXARRAYSIZE : integer that define the maximum size of array. Use 0 if array haven't limited size on your cluster
 
 STASKID : keyword to ask a task Id during in array
 SPSEUDOTASKID : keyword to ask a task Id during the call of an array
@@ -34,6 +35,7 @@ SMAXTASK=\ -tc\
 SRENAME=-N
 
 SMAXSIMJOB=75
+SMAXARRAYSIZE=0
 
 STASKID=$SGE_TASK_ID
 SPSEUDOTASKID=\$TASK_ID

@@ -6,13 +6,15 @@ import time
 from optparse import OptionParser
 import codecs
 
-sCurrentVersionScript="v2"
+sCurrentVersionScript="v3"
 iTime1=time.time()
 ########################################################################
 '''
+V3-2020/01/21
+Adapt to array wioth limited value
+
 V2-2019/10/30
 Work with index on base file instead multiple subfile (decrease memory usage)
-
 V1-2019/07/01
 Research Kmer in sequence to assign to a sample
 
@@ -35,11 +37,22 @@ UNIDENTIFIED_SUFFIX="Unidentified.tsv"
 SAMPLENONE="..."
 INDEXNONE="."
 
-SEQ_BY_TASK=1000000 #Must be similar in QsubAssignation.py
+DEFAULT_SEQ_BY_TASK=1000000 #Must be similar in QsubAssignation.py
 LINE_BY_FASTQ=4
-LINE_BY_TASK=SEQ_BY_TASK*LINE_BY_FASTQ
+# LINE_BY_TASK=SEQ_BY_TASK*LINE_BY_FASTQ
 
 SEARCHWINDOWS_SIZE=30
+
+CONF_COMMENT="#"
+CONF_STEP="="
+KEYCONF_SCALL="SCALL"
+KEYCONF_SPARAM="SPARAM"
+KEYCONF_STASKARRAY="STASKARRAY"
+KEYCONF_SMAXTASK="SMAXTASK"
+KEYCONF_SMAXSIMJOB="SMAXSIMJOB"
+KEYCONF_SMAXARRAYSIZE="SMAXARRAYSIZE"
+KEYCONF_STASKID="STASKID"
+KEYCONF_SPSEUDOTASKID="SPSEUDOTASKID"
 ########################################################################
 #Options
 parser = OptionParser()
@@ -49,6 +62,8 @@ parser.add_option("-k","--kmerlist", dest="kmerlist")
 parser.add_option("-d","--workdir", dest="workdir")
 parser.add_option("-t","--tagfile", dest="tagfile")
 parser.add_option("-i","--index", dest="index")
+parser.add_option("-q","--quantity", dest="quantity")
+parser.add_option("-c","--conffile", dest="conffile")
 
 (options, args) = parser.parse_args()
 
@@ -79,6 +94,19 @@ try:
 	iIndex=int(sIndex)
 except ValueError:
 	exit("Error : index -i must be an integer, process broken")
+	
+sQuantity=options.quantity
+if not sQuantity:
+	exit("Error : no quantity -q defined, process broken")
+try:
+	sQuantity=sQuantity.split(".")[0]
+	iQuantity=int(sQuantity)
+except ValueError:
+	exit("Error : quantity -q must be an integer, process broken")
+
+sConf=options.conffile
+if not sConf:
+	exit("Error : no conffile -c defined, process broken")
 
 sHyperName=sWorkDir+"/"+str(iIndex)+"_"+HYPER_SUFFIX
 sHypo1Name=sWorkDir+"/"+str(iIndex)+"_"+HYPO1_SUFFIX
@@ -106,20 +134,17 @@ def LoadKmerFile(sPath):
 		dOtherDict[sKmer]=iEndIndex
 	return dDict, dOtherDict
 	
-def ProcessFastq1(dKmer,dEndIndex,sFastq,iIndex):
+def ProcessFastq1(dKmer,dEndIndex,sFastq,iIndex,iJobByTask):
 	dResult={}
 	iCount=0
+	iLineByTask=iJobByTask*LINE_BY_FASTQ
 	
 	for sNewLine in open(sFastq):
 		iCount+=1
-		if iCount<iIndex*LINE_BY_TASK+1:
+		if iCount<iIndex*iLineByTask+1:
 			continue
-		elif iCount>=(iIndex+1)*LINE_BY_TASK+1:
+		elif iCount>=(iIndex+1)*iLineByTask+1:
 			break
-		# if iCount<iIndex*SEQ_BY_TASK:
-			# continue
-		# elif iCount>=(iIndex+1)*SEQ_BY_TASK:
-			# break
 		sLine=sNewLine.strip()
 		if iCount%4==1:
 			sSeqId=sLine[1:]
@@ -177,7 +202,7 @@ def AssignSample(sString,dKmer,dEndIndex):
 		#Else, pursue with lower Kmer
 	return sAssignation,sEndIndex
 	
-def ProcessFastq2(dKmer,dEndIndex,sFastq,dSeq1,iIndex):
+def ProcessFastq2(dKmer,dEndIndex,sFastq,dSeq1,iIndex,iJobByTask):
 	HYPERPATH=open(sHyperName,"w")
 	HYP01PATH=open(sHypo1Name,"w")
 	HYP02PATH=open(sHypo2Name,"w")
@@ -186,11 +211,12 @@ def ProcessFastq2(dKmer,dEndIndex,sFastq,dSeq1,iIndex):
 	UNIDENTIFIEDPATH=open(sUnidentifiedName,"w")
 	
 	iCount=0
+	iLineByTask=iJobByTask*LINE_BY_FASTQ
 	for sNewLine in open(sFastq):
 		iCount+=1
-		if iCount<iIndex*LINE_BY_TASK+1:
+		if iCount<iIndex*iLineByTask+1:
 			continue
-		elif iCount>=(iIndex+1)*LINE_BY_TASK+1:
+		elif iCount>=(iIndex+1)*iLineByTask+1:
 			break
 		sLine=sNewLine.strip()
 		if iCount%4==1:
@@ -235,13 +261,39 @@ def ProcessFastq2(dKmer,dEndIndex,sFastq,dSeq1,iIndex):
 def CreateTag(sName):
 	FILE=open(sName,"w")
 	FILE.close()
+
+def LoadConfFile(sPath):
+	dDict={}
+	for sNewLine in open(sPath):
+		# sLine=sNewLine.strip()
+		sLine=sNewLine.replace("\n","")
+		sLine=sLine.replace("\\","")
+		sLine=sLine.replace('"','')
+		if len(sLine)==0:
+			continue
+		if sLine[0]==CONF_COMMENT:
+			continue
+		tLine=sLine.split(CONF_STEP)
+		dDict[tLine[0]]=CONF_STEP.join(tLine[1:])
+	return dDict	
+
+def GetJobByTask(iSeq,iTask):
+	if iTask==0:
+		return DEFAULT_SEQ_BY_TASK
+	if iSeq%iTask==0:
+		iResult=iSeq/iTask
+	else:
+		iResult=int(round(iSeq/iTask,0))+1
+	return iResult
 		
 ########################################################################
 #MAIN
 if __name__ == "__main__":
+	dConf=LoadConfFile(sConf)
+	iJobByTask=GetJobByTask(iQuantity,int(dConf[KEYCONF_SMAXARRAYSIZE]))
 	dKmerRef, dKmerEndIndex=LoadKmerFile(sKmerList)
-	dSeqId2Sample=ProcessFastq1(dKmerRef,dKmerEndIndex,sFastq1,iIndex)
-	ProcessFastq2(dKmerRef,dKmerEndIndex,sFastq2,dSeqId2Sample,iIndex)
+	dSeqId2Sample=ProcessFastq1(dKmerRef,dKmerEndIndex,sFastq1,iIndex,iJobByTask)
+	ProcessFastq2(dKmerRef,dKmerEndIndex,sFastq2,dSeqId2Sample,iIndex,iJobByTask)
 	CreateTag(sTagFile)
 
 ########################################################################    

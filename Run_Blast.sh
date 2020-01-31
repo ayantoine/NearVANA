@@ -12,21 +12,27 @@ echo ${SEQMARKER} > Target.txt
 nb_seq=$(grep -c -f Target.txt ${PID}_All.fa)
 nb_task=${SMAXSIMJOB}
 
+echo "$SMAXARRAYSIZE"
+if [[ $SMAXARRAYSIZE -eq 0 ]]; then
+	CHUNCK=1000
+else
+	CHUNCK=$((nb_seq/SMAXARRAYSIZE+1))
+fi
+
 mkdir ${PID}_ToBlast
 
-echo "python ${SDIR}/SplitFasta.py -f ${PID}_ToBlast -i ${PID}_All.fa"
-python ${SDIR}/SplitFasta.py -f ${PID}_ToBlast -i ${PID}_All.fa
+echo "python ${SDIR}/SplitFasta.py -f ${PID}_ToBlast -i ${PID}_All.fa c ${CHUNCK}"
+python ${SDIR}/SplitFasta.py -f ${PID}_ToBlast -i ${PID}_All.fa -c ${CHUNCK}
 
 nb_jobs=$(ls ${PID}_ToBlast | wc -l)
 
 echo "Number of initial sequences: "$nb_seq
 echo "Number of final sequences: "$(cat ${PID}"_ToBlast"/* | grep -c -f Target.txt)
-echo "Number of sequences per job: "$(cat ${PID}"_ToBlast"/${PID}"_All.fa.1" | grep -c -f Target.txt)
+echo "Number of sequences per job: "$CHUNCK
 echo "Number of generated jobs: "$nb_jobs
 echo "Number of simultaneous tasks: "$nb_task
 echo "------ /Configure job array ------"
 rm Target.txt
-
 
 echo "------ Launch Blast by task ------"
 echo "$SCALL $SPARAM $SRENAME ${PID}_N_Blast -e Run_BlastN.e -o Run_BlastN.o ${SDIR}/Run_BlastTask.sh $ARG N"

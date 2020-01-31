@@ -5,14 +5,17 @@
 import time
 from optparse import OptionParser
 
-sCurrentVersionScript="v1"
+sCurrentVersionScript="v3"
 iTime1=time.time()
 ########################################################################
 '''
+V3-2020/01/21
+Allow to define the value of CHUNCK
+
 V2-2019/11/21
 Split a fasta by chunck of 1000 into a specified folder
 
-python SplitFasta.py -f FOLDER -i INPUT
+python SplitFasta.py -f FOLDER -i INPUT -c CHUNCK
 INPUT: Fasta file
 FOLDER: Targeted folder
 '''
@@ -25,6 +28,7 @@ CHUNCK=1000
 parser = OptionParser()
 parser.add_option("-f","--folder", dest="folder")
 parser.add_option("-i","--input", dest="input")
+parser.add_option("-c","--chunck", dest="chunck")
 
 (options, args) = parser.parse_args()
 
@@ -35,10 +39,21 @@ if not sFolder:
 sInput=options.input
 if not sInput:
 	exit("Error : no input -i defined, process broken")
+	
+sChunck=options.chunck
+if not sChunck:
+	iChunck=CHUNCK
+	print("Warning : no chunck -c defined, default value: "+str(iChunck))
+else:
+	try:
+		iChunck=int(sChunck)
+	except ValueError:
+		iChunck=CHUNCK
+		print("Warning : chunck -c is not an integer, default value: "+str(iChunck))
 
 ########################################################################
 #Function 	
-def SplitFasta(sFolder,sInput):
+def SplitFasta(sFolder,sInput,iChunck):
 	iFileNumber=1
 	iSeqCount=0
 	FILE=open(sFolder+"/"+sInput+"."+str(iFileNumber),"w")
@@ -49,7 +64,7 @@ def SplitFasta(sFolder,sInput):
 			if sSeqName!="":
 				FILE.write(sSeqName+sSeqContent)
 				iSeqCount+=1
-				if iSeqCount==CHUNCK:
+				if iSeqCount==iChunck:
 					FILE.close()
 					iSeqCount=0
 					iFileNumber+=1
@@ -66,7 +81,7 @@ def SplitFasta(sFolder,sInput):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	SplitFasta(sFolder,sInput)
+	SplitFasta(sFolder,sInput,iChunck)
 	
 ########################################################################    
 iTime2=time.time()
