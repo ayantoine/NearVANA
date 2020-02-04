@@ -20,7 +20,7 @@ mkdir ${PID}_Demultiplexing
 echo "------ Make assignation ------"
 echo "python ${SDIR}/QsubAssignation.py -a ${ARG} -s ${SDIR} -k ${DODE}.kmer.tsv -d ${PID}_Demultiplexing -o QsubAssignation.sh -c ${CONF} -q ${NB_SEQ} -p ${PID}"
 python ${SDIR}/QsubAssignation.py -a ${ARG} -s ${SDIR} -k ${DODE}.kmer.tsv -d ${PID}_Demultiplexing -o QsubAssignation.sh -c ${CONF} -q ${NB_SEQ} -p ${PID}
-echo "./QsubAssignation.sh"
+cat ./QsubAssignation.sh
 exit
 bash ./QsubAssignation.sh
 echo "------ /Make assignation ------"
