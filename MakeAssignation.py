@@ -139,7 +139,7 @@ def ProcessFastq1(dKmer,dEndIndex,sFastq,iIndex,iJobByTask):
 	iCount=0
 	iLineByTask=iJobByTask*LINE_BY_FASTQ
 	
-	print("Working from "+str(iIndex*iJobByTask+1)+" to "+str(iIndex+1)*iLineByTask))
+	print("Working from "+str(iIndex*iJobByTask+1)+" to "+str(iIndex+1)*iLineByTask)
 	
 	for sNewLine in open(sFastq):
 		iCount+=1
