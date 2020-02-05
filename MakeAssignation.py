@@ -37,7 +37,7 @@ UNIDENTIFIED_SUFFIX="Unidentified.tsv"
 SAMPLENONE="..."
 INDEXNONE="."
 
-DEFAULT_SEQ_BY_TASK=1000000 #Must be similar in QsubAssignation.py
+# DEFAULT_SEQ_BY_TASK=1000000 #Must be similar in QsubAssignation.py
 LINE_BY_FASTQ=4
 # LINE_BY_TASK=SEQ_BY_TASK*LINE_BY_FASTQ
 
@@ -138,6 +138,8 @@ def ProcessFastq1(dKmer,dEndIndex,sFastq,iIndex,iJobByTask):
 	dResult={}
 	iCount=0
 	iLineByTask=iJobByTask*LINE_BY_FASTQ
+	
+	print("Working from "+str(iIndex*iLineByTask+1)+" to "+str((iIndex+1)*iLineByTask))
 	
 	for sNewLine in open(sFastq):
 		iCount+=1
@@ -277,23 +279,23 @@ def LoadConfFile(sPath):
 		dDict[tLine[0]]=CONF_STEP.join(tLine[1:])
 	return dDict	
 
-def GetJobByTask(iSeq,iTask):
-	if iTask==0:
-		return DEFAULT_SEQ_BY_TASK
-	if iSeq%iTask==0:
-		iResult=iSeq/iTask
-	else:
-		iResult=int(round(iSeq/iTask,0))+1
-	return iResult
+# def GetJobByTask(iSeq,iTask):
+	# if iTask==0:
+		# return DEFAULT_SEQ_BY_TASK
+	# if iSeq%iTask==0:
+		# iResult=iSeq/iTask
+	# else:
+		# iResult=int(round(iSeq/iTask,0))+1
+	# return iResult
 		
 ########################################################################
 #MAIN
 if __name__ == "__main__":
 	dConf=LoadConfFile(sConf)
-	iJobByTask=GetJobByTask(iQuantity,int(dConf[KEYCONF_SMAXARRAYSIZE]))
+	# iJobByTask=GetJobByTask(iQuantity,int(dConf[KEYCONF_SMAXARRAYSIZE]))
 	dKmerRef, dKmerEndIndex=LoadKmerFile(sKmerList)
-	dSeqId2Sample=ProcessFastq1(dKmerRef,dKmerEndIndex,sFastq1,iIndex,iJobByTask)
-	ProcessFastq2(dKmerRef,dKmerEndIndex,sFastq2,dSeqId2Sample,iIndex,iJobByTask)
+	dSeqId2Sample=ProcessFastq1(dKmerRef,dKmerEndIndex,sFastq1,iIndex,iQuantity)
+	ProcessFastq2(dKmerRef,dKmerEndIndex,sFastq2,dSeqId2Sample,iIndex,iQuantity)
 	CreateTag(sTagFile)
 
 ########################################################################    
