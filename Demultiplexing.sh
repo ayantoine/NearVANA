@@ -35,27 +35,39 @@ cat ${PID}_Demultiplexing/*_Ambiguous_2* > ${PID}_Ambiguous_2.tsv
 cat ${PID}_Demultiplexing/*_Unidentified* > ${PID}_Unidentified.tsv
 echo "------ /Merge subdata ------"
 
+rm -r ${PID}_Demultiplexing/
+rm ./QsubAssignation.sh
+
 echo "------ Write output ------"
-#cat ${PID}_Hyper_Identified.tsv ${PID}_Hypo_2_Identified.tsv ${PID}_Ambiguous_2.tsv ${PID}_Unidentified.tsv > ${PID}_Demultiplexing_Hyper.tsv
-echo "python ${SDIR}/ConcatenateFile.py -o ${PID}_Demultiplexing_Hyper.tsv -l ${PID}_Hyper_Identified.tsv,${PID}_Hypo_2_Identified.tsv,${PID}_Ambiguous_2.tsv,${PID}_Unidentified.tsv"
-python ${SDIR}/ConcatenateFile.py -o ${PID}_Demultiplexing_Hyper.tsv -l ${PID}_Hyper_Identified.tsv,${PID}_Hypo_2_Identified.tsv,${PID}_Ambiguous_2.tsv,${PID}_Unidentified.tsv
-#cut -f2 ${PID}_Demultiplexing_Hyper.tsv | sort | uniq -c | awk '{print $2"\t"$1}' > ${PID}_Demultiplexing_Hyper_Distribution.tsv
-echo "python ${SDIR}/CountDistribution.py -i ${PID}_Demultiplexing_Hyper.tsv -o ${PID}_Demultiplexing_Hyper_Distribution.tsv"
-python ${SDIR}/CountDistribution.py -i ${PID}_Demultiplexing_Hyper.tsv -o ${PID}_Demultiplexing_Hyper_Distribution.tsv
 #cat ${PID}_Hyper_Identified.tsv ${PID}_Hypo_1_Identified.tsv ${PID}_Ambiguous_1.tsv ${PID}_Unidentified.tsv > ${PID}_Demultiplexing_Global.tsv
 echo "python ${SDIR}/ConcatenateFile.py -o ${PID}_Demultiplexing_Global.tsv -l ${PID}_Hyper_Identified.tsv,${PID}_Hypo_1_Identified.tsv,${PID}_Ambiguous_1.tsv,${PID}_Unidentified.tsv"
 python ${SDIR}/ConcatenateFile.py -o ${PID}_Demultiplexing_Global.tsv -l ${PID}_Hyper_Identified.tsv,${PID}_Hypo_1_Identified.tsv,${PID}_Ambiguous_1.tsv,${PID}_Unidentified.tsv
 #cut -f2 ${PID}_Demultiplexing_Global.tsv | sort | uniq -c | awk '{print $2"\t"$1}' > ${PID}_Demultiplexing_Global_Distribution.tsv
 echo "python ${SDIR}/CountDistribution.py -i ${PID}_Demultiplexing_Global.tsv -o ${PID}_Demultiplexing_Global_Distribution.tsv"
 python ${SDIR}/CountDistribution.py -i ${PID}_Demultiplexing_Global.tsv -o ${PID}_Demultiplexing_Global_Distribution.tsv
+
+gzip -f ${PID}_Demultiplexing_Global.tsv > ${PID}_Demultiplexing_Global.tsv.gz
+
+#cat ${PID}_Hyper_Identified.tsv ${PID}_Hypo_2_Identified.tsv ${PID}_Ambiguous_2.tsv ${PID}_Unidentified.tsv > ${PID}_Demultiplexing_Hyper.tsv
+echo "python ${SDIR}/ConcatenateFile.py -o ${PID}_Demultiplexing_Hyper.tsv -l ${PID}_Hyper_Identified.tsv,${PID}_Hypo_2_Identified.tsv,${PID}_Ambiguous_2.tsv,${PID}_Unidentified.tsv"
+python ${SDIR}/ConcatenateFile.py -o ${PID}_Demultiplexing_Hyper.tsv -l ${PID}_Hyper_Identified.tsv,${PID}_Hypo_2_Identified.tsv,${PID}_Ambiguous_2.tsv,${PID}_Unidentified.tsv
+#cut -f2 ${PID}_Demultiplexing_Hyper.tsv | sort | uniq -c | awk '{print $2"\t"$1}' > ${PID}_Demultiplexing_Hyper_Distribution.tsv
+echo "python ${SDIR}/CountDistribution.py -i ${PID}_Demultiplexing_Hyper.tsv -o ${PID}_Demultiplexing_Hyper_Distribution.tsv"
+python ${SDIR}/CountDistribution.py -i ${PID}_Demultiplexing_Hyper.tsv -o ${PID}_Demultiplexing_Hyper_Distribution.tsv
 echo "------ /Write output ------"
+
 echo "------ Bilan ------"
-wc -l ${PID}_Hyper_Identified.tsv ${PID}_Hypo_1_Identified.tsv ${PID}_Hypo_2_Identified.tsv ${PID}_Ambiguous_1.tsv ${PID}_Unidentified.tsv ${PID}_Demultiplexing_Global.tsv | head -n -1
+wc -l ${PID}_Hyper_Identified.tsv ${PID}_Hypo_1_Identified.tsv ${PID}_Ambiguous_1.tsv ${PID}_Unidentified.tsv ${PID}_Demultiplexing_Hyper.tsv | head -n -1
 echo $(expr $(cat ${PID}_R1.fastq ${PID}_R2.fastq | wc -l | cut -d " " -f1) / 4 )" sequences in "${R1}" and "${R2}
 echo "------ /Bilan ------"
 
-rm -r ${PID}_Demultiplexing/
-rm ./QsubAssignation.sh
+echo "------ Store supplementary data ------"
+gzip -f ${PID}_Hypo_1_Identified.tsv > ${PID}_Hypo_1_Identified.tsv.gz
+gzip -f ${PID}_Hypo_2_Identified.tsv > ${PID}_Hypo_2_Identified.tsv.gz
+gzip -f ${PID}_Ambiguous_1.tsv > ${PID}_Ambiguous_1.tsv.gz
+gzip -f ${PID}_Ambiguous_2.tsv > ${PID}_Ambiguous_2.tsv.gz
+gzip -f ${PID}_Unidentified.tsv > ${PID}_Unidentified.tsv.gz
+echo "------ /Store supplementary data ------"
 
 > ${PID}.Demultiplexing.ok
 
