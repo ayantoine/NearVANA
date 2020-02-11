@@ -4,21 +4,53 @@ ARG=$1
 #WARNING!! Source file is executed (Security, etc.)
 source $ARG
 
+function boolean() {
+  case $1 in
+    TRUE) echo true ;;
+    FALSE) echo false ;;
+    *) echo "Err: Unknown boolean value \"$1\"" 1>&2; exit 1 ;;
+   esac
+}
+
+USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
+
 echo "------ Check Input existence ------"
 if [ ! -d $SDIR ] ; then
 	echo "Directory SDIR ${SDIR} does not exists"
 	exit 1
 fi
-LIST_FILE=($R1 $R2 $ADAP $DODE $META $SUBS $NUCACC $NUCDEF $PROACC $PRODEF $DBLINEAGE $VIRMINLEN $CONF)
+LIST_FILE=($DATA $ADAP $SUBS $NUCACC $NUCDEF $PROACC $PRODEF $DBLINEAGE $VIRMINLEN $CONF)
 for i in "${LIST_FILE[@]}"; do
 	if [ ! -f $i ]; then
 		echo "File $i does not exists"
 		exit 1
 	fi
 done
+echo "\t -check data"
+source $DATA
+if USE_MULTIPLEX ; then
+	NB_ITEM=4
+else
+	NB_ITEM=2
+fi
 
+for p in "${PLATE[@]}"; do
+	if [ "${#p[@]}" -eq "${NB_ITEM}" ]; then
+		for i in "${p[@]}"; do
+			if [ ! -f $i ]; then
+				echo "File $i does not exists"
+				exit 1
+		done
+	else
+		echo "With option MULTIPLEX set to $MULTIPLEX, $p must contains $NB_ITEM elements"
+		exit 1
+	fi
+done
+echo "------ /Check Input existence ------"
+
+echo "------ Show variable value ------"
 echo "> Args details"
-List_NONFILE=(PID R1 R2 ADAP DODE META SUBS NUCACC NUCDEF PROACC PRODEF DBLINEAGE VIRMINLEN CONF)
+List_NONFILE=(PID DATA MULTIPLEX ADAP SUBS NUCACC NUCDEF PROACC PRODEF DBLINEAGE VIRMINLEN CONF)
 for i in "${List_NONFILE[@]}"; do
 	echo "$i: ${!i}"
 done
@@ -30,7 +62,7 @@ LIST_PARAM=(SCALL SPARAM MULTICPU SPARAM_MULTICPU STASKARRAY SMAXTASK SRENAME SM
 for i in "${LIST_PARAM[@]}"; do
 	echo "$i: ${!i}"
 done
-echo "------ /Check Input existence ------"
+echo "------ /Show variable value ------"
 
 echo "------ Get Sample list ------"
 declare -a SAMPLE_LIST
@@ -39,6 +71,11 @@ while read c1 leftovers; do
 done < ${DODE}
 echo "${SAMPLE_LIST[@]}"
 echo "------ /Get Sample list ------"
+
+
+exit
+
+########################################################################
 
 echo "------ Extract .gz ------"
 if [ ! -f ${PID}.extraction.ok ]; then
