@@ -4,6 +4,7 @@ ARG=$1
 #WARNING!! Source file is executed (Security, etc.)
 source $ARG
 
+
 echo "------ Check Input existence ------"
 if [ ! -d $SDIR ] ; then
 	echo "Directory SDIR ${SDIR} does not exists"
