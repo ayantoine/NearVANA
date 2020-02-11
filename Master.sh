@@ -79,6 +79,7 @@ for VARNAME in "${PLATE[@]}"; do
 	while read c1 leftovers; do
 		SAMPLE_LIST+=(${VARNAME}${c1})
 	done < ${!VAR_SAMPLE_FILE}
+	echo "${SAMPLE_LIST[@]}"
 done
 echo "------ /Get Sample list ------"
 
@@ -94,19 +95,24 @@ fi
 echo "------ /Extract .gz ------"
 
 
+if [ "$USE_MULTIPLEX" = true ] ; then
+	echo "------ Demultiplexing reads ------"
+	if [ ! -f ${PID}.Demultiplexing.ok ]; then
+		echo "$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing_Illumina_pe_V5.e -o Demultiplexing_Illumina_pe_V5.o ${SDIR}/Demultiplexing_Illumina_pe_V5.sh $ARG"
+		$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing.e -o Demultiplexing.o ${SDIR}/Demultiplexing.sh $ARG # Input: ${PID}_R1.fastq ${PID}_R2.fastq $MID $PID $SDIR # Output: ${PID}_Demultiplexing.tab ${PID}_Demultiplexing_Distribution.tab ${PID}_Hyper_Identified.tab ${PID}_Hypo_1_Identified.tab ${PID}_Hypo_2_Identified.tab ${PID}_Ambiguous.tab ${PID}_Unidentified.tab
+		while [ ! -e ${PID}.Demultiplexing.ok ]; do sleep 60 ; done
+	else
+		echo "${PID}.Demultiplexing.ok existing, pass"
+	fi
+	echo "------ /Demultiplexing reads -----"
+fi
+
+
+
+
+
 ########################################################################
 exit
-
-
-echo "------ Demultiplexing reads ------"
-if [ ! -f ${PID}.Demultiplexing.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing_Illumina_pe_V5.e -o Demultiplexing_Illumina_pe_V5.o ${SDIR}/Demultiplexing_Illumina_pe_V5.sh $ARG"
-	$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing.e -o Demultiplexing.o ${SDIR}/Demultiplexing.sh $ARG # Input: ${PID}_R1.fastq ${PID}_R2.fastq $MID $PID $SDIR # Output: ${PID}_Demultiplexing.tab ${PID}_Demultiplexing_Distribution.tab ${PID}_Hyper_Identified.tab ${PID}_Hypo_1_Identified.tab ${PID}_Hypo_2_Identified.tab ${PID}_Ambiguous.tab ${PID}_Unidentified.tab
-	while [ ! -e ${PID}.Demultiplexing.ok ]; do sleep 60 ; done
-else
-	echo "${PID}.Demultiplexing.ok existing, pass"
-fi
-echo "------ /Demultiplexing reads -----"
 
 echo "------ Cleaning reads ------"
 if [ ! -f ${PID}.Cleaning.ok ]; then

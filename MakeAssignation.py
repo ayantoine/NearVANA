@@ -10,9 +10,11 @@ sCurrentVersionScript="v3"
 iTime1=time.time()
 ########################################################################
 '''
+V4-2020/02/11
+Adapt to multi-plate analysis
+
 V3-2020/01/21
 Adapt to array wioth limited value
-
 V2-2019/10/30
 Work with index on base file instead multiple subfile (decrease memory usage)
 V1-2019/07/01
@@ -64,6 +66,7 @@ parser.add_option("-t","--tagfile", dest="tagfile")
 parser.add_option("-i","--index", dest="index")
 parser.add_option("-q","--quantity", dest="quantity")
 parser.add_option("-c","--conffile", dest="conffile")
+parser.add_option("-v","--varname", dest="varname")
 
 (options, args) = parser.parse_args()
 
@@ -107,6 +110,10 @@ except ValueError:
 sConf=options.conffile
 if not sConf:
 	exit("Error : no conffile -c defined, process broken")
+	
+sVarName=options.varname
+if not sVarName:
+	exit("Error : no varname -v defined, process broken")
 
 sHyperName=sWorkDir+"/"+str(iIndex)+"_"+HYPER_SUFFIX
 sHypo1Name=sWorkDir+"/"+str(iIndex)+"_"+HYPO1_SUFFIX
