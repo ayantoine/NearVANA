@@ -13,9 +13,11 @@ for VARNAME in "${PLATE[@]}"; do
 	VAR_DODE="${VARNAME}[3]"
 	
 	echo "------ Create Kmer library ------"
-	echo "python ${SDIR}/CreateKmerList.py -m ${!!VAR_DODE} -o ${!!VAR_DODE}.kmer.tsv -p ${PID} -v ${VARNAME}"
-	python ${SDIR}/CreateKmerList.py -m ${!!VAR_DODE} -o ${!!VAR_DODE}.kmer.tsv -p ${PID} -v ${VARNAME}
+	echo "python ${SDIR}/CreateKmerList.py -m ${!VAR_DODE} -o ${!VAR_DODE}.kmer.tsv -p ${PID} -v ${VARNAME}"
+	python ${SDIR}/CreateKmerList.py -m ${!VAR_DODE} -o ${!VAR_DODE}.kmer.tsv -p ${PID} -v ${VARNAME}
 	echo "------ /Create Kmer library ------"
+	
+	exit
 	
 	echo "------ Count sequences ------"
 	NB_SEQ=$(($(sed -n '$=' ${PID}_${VARNAME}_R1.fastq)/4))
