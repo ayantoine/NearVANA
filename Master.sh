@@ -29,7 +29,7 @@ done
 echo "\t -check data"
 echo "$USE_MULTIPLEX"
 source $DATA
-if USE_MULTIPLEX ; then
+if [ "$USE_MULTIPLEX" = true ] ; then
 	NB_ITEM=4
 else
 	NB_ITEM=2
