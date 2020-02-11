@@ -27,6 +27,7 @@ for i in "${LIST_FILE[@]}"; do
 	fi
 done
 echo "\t -check data"
+echo "$USE_MULTIPLEX"
 source $DATA
 if USE_MULTIPLEX ; then
 	NB_ITEM=4
