@@ -79,8 +79,8 @@ for VARNAME in "${PLATE[@]}"; do
 	while read c1 leftovers; do
 		SAMPLE_LIST+=(${VARNAME}${c1})
 	done < ${!VAR_SAMPLE_FILE}
-	echo "${SAMPLE_LIST[@]}"
 done
+echo "${SAMPLE_LIST[@]}"
 echo "------ /Get Sample list ------"
 
 

@@ -13,8 +13,8 @@ for VARNAME in "${PLATE[@]}"; do
 	VAR_DODE="${VARNAME}[3]"
 	
 	echo "------ Create Kmer library ------"
-	echo "python ${SDIR}/CreateKmerList.py -m ${VAR_DODE} -o ${VAR_DODE}.kmer.tsv -p ${PID} -v ${VARNAME}"
-	python ${SDIR}/CreateKmerList.py -m ${VAR_DODE} -o ${VAR_DODE}.kmer.tsv -p ${PID} -v ${VARNAME}
+	echo "python ${SDIR}/CreateKmerList.py -m ${!!VAR_DODE} -o ${!!VAR_DODE}.kmer.tsv -p ${PID} -v ${VARNAME}"
+	python ${SDIR}/CreateKmerList.py -m ${!!VAR_DODE} -o ${!!VAR_DODE}.kmer.tsv -p ${PID} -v ${VARNAME}
 	echo "------ /Create Kmer library ------"
 	
 	echo "------ Count sequences ------"
@@ -25,8 +25,8 @@ for VARNAME in "${PLATE[@]}"; do
 	mkdir ${PID}_${VARNAME}_Demultiplexing
 	
 	echo "------ Make assignation ------"
-	echo "python ${SDIR}/QsubAssignation.py -v ${VARNAME} -a ${ARG} -s ${SDIR} -k ${VAR_DODE}.kmer.tsv -d ${PID}_${VARNAME}_Demultiplexing -o QsubAssignation.sh -c ${CONF} -q ${NB_SEQ} -p ${PID}"
-	python ${SDIR}/QsubAssignation.py -v ${VARNAME} -a ${ARG} -s ${SDIR} -k ${VAR_DODE}.kmer.tsv -d ${PID}_${VARNAME}_Demultiplexing -o QsubAssignation.sh -c ${CONF} -q ${NB_SEQ} -p ${PID}
+	echo "python ${SDIR}/QsubAssignation.py -v ${VARNAME} -a ${ARG} -s ${SDIR} -k ${!VAR_DODE}.kmer.tsv -d ${PID}_${VARNAME}_Demultiplexing -o QsubAssignation.sh -c ${CONF} -q ${NB_SEQ} -p ${PID}"
+	python ${SDIR}/QsubAssignation.py -v ${VARNAME} -a ${ARG} -s ${SDIR} -k ${!VAR_DODE}.kmer.tsv -d ${PID}_${VARNAME}_Demultiplexing -o QsubAssignation.sh -c ${CONF} -q ${NB_SEQ} -p ${PID}
 	cat ./QsubAssignation.sh
 	bash ./QsubAssignation.sh
 	echo "------ /Make assignation ------"
@@ -54,7 +54,7 @@ for VARNAME in "${PLATE[@]}"; do
 	
 	echo "------ Bilan ------"
 	wc -l ${PID}_${VARNAME}_Hyper_Identified.tsv ${PID}_${VARNAME}_Hypo_2_Identified.tsv ${PID}_${VARNAME}_Ambiguous_2.tsv ${PID}_${VARNAME}_Unidentified.tsv ${PID}_${VARNAME}_Demultiplexing_Hyper.tsv | head -n -1
-	echo $(expr $(cat ${PID}_${VARNAME}_R1.fastq ${PID}_${VARNAME}_R1.fastq | wc -l | cut -d " " -f1) / 4 )" sequences in "${VAR_R1_FILE}" and "${VAR_R2_FILE}
+	echo $(expr $(cat ${PID}_${VARNAME}_R1.fastq ${PID}_${VARNAME}_R1.fastq | wc -l | cut -d " " -f1) / 4 )" sequences in "${!VAR_R1_FILE}" and "${!VAR_R2_FILE}
 	echo "------ /Bilan ------"
 
 	echo "------ Store supplementary data ------"
