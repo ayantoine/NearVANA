@@ -121,7 +121,7 @@ def LoadConfFile(sPath):
 	return dDict	
 		
 def WriteBash(sArg,iSize,sScriptDir,sKmerPath,sOutputPath,sDir,dCall,sConf,sPID,iNumberSeq,sPlateId):
-	sLogDir=sPID+"_log_LaunchAssignation"
+	sLogDir=sPID++"_"+sPlateId+"_log_LaunchAssignation"
 	FILE=open(sOutputPath,"w")
 	FILE.write("#! /bin/bash\n\n")
 	FILE.write("mkdir "+sLogDir+"\n")
