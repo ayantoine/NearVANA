@@ -41,6 +41,7 @@ for p in "${PLATE[@]}"; do
 			if [ ! -f $i ]; then
 				echo "File $i does not exists"
 				exit 1
+			fi
 		done
 	else
 		echo "With option MULTIPLEX set to $MULTIPLEX, $p must contains $NB_ITEM elements"
