@@ -35,18 +35,17 @@ else
 fi
 
 for p in "${PLATE[@]}"; do
-	echo "$p"
-	#if [ "${#p[@]}" -eq "${NB_ITEM}" ]; then
-		#for i in "${p[@]}"; do
-			#if [ ! -f $i ]; then
-				#echo "File $i does not exists"
-				#exit 1
-			#fi
-		#done
-	#else
-		#echo "With option MULTIPLEX set to $MULTIPLEX, $p must contains $NB_ITEM elements"
-		#exit 1
-	#fi
+	if [ "${#p[@]}" -eq "${NB_ITEM}" ]; then
+		for i in "${p[@]}"; do
+			if [ ! -f $i ]; then
+				echo "File $i does not exists"
+				exit 1
+			fi
+		done
+	else
+		echo "With option MULTIPLEX set to $MULTIPLEX, $p must contains $NB_ITEM elements"
+		exit 1
+	fi
 done
 echo "------ /Check Input existence ------"
 
