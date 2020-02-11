@@ -27,7 +27,6 @@ for i in "${LIST_FILE[@]}"; do
 	fi
 done
 echo "\t -check data"
-echo "$USE_MULTIPLEX"
 source $DATA
 if [ "$USE_MULTIPLEX" = true ] ; then
 	NB_ITEM=4
@@ -36,17 +35,18 @@ else
 fi
 
 for p in "${PLATE[@]}"; do
-	if [ "${#p[@]}" -eq "${NB_ITEM}" ]; then
-		for i in "${p[@]}"; do
-			if [ ! -f $i ]; then
-				echo "File $i does not exists"
-				exit 1
-			fi
-		done
-	else
-		echo "With option MULTIPLEX set to $MULTIPLEX, $p must contains $NB_ITEM elements"
-		exit 1
-	fi
+	echo "$p"
+	#if [ "${#p[@]}" -eq "${NB_ITEM}" ]; then
+		#for i in "${p[@]}"; do
+			#if [ ! -f $i ]; then
+				#echo "File $i does not exists"
+				#exit 1
+			#fi
+		#done
+	#else
+		#echo "With option MULTIPLEX set to $MULTIPLEX, $p must contains $NB_ITEM elements"
+		#exit 1
+	#fi
 done
 echo "------ /Check Input existence ------"
 
