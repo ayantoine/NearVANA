@@ -26,7 +26,8 @@ for i in "${LIST_FILE[@]}"; do
 		exit 1
 	fi
 done
-echo "\t -check data"
+echo "All referenced files in $ARG exists"
+echo "------ check data"
 source $DATA
 if [ "$USE_MULTIPLEX" = true ] ; then
 	NB_ITEM=4
@@ -34,8 +35,12 @@ else
 	NB_ITEM=2
 fi
 
-for p in "${PLATE[@]}"; do
-	if [ "${#p[@]}" -eq "${NB_ITEM}" ]; then
+for VARNAME in "${PLATE[@]}"; do
+	VAR=$VARNAME[@]
+	#echo ${!VAR}
+	eval "LEN=\${#$VAR[@]}"
+	#echo "$len"
+	if [ "$LEN" -eq "${NB_ITEM}" ]; then
 		for i in "${p[@]}"; do
 			if [ ! -f $i ]; then
 				echo "File $i does not exists"
@@ -47,6 +52,7 @@ for p in "${PLATE[@]}"; do
 		exit 1
 	fi
 done
+echo "All referenced files in $DATA exists"
 echo "------ /Check Input existence ------"
 
 echo "------ Show variable value ------"
@@ -67,16 +73,15 @@ echo "------ /Show variable value ------"
 
 echo "------ Get Sample list ------"
 declare -a SAMPLE_LIST
-while read c1 leftovers; do
-	SAMPLE_LIST+=($c1)
-done < ${DODE}
-echo "${SAMPLE_LIST[@]}"
+for VARNAME in "${PLATE[@]}"; do
+	VAR_SAMPLE_FILE="${VARNAME}[3]"
+	#echo "${!VAR_SAMPLE_FILE}"
+	while read c1 leftovers; do
+		SAMPLE_LIST+=(${VARNAME}${c1})
+	done < ${!VAR_SAMPLE_FILE}
+done
 echo "------ /Get Sample list ------"
 
-
-exit
-
-########################################################################
 
 echo "------ Extract .gz ------"
 if [ ! -f ${PID}.extraction.ok ]; then
@@ -87,6 +92,11 @@ else
 	echo "${PID}.extraction.ok already existing, pass"
 fi
 echo "------ /Extract .gz ------"
+
+
+########################################################################
+exit
+
 
 echo "------ Demultiplexing reads ------"
 if [ ! -f ${PID}.Demultiplexing.ok ]; then
