@@ -65,6 +65,8 @@ for VARNAME in "${PLATE[@]}"; do
 	gzip -f ${PID}_Unidentified.tsv > ${PID}_${VARNAME}_Unidentified.tsv.gz
 	echo "------ /Store supplementary data ------"
 	
+	rm ${PID}_Hypo_2_Identified.tsv ${PID}_Ambiguous_2.tsv ${PID}_Unidentified.tsv
+	
 done
 
 > ${PID}.Demultiplexing.ok
