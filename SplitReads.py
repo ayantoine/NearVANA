@@ -120,7 +120,7 @@ def WriteSplitFastq(sPath,dList,sSID):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	dListOfSeq=LoadRef(sRef,sSampleTag,sPairId)
+	dListOfSeq=LoadRef(sRef,sSampleId,sPairId)
 	WriteSplitFastq(sFastq,dListOfSeq,sSampleId)
 	
 	
