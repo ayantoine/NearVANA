@@ -122,7 +122,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 				$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}
 				while [ ! -e ${PID}_${VARNAME}_R1.fastq.split.ok ]; do sleep 60 ; done
 				while [ ! -e ${PID}_${VARNAME}_R2.fastq.split.ok ]; do sleep 60 ; done
-				rm ${PID}_${VARNAME}_R1.fastq ${PID}_${VARNAME}_R2.fastq
+				#rm ${PID}_${VARNAME}_R1.fastq ${PID}_${VARNAME}_R2.fastq
 			done
 		fi
 		touch ${PID}.SplitReads.ok
