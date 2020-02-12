@@ -225,10 +225,6 @@ else
 fi
 echo "------ /Reads correction------"
 
-
-########################################################################
-exit
-
 echo "------ Reads assembly ------"
 if [ ! -f ${PID}.Assembly.ok ]; then
 	echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG"
@@ -238,6 +234,10 @@ else
 	echo "${PID}.Assembly.ok already existing, pass"
 fi
 echo "------ /Reads assembly------"
+
+
+########################################################################
+exit
 
 echo "------ Launch Blast ------"
 if [ ! -f ${PID}.Blast.ok ]; then
