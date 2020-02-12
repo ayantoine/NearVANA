@@ -107,6 +107,32 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 	echo "------ /Demultiplexing reads -----"
 fi
 
+echo "------ Cleaning reads ------"
+if [ ! -f ${PID}.Cleaning.ok ]; then
+	if [ ! -f ${PID}.SplitReads.ok ]; then
+		if [ "$USE_MULTIPLEX" = true ] ; then
+			echo -e "\t- Cleaning linkers"
+			for sampleId in "${SAMPLE_LIST[@]}"; do
+				mkdir $sampleId	
+			done
+			for VARNAME in "${PLATE[@]}"; do
+				echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_R1_SplitReads.e -o Run_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_R1.fastq 1"
+				$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_${VARNAME}_R1_SplitReads.e -o Run_${VARNAME}_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R1.fastq 1 ${VARNAME}
+				echo "$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_R2_SplitReads.e -o Run_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_R2.fastq 2"
+				$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}
+				while [ ! -e ${PID}_${VARNAME}_R1.fastq.split.ok ]; do sleep 60 ; done
+				while [ ! -e ${PID}_${VARNAME}_R2.fastq.split.ok ]; do sleep 60 ; done
+				rm ${PID}_${VARNAME}_R1.fastq ${PID}_${VARNAME}_R2.fastq
+			done
+		fi
+		touch ${PID}.SplitReads.ok
+	else
+		echo -e "\t- ${PID}.SplitReads.ok existing, pas"
+	fi
+else
+	echo "${PID}.Cleaning.ok already existing, pass"
+fi
+echo "------ /Cleaning reads ------"
 
 
 
