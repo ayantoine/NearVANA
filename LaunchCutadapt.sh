@@ -5,17 +5,19 @@ datetime1=$(date +%s)
 ARG=$1
 source $ARG
 source $CONF
+source $DATA
 
-FASTQ=$2
-PAIR=$3
-
-echo "------ Get Sample list ------"
+echo "------ Get Subsample list ------"
 declare -a SAMPLE_LIST
-while read c1 leftovers; do
-	SAMPLE_LIST+=($c1)
-done < ${DODE}
+for VARNAME in "${PLATE[@]}"; do
+	VAR_SAMPLE_FILE="${VARNAME}[3]"
+	#echo "${!VAR_SAMPLE_FILE}"
+	while read c1 leftovers; do
+		SAMPLE_LIST+=(${VARNAME}${c1})
+	done < ${!VAR_SAMPLE_FILE}
+done
 echo "${SAMPLE_LIST[@]}"
-echo "------ /Get Sample list ------"
+echo "------ /Get Subsample list ------"
 
 SAMPLE=${SAMPLE_LIST[${STASKID}-1]}
 
