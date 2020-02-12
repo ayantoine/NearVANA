@@ -19,7 +19,7 @@ rm *.bt2
 python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam
 echo "------ /Megahit reverse-mapping ------"
 
-rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
+#rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
 
 echo "------ Compress Corrected.fastq ------"
 gzip -f ${PID}_R0.Corrected.fastq > ${PID}_R0.Corrected.fastq.gz
@@ -48,8 +48,8 @@ cat ${PID}_R2.FLASH_unassembled.fa >> ${PID}_All.fa
 cat ${PID}_R0.Megahit_unassembled.fa >> ${PID}_All.fa
 echo "------ /Merge Assembly ------"
 
-rm ${PID}_All.Megahit_contigs.fa ${PID}_All.FLASH_contigs.fa ${PID}_R1.FLASH_unassembled.fa
-rm ${PID}_R2.FLASH_unassembled.fa ${PID}_R0.Megahit_unassembled.fa
+#rm ${PID}_All.Megahit_contigs.fa ${PID}_All.FLASH_contigs.fa ${PID}_R1.FLASH_unassembled.fa
+#rm ${PID}_R2.FLASH_unassembled.fa ${PID}_R0.Megahit_unassembled.fa
 
 touch ${PID}.Assembly.ok
 
