@@ -161,8 +161,9 @@ def WriteContigFasta(dDict):
 	for sNewLine in open(MEGAHIT_ASSEMBLY_OUTPUT):
 		if ">" in sNewLine:
 			sContigName=sNewLine[1:-1]
+			sShortContigName=sContigName.split(" ")[0]
 			try:
-				sNewName=dDict[sContigName]
+				sNewName=dDict[sShortContigName]
 				bWriteIt=True
 			except KeyError:
 				bWriteIt=False
