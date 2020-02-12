@@ -49,9 +49,9 @@ sRef=options.ref
 if not sRef:
 	exit("Error : no ref -r defined, process broken")
 	
-sPid=options.pid
-if not sPid:
-	exit("Error : no pid -p defined, process broken")
+sPairId=options.pairid
+if not sPairId:
+	exit("Error : no pairid -i defined, process broken")
 
 sSampleId=options.sample
 if not sSampleId:
