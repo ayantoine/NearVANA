@@ -23,7 +23,7 @@ echo "------ /Get Subsample list ------"
 SAMPLE=${SAMPLE_LIST[${STASKID}-1]}
 
 echo "------ Split fastq by sample ------"
-python ${SDIR}/SplitReads.py -f ${FASTQ} -r ${PID}_${VARNAME}_Hyper_Identified.tsv -s ${SAMPLE} -i ${PAIR}
+python ${SDIR}/SplitReads.py -f ${FASTQ} -r ${PID}_${VARNAME}_Hyper_Identified.tsv -s ${SAMPLE} -i ${PAIR} -o ${SAMPLE}_${PID}_R${PAIR}.fastq.split
 echo "------ /Split fastq by sample ------"
 
 echo "Creating ok file"

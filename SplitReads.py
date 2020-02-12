@@ -38,6 +38,7 @@ parser.add_option("-f","--fastq", dest="fastq")
 parser.add_option("-r","--ref", dest="ref")
 parser.add_option("-s","--sample", dest="sample")
 parser.add_option("-i","--pairid", dest="pairid")
+parser.add_option("-o","--output", dest="output")
 
 (options, args) = parser.parse_args()
 
@@ -57,6 +58,10 @@ sSampleId=options.sample
 if not sSampleId:
 	exit("Error : no sample -s defined, process broken")
 
+sOutput=options.output
+if not sOutput:
+	exit("Error : no output -o defined, process broken")
+
 ########################################################################
 #Function 	
 def LoadRef(sPath,sSample,sPair):
@@ -71,8 +76,8 @@ def LoadRef(sPath,sSample,sPair):
 				dResult[sSeqName]=int(iEndIndex)
 	return dResult
 
-def WriteSplitFastq(sPath,dList,sSID):
-	FILE=open(sSID+"/"+sSID+"_"+sPath+"."+SPLIT_TAG,"w")
+def WriteSplitFastq(sPath,dList,sSID,sOut):
+	FILE=open(sSID+"/"+sOut,"w")
 	sSeqName=""
 	sContent=""
 	sInterline=""
@@ -121,7 +126,7 @@ def WriteSplitFastq(sPath,dList,sSID):
 #MAIN
 if __name__ == "__main__":
 	dListOfSeq=LoadRef(sRef,sSampleId,sPairId)
-	WriteSplitFastq(sFastq,dListOfSeq,sSampleId)
+	WriteSplitFastq(sFastq,dListOfSeq,sSampleId,sOutput)
 	
 	
 ########################################################################    
