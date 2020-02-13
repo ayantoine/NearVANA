@@ -27,7 +27,7 @@ python ${SDIR}/SplitFasta.py -f ${PID}_ToDiamond -i ${PID}_All.fa -c ${CHUNCK}
 nb_jobs=$(ls ${PID}_ToDiamond | wc -l)
 
 echo "Number of initial sequences: "$nb_seq
-echo "Number of final sequences: "$(cat ${PID}"_ToBlast"/* | grep -c -f Target.txt)
+echo "Number of final sequences: "$(cat ${PID}"_ToDiamond"/* | grep -c -f Target.txt)
 echo "Number of sequences per job: "$CHUNCK
 echo "Number of generated jobs: "$nb_jobs
 echo "Number of simultaneous tasks: "$nb_task
