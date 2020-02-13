@@ -235,19 +235,20 @@ else
 fi
 echo "------ /Reads assembly------"
 
-
-########################################################################
-exit
-
-echo "------ Launch Blast ------"
-if [ ! -f ${PID}.Blast.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Blast -e Run_Blast.e -o Run_Blast.o ${SDIR}/Run_Blast.sh $ARG"
-	$SCALL $SPARAM $SRENAME ${PID}_Run_Blast -e Run_Blast.e -o Run_Blast.o ${SDIR}/Run_Blast.sh $ARG
-	while [ ! -e ${PID}.Blast.ok ]; do sleep 60 ; done
+echo "------ Launch Diamond ------"
+if [ ! -f ${PID}.Diamond.ok ]; then
+	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Diamond -e Run_Diamond.e -o Run_Diamond.o ${SDIR}/Run_Diamond.sh $ARG"
+	$SCALL $SPARAM $SRENAME ${PID}_Run_Diamond -e Run_Diamond.e -o Run_Diamond.o ${SDIR}/Run_Diamond.sh $ARG
+	while [ ! -e ${PID}.Diamond.ok ]; do sleep 60 ; done
 else
 	echo "${PID}.Blast.ok already existing, pass"
 fi
 echo "------ /Launch Blast------"
+
+
+########################################################################
+exit
+
 
 echo "------ Retrieve Taxonomy data ------"
 if [ ! -f ${PID}.Taxonomy.ok ]; then
