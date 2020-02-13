@@ -13,7 +13,7 @@ if [ ! -d ${PID}"_Diamond" ] ; then mkdir ${PID}"_Diamond" ; fi
 if [ ! -d ${PID}"_log_Diamond" ] ; then mkdir ${PID}"_log_Diamond" ; fi
 
 if [ ! -f ${PID}.Diamond.ok ] ; then
-    echo "$SCALL $SPARAM $SRENAME ${PID}_Diamond ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Diamond"/${PID}_Diamond.e${SPSEUDOTASKID} -o ${PID}"_log_Diamond"/${PID}_Diamond.o${SPSEUDOTASKID} ${SDIR}/Diamond.sh $ARG"
+    echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Diamond ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Diamond"/${PID}_Diamond.e${SPSEUDOTASKID} -o ${PID}"_log_Diamond"/${PID}_Diamond.o${SPSEUDOTASKID} ${SDIR}/Diamond.sh $ARG"
     $SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Diamond ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Diamond"/${PID}_Diamond.e${SPSEUDOTASKID} -o ${PID}"_log_Diamond"/${PID}_Diamond.o${SPSEUDOTASKID} ${SDIR}/Diamond.sh $ARG
     while true ; do
 	    if [ $(ls Diamond_Ok/ | wc -l) -eq 0 ]
