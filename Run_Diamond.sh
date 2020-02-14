@@ -46,6 +46,8 @@ echo "------ Compress All.fa ------"
 gzip -f ${PID}_All.fa > ${PID}_All.fa.gz
 echo "------ /Compress All.fa ------"
 
+touch ${PID}.Diamond.ok
+
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
 echo "Time Diamond: "$delta > Time09.txt

@@ -33,7 +33,7 @@ else
     echo "${PID}.Diamond.ok already existing, do nothing..."
 fi
 
-touch ${PID}.Diamond.ok
+touch ${PID}.DiamondTask.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
