@@ -113,7 +113,7 @@ if __name__ == "__main__":
 ########################################################################
 #Function 	
 def LoadData(sFile):
-	print("Loading fle "+str(sFile))
+	print("Loading file "+str(sFile))
 	dDict={}
 	bFirst=True
 	for sNewLine in open(sFile):
@@ -123,6 +123,8 @@ def LoadData(sFile):
 			bFirst=False
 			continue
 		sLine=sNewLine.strip()
+		if sLine==EMPTY:
+			continue
 		tLine=sLine.split(EQUAL)
 		sPlateId=tLine[0]
 		sListOfData=tLine[1].replace(OPEN_PARENTHESIS,EMPTY).replace(CLOSE_PARENTHESIS,EMPTY)
@@ -229,12 +231,13 @@ def LoadBlast(sFile):
 			dDict[sQueryId]={}
 		
 		sSubjectId=DEFAULT
-		if tLine[BLAST_SUBJECTIDCOl]!="":
-			sSubjectId=tLine[BLAST_SUBJECTIDCOl]
-			tSubjectId=sSubjectId.split("|")
-			sSubjectId=tSubjectId[3]
-			if sSubjectId==EMPTY:
-				continue
+		sSubjectId=tLine[BLAST_SUBJECTIDCOl]
+		# if tLine[BLAST_SUBJECTIDCOl]!="":
+			# sSubjectId=tLine[BLAST_SUBJECTIDCOl]
+			# tSubjectId=sSubjectId.split("|")
+			# sSubjectId=tSubjectId[3]
+			# if sSubjectId==EMPTY:
+				# continue
 		sIdentity=DEFAULT
 		if tLine[BLAST_IDENTITYCOl]!="":
 			sIdentity=tLine[BLAST_IDENTITYCOl]

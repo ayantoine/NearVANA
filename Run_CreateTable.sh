@@ -19,7 +19,6 @@ python ${SDIR}/CreateTable.py -j ${nb_jobs} -p ${PID} -d ${DATA} -l ${VIRMINLEN}
 echo "------ /Create table ------"
 
 echo "------ Xlsx conversion ------"
-cat ${SDIR}/Tab2Xls.pl | wc -l
 perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_Diamond_results.tab ${PID}_Diamond_results.xlsx $((${#PID}+7))
 echo "------ /Xlsx conversion ------"
 
