@@ -271,13 +271,6 @@ else
 fi
 echo "------ /Create table ------"
 
-########################################################################
-exit
-
-
-
-
-
 ##echo "------ Clean workdir ------"
 ##if [ ! -f ${PID}.Clean.ok ]; then
 	##echo "$SCALL $SPARAM $SRENAME ${PID}_Clean -e CleanWorkDir.e -o CleanWorkDir.o ${SDIR}/CleanWorkDir.sh $ARG"

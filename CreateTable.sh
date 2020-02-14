@@ -6,8 +6,7 @@ ARG=$1
 source $ARG
 source $CONF
 
-task=$2
-nb_jobs=$3
+nb_jobs=$2
 
 echo "python ${SDIR}/CreateTable.py -j ${nb_jobs} -p ${PID} -d ${DATA} -l ${VIRMINLEN}"
 python ${SDIR}/CreateTable.py -j ${nb_jobs} -p ${PID} -d ${DATA} -l ${VIRMINLEN}
