@@ -68,7 +68,7 @@ DIESE="#"
 EQUAL="="
 OPEN_PARENTHESIS="("
 CLOSE_PARENTHESIS=")"
-SPACE=""
+SPACE=" "
 
 ########################################################################
 #Options
