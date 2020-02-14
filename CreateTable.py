@@ -339,9 +339,19 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 					fFragment="N/A"
 				else:
 					fFragment=round(float(iQuerySize)/iMinSize*100,2)
+					
+				sOrganism=dTaxo[sSubjectId]["Organism"]
+				sSuperkingdom=dTaxo[sSubjectId]["Superkingdom"]
+				sLineage=dTaxo[sSubjectId]["Lineage"]
+				sDefinition=dTaxo[sSubjectId]["Definition"]
+
 			except KeyError:
 				sTaxo="unknown"
-				fFragment="unknown"
+				iMinSize="unknown"
+				sOrganism="unknown"
+				sSuperkingdom="unknown"
+				sLineage="unknown"
+				sDefinition="unknown"
 				
 			for sGlobalSample in tGlobalSample:
 				for sPlateId in dMetadata:
@@ -352,8 +362,8 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 				dMetadata[sPlateId][sSampleId]["Location"],dMetadata[sPlateId][sSampleId]["Date"],
 				dMetadata[sPlateId][sSampleId]["Host"],dMetadata[sPlateId][sSampleId]["Individuals"],
 				dMetadata[sPlateId][sSampleId]["Weight"],sSubjectId,
-				dTaxo[sSubjectId]["Organism"],dTaxo[sSubjectId]["Superkingdom"],
-				dTaxo[sSubjectId]["Lineage"],dTaxo[sSubjectId]["Definition"],str(fFragment),
+				sOrganism,sSuperkingdom,
+				sLineage,sDefinition,str(fFragment),
 				dBlast[sQuery][iRank]["Identity"],
 				str(fCover),dBlast[sQuery][iRank]["Length"],dBlast[sQuery][iRank]["Mismatch"],
 				dBlast[sQuery][iRank]["GapOpen"],dBlast[sQuery][iRank]["QueryStart"],
