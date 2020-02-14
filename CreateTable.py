@@ -326,18 +326,22 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 				sReadQuantity="1"
 			sSubjectId=dBlast[sQuery][iRank]["SubjectId"]
 			
-			sTaxo=dTaxo[sSubjectId]["Lineage"]
-			tTaxo=sTaxo.replace("; ",";").split(";")
-			iMinSize=0
-			for oTaxo in tTaxo:
-				try:
-					iMinSize=dLength[oTaxo]
-				except KeyError:
-					continue
-			if iMinSize==0:
-				fFragment="N/A"
-			else:
-				fFragment=round(float(iQuerySize)/iMinSize*100,2)
+			try:
+				sTaxo=dTaxo[sSubjectId]["Lineage"]
+				tTaxo=sTaxo.replace("; ",";").split(";")
+				iMinSize=0
+				for oTaxo in tTaxo:
+					try:
+						iMinSize=dLength[oTaxo]
+					except KeyError:
+						continue
+				if iMinSize==0:
+					fFragment="N/A"
+				else:
+					fFragment=round(float(iQuerySize)/iMinSize*100,2)
+			except KeyError:
+				sTaxo="unknown"
+				fFragment="unknown"
 				
 			for sGlobalSample in tGlobalSample:
 				for sPlateId in dMetadata:
