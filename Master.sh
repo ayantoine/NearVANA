@@ -245,11 +245,6 @@ else
 fi
 echo "------ /Launch Blast------"
 
-
-########################################################################
-exit
-
-
 echo "------ Retrieve Taxonomy data ------"
 if [ ! -f ${PID}.Taxonomy.ok ]; then
 	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG"
@@ -259,6 +254,12 @@ else
 	echo "${PID}.Taxonomy.ok already existing, pass"
 fi
 echo "------ /Retrieve Taxonomy data ------"
+
+########################################################################
+exit
+
+
+
 
 echo "------ Create table ------"
 if [ ! -f ${PID}.Table.ok ]; then
