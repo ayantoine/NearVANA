@@ -6,7 +6,7 @@ ARG=$1
 source $ARG
 source $CONF
 
-nb_jobs=$(ls ${PID}_BlastX/*_2.tab | wc -l)
+nb_jobs=$(ls ${PID}_Diamond/*_2.tab | wc -l)
 
 echo "DEFINITION" > DEFINITION.txt
 echo "ACCESSION" > ACCESSION.txt
