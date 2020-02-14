@@ -69,6 +69,7 @@ EQUAL="="
 OPEN_PARENTHESIS="("
 CLOSE_PARENTHESIS=")"
 SPACE=" "
+PIPE="|"
 
 ########################################################################
 #Options
@@ -232,12 +233,12 @@ def LoadBlast(sFile):
 		
 		sSubjectId=DEFAULT
 		sSubjectId=tLine[BLAST_SUBJECTIDCOl]
-		# if tLine[BLAST_SUBJECTIDCOl]!="":
-			# sSubjectId=tLine[BLAST_SUBJECTIDCOl]
-			# tSubjectId=sSubjectId.split("|")
-			# sSubjectId=tSubjectId[3]
-			# if sSubjectId==EMPTY:
-				# continue
+		if PIPE in sSubjectId:
+			if PIPE==sSubjectId[-1]:
+				sSubjectId=sSubjectId[:-1]
+			sSubjectId=sSubjectId.split(PIPE)[-1]
+		if sSubjectId==EMPTY:
+			continue
 		sIdentity=DEFAULT
 		if tLine[BLAST_IDENTITYCOl]!="":
 			sIdentity=tLine[BLAST_IDENTITYCOl]
