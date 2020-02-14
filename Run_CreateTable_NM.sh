@@ -14,8 +14,8 @@ cut -f2,4 ${PID}_All.FLASH_reverseAssembly.tsv | sort -u > ${PID}_All.FLASH.cont
 echo "------ /Create short-list ------"
 
 echo "------ Create table ------"
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Table -e Creation_Table.e -o Creation_Table.o ${SDIR}/CreateTable.sh $ARG ${nb_jobs}"
-	$SCALL $SPARAM $SRENAME ${PID}_Table -e Creation_Table.e -o Creation_Table.o ${SDIR}/CreateTable.sh $ARG ${nb_jobs}
+	echo "$SCALL $SPARAM $SRENAME ${PID}_Table -e Creation_Table.e -o Creation_Table.o ${SDIR}/CreateTable_NM.sh $ARG ${nb_jobs}"
+	$SCALL $SPARAM $SRENAME ${PID}_Table -e Creation_Table.e -o Creation_Table.o ${SDIR}/CreateTable_NM.sh $ARG ${nb_jobs}
 	while [ ! -e ${PID}.creationTable.ok ]; do sleep 60 ; done
 	rm ${PID}.creationTable.ok
 echo "------ /Create table ------"

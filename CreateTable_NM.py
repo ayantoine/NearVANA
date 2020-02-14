@@ -10,20 +10,19 @@ iTime1=time.time()
 ########################################################################
 '''
 V2-2020/02/14
-Adapt to Diamond and Demultiplexing
+Adapt to Diamond and no multiplexing
 
 V1-2019/11/06
 Create tsv bilan from Blast data
 
-python CreateTable.py -d DATA -i JOBS -p PID
-DATA: Data argfile
+python CreateTable.py -i JOBS -p PID
 JOBS: jobs number
 PID: Plaque Id
 '''
 ########################################################################
 #CONSTANT
-HEADER_LIST=["Hit rank","Query Seq-Id","Sample","Read quantity","Sequence length","Location","Date","Host",
-"Individual","Weight(mg)","Subject Seq-Id","Organism","SuperKingdom","Taxonomy","Hit definition","% Fragment","Identity",
+HEADER_LIST=["Hit rank","Query Seq-Id","Read quantity","Sequence length",
+"Subject Seq-Id","Organism","SuperKingdom","Taxonomy","Hit definition","% Fragment","Identity",
 "Query cover","Alignment length","Mismatches","Gap opening","Start alignment query","End alignment query",
 "Start alignment subject","End alignment subject","E-value","Bit score","Query sequences"]
 HEADER="\t".join(HEADER_LIST)+"\n"
@@ -34,13 +33,6 @@ HIT="."
 REPLACEME="REPLACE-ME"
 SAMPLE_SEPARATOR="-"
 CONTIG="Contig"
-
-META_SAMPLECOL=0
-META_HOSTCOL=1
-META_LOCATIONCOL=3
-META_DATECOL=6
-META_INDIVIDUALSCOL=7
-META_WEIGHTCOL=8
 
 BLAST_QUERYIDCOl=0
 BLAST_SUBJECTIDCOl=1
@@ -112,63 +104,6 @@ if __name__ == "__main__":
 
 ########################################################################
 #Function 	
-def LoadData(sFile):
-	print("Loading fle "+str(sFile))
-	dDict={}
-	bFirst=True
-	for sNewLine in open(sFile):
-		if sNewLine[0]==DIESE:
-			continue
-		if bFirst:
-			bFirst=False
-			continue
-		sLine=sNewLine.strip()
-		tLine=sLine.split(EQUAL)
-		sPlateId=tLine[0]
-		sListOfData=tLine[1].replace(OPEN_PARENTHESIS,EMPTY).replace(CLOSE_PARENTHESIS,EMPTY)
-		tListOfData=sListOfData.split(SPACE)
-		sMeta=tListOfData[2]
-		dDict[sPlateId]=sMeta
-	return dDict
-
-def LoadMetadata(dData):
-	dDict={}
-	for sPlateId in dData:
-		dDict[sPlateId]={}
-		sFile=dData[sPlateId]
-		print("Loading file "+str(sFile))
-		for sNewLine in open(sFile):
-			sLine=sNewLine.replace("\n","")
-			if len(sLine)==0:
-				continue
-			tLine=sLine.split("\t")
-			
-			sHost=DEFAULT
-			if tLine[META_HOSTCOL]!="":
-				sHost=tLine[META_HOSTCOL]
-			sLocation=DEFAULT
-			if tLine[META_LOCATIONCOL]!="":
-				sLocation=tLine[META_LOCATIONCOL]
-			sDate=DEFAULT
-			if tLine[META_DATECOL]!="":
-				sDate=tLine[META_DATECOL]
-			sIndividuals=DEFAULT
-			if tLine[META_INDIVIDUALSCOL]!="":
-				sIndividuals=tLine[META_INDIVIDUALSCOL]
-			sWeight=DEFAULT
-			if tLine[META_WEIGHTCOL]!="":
-				sWeight=tLine[META_WEIGHTCOL]
-			
-			dDict[sPlateId][tLine[META_SAMPLECOL]]={
-				"Host":sHost,
-				"Location":sLocation,
-				"Date":sDate,
-				"Individuals":sIndividuals,
-				"Weight":sWeight
-				}
-				
-	return dDict
-
 def LoadContigs(sFile,dRef,dDict={}):
 	print("Loading file "+str(sFile))
 	for sNewLine in open(sFile):
@@ -298,7 +233,7 @@ def LoadQuery(sFile):
 		dDict[sSeqName]=sSeqContent
 	return dDict
 
-def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
+def WriteData(FILE,dBlast,dTaxo,dContigs,dContent,dLength):
 	for sQuery in dBlast:
 		for iRank in dBlast[sQuery]:
 			
@@ -310,12 +245,7 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 			iQuerySize=len(dContent[sQuery])
 			iCoverSize=int(dBlast[sQuery][iRank]["QueryEnd"])-int(dBlast[sQuery][iRank]["QueryStart"])
 			fCover=round(float(iCoverSize)/iQuerySize*100,2)
-			
-			try:
-				tGlobalSample=dContigs[sQuery]
-			except KeyError:
-				tGlobalSample=[sQuery.split("_")[-1]]
-						
+				
 			if CONTIG in sQuery:
 				sReadQuantity=sQuery.split("(")[-1].split(")")[0]
 			else:
@@ -335,25 +265,18 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 			else:
 				fFragment=round(float(iQuerySize)/iMinSize*100,2)
 				
-			for sGlobalSample in tGlobalSample:
-				for sPlateId in dMetadata:
-					if sPlateId in sGlobalSample:
-						break
-				sSampleId=sGlobalSample.replace(sPlateId,EMPTY)
-				tLine=[sRank,sQuery,sGlobalSample,sReadQuantity,str(iQuerySize),
-				dMetadata[sPlateId][sSampleId]["Location"],dMetadata[sPlateId][sSampleId]["Date"],
-				dMetadata[sPlateId][sSampleId]["Host"],dMetadata[sPlateId][sSampleId]["Individuals"],
-				dMetadata[sPlateId][sSampleId]["Weight"],sSubjectId,
-				dTaxo[sSubjectId]["Organism"],dTaxo[sSubjectId]["Superkingdom"],
-				dTaxo[sSubjectId]["Lineage"],dTaxo[sSubjectId]["Definition"],str(fFragment),
-				dBlast[sQuery][iRank]["Identity"],
-				str(fCover),dBlast[sQuery][iRank]["Length"],dBlast[sQuery][iRank]["Mismatch"],
-				dBlast[sQuery][iRank]["GapOpen"],dBlast[sQuery][iRank]["QueryStart"],
-				dBlast[sQuery][iRank]["QueryEnd"],dBlast[sQuery][iRank]["SubjectStart"],
-				dBlast[sQuery][iRank]["SubjectEnd"],dBlast[sQuery][iRank]["Evalue"],
-				dBlast[sQuery][iRank]["BitScore"],dContent[sQuery]
-				]
-				FILE.write("\t".join(tLine)+"\n")
+			tLine=[sRank,sQuery,sReadQuantity,str(iQuerySize),
+			sSubjectId,
+			dTaxo[sSubjectId]["Organism"],dTaxo[sSubjectId]["Superkingdom"],
+			dTaxo[sSubjectId]["Lineage"],dTaxo[sSubjectId]["Definition"],str(fFragment),
+			dBlast[sQuery][iRank]["Identity"],
+			str(fCover),dBlast[sQuery][iRank]["Length"],dBlast[sQuery][iRank]["Mismatch"],
+			dBlast[sQuery][iRank]["GapOpen"],dBlast[sQuery][iRank]["QueryStart"],
+			dBlast[sQuery][iRank]["QueryEnd"],dBlast[sQuery][iRank]["SubjectStart"],
+			dBlast[sQuery][iRank]["SubjectEnd"],dBlast[sQuery][iRank]["Evalue"],
+			dBlast[sQuery][iRank]["BitScore"],dContent[sQuery]
+			]
+			FILE.write("\t".join(tLine)+"\n")
 						
 # HEADER_LIST=["Hit rank","Query Seq-Id","Sample","Read quantity","Sequence length","Location","Date","Host",
 # "Individual","Weight(mg)","Subject Seq-Id","Organism","SuperKingdom","Taxonomy","Hit definition","% Fragment","Identity",
@@ -374,8 +297,6 @@ def LoadLength(sFile):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	dData=LoadData(sData)
-	dMetadata=LoadMetadata(dData)
 	dLength=LoadLength(sLengthFile)
 	FILE=open(BLAST_OUTPUT,"w")
 	FILE.write(HEADER)
@@ -386,7 +307,7 @@ if __name__ == "__main__":
 		dContigs2Sample=LoadContigs(SHORTFLASH,dQuery2Content,dContigs2Sample)
 		dTaxo=LoadTaxo(BLAST_FOLDER+"/"+TAXO_FILE.replace(REPLACEME,str(iIndex)))
 		dBlast=LoadBlast(BLAST_FOLDER+"/"+BLAST_FILE.replace(REPLACEME,str(iIndex)))
-		WriteData(FILE,dBlast,dTaxo,dContigs2Sample,dMetadata,dQuery2Content,dLength)
+		WriteData(FILE,dBlast,dTaxo,dContigs2Sample,dQuery2Content,dLength)
 	FILE.close()
 	
 ########################################################################    
