@@ -255,21 +255,25 @@ else
 fi
 echo "------ /Retrieve Taxonomy data ------"
 
+echo "------ Create table ------"
+if [ ! -f ${PID}.Table.ok ]; then
+	if [ "$USE_MULTIPLEX" = true ] ; then
+		echo "$SCALL $SPARAM $SRENAME ${PID}_Table -e Table.e -o Table.o ${SDIR}/Run_CreateTable.sh $ARG"
+		$SCALL $SPARAM $SRENAME ${PID}_Table -e Run_Table.e -o Run_Table.o ${SDIR}/Run_CreateTable.sh $ARG
+		while [ ! -e ${PID}.Table.ok ]; do sleep 60 ; done
+	else
+	fi
+else
+	echo "${PID}.Table.ok already existing, pass"
+fi
+echo "------ /Create table ------"
+
 ########################################################################
 exit
 
 
 
 
-echo "------ Create table ------"
-if [ ! -f ${PID}.Table.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Table -e Table.e -o Table.o ${SDIR}/Run_CreateTable.sh $ARG"
-	$SCALL $SPARAM $SRENAME ${PID}_Table -e Run_Table.e -o Run_Table.o ${SDIR}/Run_CreateTable.sh $ARG
-	while [ ! -e ${PID}.Table.ok ]; do sleep 60 ; done
-else
-	echo "${PID}.Table.ok already existing, pass"
-fi
-echo "------ /Create table ------"
 
 ##echo "------ Clean workdir ------"
 ##if [ ! -f ${PID}.Clean.ok ]; then
