@@ -347,7 +347,7 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 
 			except KeyError:
 				sTaxo="unknown"
-				iMinSize="unknown"
+				fFragment="unknown"
 				sOrganism="unknown"
 				sSuperkingdom="unknown"
 				sLineage="unknown"
