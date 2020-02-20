@@ -59,13 +59,13 @@ for VARNAME in "${PLATE[@]}"; do
 
 	echo "------ Store supplementary data ------"
 	#gzip -f ${PID}_${VARNAME}_Hypo_1_Identified.tsv > ${PID}_Hypo_1_Identified.tsv.gz
-	gzip -f $${PID}_${VARNAME}_Hypo_2_Identified.tsv > ${PID}_${VARNAME}_Hypo_2_Identified.tsv.gz
+	gzip -f ${PID}_${VARNAME}_Hypo_2_Identified.tsv > ${PID}_${VARNAME}_Hypo_2_Identified.tsv.gz
 	#gzip -f $${PID}_${VARNAME}_Ambiguous_1.tsv > ${PID}_Ambiguous_1.tsv.gz
 	gzip -f ${PID}_${VARNAME}_Ambiguous_2.tsv > ${PID}_${VARNAME}_Ambiguous_2.tsv.gz
 	gzip -f ${PID}_${VARNAME}_Unidentified.tsv > ${PID}_${VARNAME}_Unidentified.tsv.gz
 	echo "------ /Store supplementary data ------"
 	
-	rm ${PID}_${VARNAME}_Hypo_2_Identified.tsv ${PID}_${VARNAME}_Ambiguous_2.tsv ${PID}_${VARNAME}_Unidentified.tsv
+	#rm ${PID}_${VARNAME}_Hypo_2_Identified.tsv ${PID}_${VARNAME}_Ambiguous_2.tsv ${PID}_${VARNAME}_Unidentified.tsv
 	
 done
 
