@@ -5,13 +5,15 @@
 import time
 from optparse import OptionParser
 
-sCurrentVersionScript="v2"
+sCurrentVersionScript="v3"
 iTime1=time.time()
 ########################################################################
 '''
+V3-2020/02/12
+Adapt to multiplate anaysis
+
 V2-2019/10/23
 Add SampleId into name
-
 V1-2019/10/22
 Split fastq by SampleId and store into specific SampleFolder (All SampleFolder
 must be already existing)
@@ -35,8 +37,8 @@ parser = OptionParser()
 parser.add_option("-f","--fastq", dest="fastq")
 parser.add_option("-r","--ref", dest="ref")
 parser.add_option("-s","--sample", dest="sample")
-parser.add_option("-p","--pid", dest="pid")
 parser.add_option("-i","--pairid", dest="pairid")
+parser.add_option("-o","--output", dest="output")
 
 (options, args) = parser.parse_args()
 
@@ -48,10 +50,6 @@ sRef=options.ref
 if not sRef:
 	exit("Error : no ref -r defined, process broken")
 	
-sPid=options.pid
-if not sPid:
-	exit("Error : no pid -p defined, process broken")
-	
 sPairId=options.pairid
 if not sPairId:
 	exit("Error : no pairid -i defined, process broken")
@@ -59,7 +57,10 @@ if not sPairId:
 sSampleId=options.sample
 if not sSampleId:
 	exit("Error : no sample -s defined, process broken")
-sSampleTag=sPid+"_"+sSampleId
+
+sOutput=options.output
+if not sOutput:
+	exit("Error : no output -o defined, process broken")
 
 ########################################################################
 #Function 	
@@ -75,8 +76,8 @@ def LoadRef(sPath,sSample,sPair):
 				dResult[sSeqName]=int(iEndIndex)
 	return dResult
 
-def WriteSplitFastq(sPath,dList,sSID):
-	FILE=open(sSID+"/"+sSID+"_"+sPath+"."+SPLIT_TAG,"w")
+def WriteSplitFastq(sPath,dList,sSID,sOut):
+	FILE=open(sSID+"/"+sOut,"w")
 	sSeqName=""
 	sContent=""
 	sInterline=""
@@ -124,8 +125,8 @@ def WriteSplitFastq(sPath,dList,sSID):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	dListOfSeq=LoadRef(sRef,sSampleTag,sPairId)
-	WriteSplitFastq(sFastq,dListOfSeq,sSampleId)
+	dListOfSeq=LoadRef(sRef,sSampleId,sPairId)
+	WriteSplitFastq(sFastq,dListOfSeq,sSampleId,sOutput)
 	
 	
 ########################################################################    

@@ -5,13 +5,15 @@
 import time
 from optparse import OptionParser
 
-sCurrentVersionScript="v3"
+sCurrentVersionScript="v4"
 iTime1=time.time()
 ########################################################################
 '''
+V4-2020/02/11
+Adapt to muliplate analysis: Sample Id = PlateId+SampleId 
+
 V3-2019/10/22
 Keep IndexEnd value, the index to the end of the linker signals
-
 V2-2019/10/22
 No more header in dodeca/midfile
 V1-2019/07/01
@@ -29,7 +31,7 @@ OUTPUTFILE: Path to the output tab file generated
 parser = OptionParser()
 parser.add_option("-m","--midfile", dest="midfile")
 parser.add_option("-o","--output", dest="output")
-parser.add_option("-p","--pid", dest="pid")
+parser.add_option("-v","--varname", dest="varname")
 
 (options, args) = parser.parse_args()
 
@@ -40,10 +42,10 @@ if not sMidFile:
 sOutput=options.output
 if not sOutput:
 	exit("Error : no output -o defined, process broken")
-
-sPid=options.pid
-if not sPid:
-	exit("Error : no pid -p defined, process broken")
+	
+sVarName=options.varname
+if not sVarName:
+	exit("Error : no varname -v defined, process broken")
 
 ########################################################################
 #Function 	
@@ -57,7 +59,7 @@ def ReadLinkerFile(sString,sPrefix):
 		sLine=sNewLine.strip()
 		tLine=sLine.split("\t")
 		print(tLine)
-		sRef=sPrefix+"_"+tLine[0]
+		sRef=sPrefix+tLine[0]
 		sSeq="".join(tLine[1:])
 		dResult[sRef]=sSeq
 		# print(sRef,sSeq)
@@ -119,7 +121,7 @@ def WriteKmerList(dDict,sPath):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	dRef2Linker=ReadLinkerFile(sMidFile,sPid)
+	dRef2Linker=ReadLinkerFile(sMidFile,sVarName)
 	dKmerRef=GetKmerRef(dRef2Linker)
 	WriteKmerList(dKmerRef,sOutput)
 	

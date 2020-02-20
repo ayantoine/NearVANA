@@ -10,9 +10,11 @@ sCurrentVersionScript="v3"
 iTime1=time.time()
 ########################################################################
 '''
+V4-2020/02/11
+Adapt to multiplate analysis
+
 V3-2020/01/21
 Adapt to array wioth limited value
-
 V2-2019/10/30
 Work with index on base file instead multiple subfile (decrease memory usage)
 V1-2019/07/01
@@ -51,6 +53,7 @@ parser.add_option("-c","--conffile", dest="conf")
 parser.add_option("-q","--quantity", dest="quantity")
 parser.add_option("-a","--argfile", dest="argfile")
 parser.add_option("-p","--pid", dest="pid")
+parser.add_option("-v","--varname", dest="varname")
 
 (options, args) = parser.parse_args()
 
@@ -96,6 +99,10 @@ sPID=options.pid
 if not sPID:
 	exit("Error : no pid -p defined, process broken")
 
+sVarName=options.varname
+if not sVarName:
+	exit("Error : no varname -v defined, process broken")
+
 ########################################################################
 #Function 	
 def LoadConfFile(sPath):
@@ -113,30 +120,30 @@ def LoadConfFile(sPath):
 		dDict[tLine[0]]=CONF_STEP.join(tLine[1:])
 	return dDict	
 		
-def WriteBash(sArg,iSize,sScriptDir,sKmerPath,sOutputPath,sDir,dCall,sConf,sPID,iNumberSeq):
-	sLogDir=sPID+"_log_LaunchAssignation"
+def WriteBash(sArg,iSize,sScriptDir,sKmerPath,sOutputPath,sDir,dCall,sConf,sPID,iNumberSeq,sPlateId):
+	sLogDir=sPID+"_"+sPlateId+"_log_LaunchAssignation"
 	FILE=open(sOutputPath,"w")
 	FILE.write("#! /bin/bash\n\n")
 	FILE.write("mkdir "+sLogDir+"\n")
-	FILE.write("mkdir Demultiplexing_Ok\n")
-	FILE.write(dCall[KEYCONF_SCALL]+" "+dCall[KEYCONF_SPARAM]+" "+dCall[KEYCONF_STASKARRAY]+"1-"+str(iSize)+dCall[KEYCONF_SMAXTASK]+dCall[KEYCONF_SMAXSIMJOB]+" -e "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".e"+dCall[KEYCONF_SPSEUDOTASKID]+" -o "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".o"+dCall[KEYCONF_SPSEUDOTASKID]+" "+sScriptDir+"/"+BASHSCRIPT+" "+str(iNumberSeq)+" "+sKmerPath+" "+sDir+" "+sScriptDir+" Demultiplexing_Ok "+sConf+" "+sArg+"\n")
+	FILE.write("if [ ! -d Demultiplexing"+sPlateId+"_Ok ] ; then mkdir Demultiplexing"+sPlateId+"_Ok" ; fi")
+	FILE.write(dCall[KEYCONF_SCALL]+" "+dCall[KEYCONF_SPARAM]+" "+dCall[KEYCONF_STASKARRAY]+"1-"+str(iSize)+dCall[KEYCONF_SMAXTASK]+dCall[KEYCONF_SMAXSIMJOB]+" -e "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".e"+dCall[KEYCONF_SPSEUDOTASKID]+" -o "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".o"+dCall[KEYCONF_SPSEUDOTASKID]+" "+sScriptDir+"/"+BASHSCRIPT+" "+str(iNumberSeq)+" "+sKmerPath+" "+sDir+" "+sScriptDir+" Demultiplexing"+sPlateId+"_Ok "+sConf+" "+sArg+" "+sPlateId+"\n")
 	# FILE.write("""
-# if [ ! -d "Demultiplexing_Ok" ] ; then mkdir "Demultiplexing_Ok" ; fi
+# if [ ! -d "Demultiplexing"""+sPlateId+"""_Ok" ] ; then mkdir "Demultiplexing"""+sPlateId+"""_Ok" ; fi
 # while true ; do
-	# if [ $(ls Demultiplexing_Ok/ | wc -l) -eq 0 ]
+	# if [ $(ls Demultiplexing"""+sPlateId+"""_Ok/ | wc -l) -eq 0 ]
 		# then
 		# nbr_ok=0
 	# else
-		# nbr_ok=$(ls Demultiplexing_Ok/*_MakeAssignation.ok | wc -l)
+		# nbr_ok=$(ls Demultiplexing"""+sPlateId+"""_Ok/*_MakeAssignation.ok | wc -l)
 	# fi
 	# if [ "${nbr_ok}" -eq """+str(iSize)+""" ]
 		# then
-		# rm -r Demultiplexing_Ok
+		# rm -r Demultiplexing"""+sPlateId+"""_Ok
 		# break
 	# fi
 	# sleep 60
 # done\n""")
-	FILE.write("rm -r Demultiplexing_Ok\n")
+	FILE.write("rm -r Demultiplexing"+sPlateId+"_Ok\n")
 	FILE.write("echo \""+BASHSCRIPT+"\" DONE\n")
 	FILE.close()
 
@@ -154,7 +161,7 @@ def GetJobByTask(iSeq,iTask):
 if __name__ == "__main__":
 	dConf=LoadConfFile(sConf)
 	iJobByTask,iTask=GetJobByTask(iQuantity,int(dConf[KEYCONF_SMAXARRAYSIZE]))
-	WriteBash(sArg,iTask,sScript,sKmerList,sOutput,sWorkDir,dConf,sConf,sPID,iJobByTask)
+	WriteBash(sArg,iTask,sScript,sKmerList,sOutput,sWorkDir,dConf,sConf,sPID,iJobByTask,sVarName)
 	
 ########################################################################    
 iTime2=time.time()

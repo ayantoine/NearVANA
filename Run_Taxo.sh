@@ -6,17 +6,16 @@ ARG=$1
 source $ARG
 source $CONF
 
-nb_jobs=$(ls ${PID}_BlastX/*_2.tab | wc -l)
+nb_jobs=$(ls ${PID}_Diamond/*_2.tab | wc -l)
 
 echo "DEFINITION" > DEFINITION.txt
 echo "ACCESSION" > ACCESSION.txt
 
 if [ ! -d ${PID}"_log_Taxo" ] ; then mkdir ${PID}"_log_Taxo" ; fi
 if [ ! -d "Taxo_Ok" ] ; then mkdir "Taxo_Ok" ; fi
-touch ${PID}_nucleotide_TempDefDb.txt
 touch ${PID}_protein_TempDefDb.txt
-echo "$SCALL $SPARAM $SRENAME ${PID}_Taxo ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Taxo"/${PID}_Blast${TASK}.e${SPSEUDOTASKID} -o ${PID}"_log_Taxo"/${PID}_Blast${TASK}.o${SPSEUDOTASKID} ${SDIR}/GetTaxonomy.sh $ARG ${TASK}"
-$SCALL $SPARAM $SRENAME ${PID}_Taxo ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Taxo"/${PID}_Blast${TASK}.e${SPSEUDOTASKID} -o ${PID}"_log_Taxo"/${PID}_Blast${TASK}.o${SPSEUDOTASKID} ${SDIR}/GetTaxonomy.sh $ARG ${TASK}
+echo "$SCALL $SPARAM $SRENAME ${PID}_Taxo ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Taxo"/${PID}_Diamond.e${SPSEUDOTASKID} -o ${PID}"_log_Taxo"/${PID}_Diamond.o${SPSEUDOTASKID} ${SDIR}/GetTaxonomy.sh $ARG"
+$SCALL $SPARAM $SRENAME ${PID}_Taxo ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Taxo"/${PID}_Diamond.e${SPSEUDOTASKID} -o ${PID}"_log_Taxo"/${PID}_Diamond.o${SPSEUDOTASKID} ${SDIR}/GetTaxonomy.sh $ARG
 #while true ; do
 	#if [ $(ls Taxo_Ok/ | wc -l) -eq 0 ]
 		#then
@@ -33,10 +32,8 @@ $SCALL $SPARAM $SRENAME ${PID}_Taxo ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSI
 #done
 rm -r Taxo${TASK}_Ok
 
-cat ${PID}_nucleotide_TempDefDb.txt >> ${NUCDEF}
 cat ${PID}_protein_TempDefDb.txt >> ${PRODEF}
 
-rm ${PID}_nucleotide_TempDefDb.txt
 rm ${PID}_protein_TempDefDb.txt
 rm DEFINITION.txt
 rm ACCESSION.txt
