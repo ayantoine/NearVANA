@@ -7,7 +7,7 @@ source $ARG
 source $CONF
 
 echo "------ Megahit ------"
-megahit --k-list 21,33,55,77,99 -1 VP-1_R1.Corrected.fastq -2 VP-1_R2.Corrected.fastq -r VP-1_R0.Corrected.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${PID}"_log_Assembly-Megahit"
+megahit --k-list 21,33,55,77,99 -1 ${PID}_R1.Corrected.fastq -2 ${PID}_R2.Corrected.fastq -r ${PID}_R0.Corrected.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${PID}"_log_Assembly-Megahit"
 echo "------ /Megahit ------"
 
 mv ${PID}_log_Assembly-Megahit/final.contigs.fa ${PID}_Temp.Megahit_contigs.fa
