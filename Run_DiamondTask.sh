@@ -37,4 +37,4 @@ touch ${PID}.DiamondTask.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
-echo "Time Diamond: "$delta > Time09-1.txt
+echo "Time Diamond Array: "$delta > Time09-1.txt

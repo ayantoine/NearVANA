@@ -125,7 +125,7 @@ def WriteBash(sArg,iSize,sScriptDir,sKmerPath,sOutputPath,sDir,dCall,sConf,sPID,
 	FILE=open(sOutputPath,"w")
 	FILE.write("#! /bin/bash\n\n")
 	FILE.write("mkdir "+sLogDir+"\n")
-	FILE.write("if [ ! -d Demultiplexing"+sPlateId+"_Ok ] ; then mkdir Demultiplexing"+sPlateId+"_Ok" ; fi")
+	FILE.write("if [ ! -d Demultiplexing"+sPlateId+"_Ok ] ; then mkdir Demultiplexing"+sPlateId+"_Ok ; fi")
 	FILE.write(dCall[KEYCONF_SCALL]+" "+dCall[KEYCONF_SPARAM]+" "+dCall[KEYCONF_STASKARRAY]+"1-"+str(iSize)+dCall[KEYCONF_SMAXTASK]+dCall[KEYCONF_SMAXSIMJOB]+" -e "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".e"+dCall[KEYCONF_SPSEUDOTASKID]+" -o "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".o"+dCall[KEYCONF_SPSEUDOTASKID]+" "+sScriptDir+"/"+BASHSCRIPT+" "+str(iNumberSeq)+" "+sKmerPath+" "+sDir+" "+sScriptDir+" Demultiplexing"+sPlateId+"_Ok "+sConf+" "+sArg+" "+sPlateId+"\n")
 	# FILE.write("""
 # if [ ! -d "Demultiplexing"""+sPlateId+"""_Ok" ] ; then mkdir "Demultiplexing"""+sPlateId+"""_Ok" ; fi
