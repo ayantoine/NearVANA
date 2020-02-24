@@ -241,9 +241,9 @@ if [ ! -f ${PID}.Diamond.ok ]; then
 	$SCALL $SPARAM $SRENAME ${PID}_Run_Diamond -e Run_Diamond.e -o Run_Diamond.o ${SDIR}/Run_Diamond.sh $ARG
 	while [ ! -e ${PID}.Diamond.ok ]; do sleep 60 ; done
 else
-	echo "${PID}.Blast.ok already existing, pass"
+	echo "${PID}.Diamond.ok already existing, pass"
 fi
-echo "------ /Launch Blast------"
+echo "------ /Launch Diamond------"
 
 echo "------ Retrieve Taxonomy data ------"
 if [ ! -f ${PID}.Taxonomy.ok ]; then
