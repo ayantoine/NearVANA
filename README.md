@@ -53,7 +53,7 @@ NearVANA need some files from NCBI to determine the taxonomy of a hit. This file
 
 They are avalaible on the NCBI ftp. There is a git programm that automatize their download (https://github.com/ayantoine/NCBI-ViralTaxo)
 
-In addition, TINAP need to acces two file that contains hit definitions.
+In addition, NearVANA need to acces two file that contains hit definitions.
 - NuclAccId2Def.tsv
 - ProtAccId2Def.tsv
 
