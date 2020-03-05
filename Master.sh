@@ -110,9 +110,12 @@ fi
 echo "------ Cleaning reads ------"
 if [ ! -f ${PID}.Cleaning.ok ]; then
 	if [ "$USE_MULTIPLEX" = true ] ; then
+		EXTEND_SAMPLE_LIST=("$SAMPLE_LIST[@]")
+		EXTEND_SAMPLE_LIST+=("Hypo")
+		EXTEND_SAMPLE_LIST+=("NoId")
 		if [ ! -f ${PID}.SplitReads.ok ]; then
 			echo -e "\t- Cleaning linkers"
-			for sampleId in "${SAMPLE_LIST[@]}"; do
+			for sampleId in "${EXTEND_SAMPLE_LIST[@]}"; do
 				mkdir $sampleId	
 			done
 			for VARNAME in "${PLATE[@]}"; do
@@ -134,7 +137,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 			echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_CutAdapt -e Run_R1_CutAdapt.e -o Run_R1_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG ${PID}_R1.fastq"
 			$SCALL $SPARAM $SRENAME ${PID}_Run_CutAdapt -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG
 			while [ ! -e ${PID}.CutAdapt.ok ]; do sleep 60 ; done
-			for sampleId in "${SAMPLE_LIST[@]}"; do
+			for sampleId in "${EXTEND_SAMPLE_LIST[@]}"; do
 				rm ${sampleId}/${sampleId}_${PID}_R1.fastq.split
 				rm ${sampleId}/${sampleId}_${PID}_R2.fastq.split
 			done
@@ -154,7 +157,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 			touch ${PID}_R2.Unsubstracted.fastq
 			touch ${PID}_R0.Unsubstracted.fastq
 			
-			for sampleId in "${SAMPLE_LIST[@]}"; do
+			for sampleId in "${EXTEND_SAMPLE_LIST[@]}"; do
 				cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
 				cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
 				cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq

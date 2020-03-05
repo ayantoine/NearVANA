@@ -31,6 +31,8 @@ PAIRID: id of the pair end file
 ILLUMINA_PAIR_TAG=":N:0:"
 
 SPLIT_TAG="split"
+
+NOENDINDEX="."
 ########################################################################
 #Options
 parser = OptionParser()
@@ -77,7 +79,7 @@ def LoadRef(sPath,sSample,sPair):
 	return dResult
 
 def WriteSplitFastq(sPath,dList,sSID,sOut):
-	FILE=open(sSID+"/"+sOut,"w")
+	FILE=open(sOut,"w")
 	sSeqName=""
 	sContent=""
 	sInterline=""
@@ -90,11 +92,8 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 			if sSeqName!="":
 				try:
 					iEndIndex=dList[sSeqName[1:-1]] #remove starting @ and ending \n
-					# print(iEndIndex)
-					# print(sSeqName)
-					# print(sContent)
-					# print(sInterline)
-					# print(sQuality)
+					if iEndIndex==NOENDINDEX:
+						iEndIndex=0
 					sSeqName=sSeqName.replace("\n"," "+sSID+"\n") 
 					FILE.write(sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:])
 					iSeqAssociated+=1
@@ -113,13 +112,15 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 	if sSeqName!="":
 		try:
 			iEndIndex=dList[sSeqName[1:-1]] #remove starting @ and ending \n
+			if iEndIndex==NOENDINDEX:
+				iEndIndex=0
 			sSeqName=sSeqName.replace("\n"," "+sSID+"\n") 
 			FILE.write(sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:])
 			iSeqAssociated+=1
 		except KeyError:
 			pass
 	
-	print(sSID+"/"+sSID+"_"+sPath+"."+SPLIT_TAG+" contains "+str(iSeqAssociated)+" sequences")
+	print(sOut" contains "+str(iSeqAssociated)+" sequences")
 	FILE.close()
 		
 ########################################################################

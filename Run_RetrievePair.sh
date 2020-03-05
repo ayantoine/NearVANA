@@ -16,6 +16,8 @@ for VARNAME in "${PLATE[@]}"; do
 		SAMPLE_LIST+=(${VARNAME}${c1})
 	done < ${!VAR_SAMPLE_FILE}
 done
+SAMPLE_LIST+=("Hypo")
+SAMPLE_LIST+=("NoId")
 echo "${SAMPLE_LIST[@]}"
 echo "------ /Get Subsample list ------"
 
