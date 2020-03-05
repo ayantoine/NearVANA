@@ -236,8 +236,8 @@ echo "------ /Reads assembly------"
 echo "------ Launch Diamond ------"
 if [ ! -f ${PID}.Diamond.ok ]; then
 	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Diamond -e Run_Diamond.e -o Run_Diamond.o ${SDIR}/Run_Diamond.sh $ARG"
-	#$SCALL $SPARAM $SRENAME ${PID}_Run_Diamond -e Run_Diamond.e -o Run_Diamond.o ${SDIR}/Run_Diamond.sh $ARG
-	while [ ! -e ${PID}.Diamond.ok ]; do sleep 60 ; done
+	$SCALL $SPARAM $SRENAME ${PID}_Run_Diamond -e Run_Diamond.e -o Run_Diamond.o ${SDIR}/Run_Diamond.sh $ARG
+	#while [ ! -e ${PID}.Diamond.ok ]; do sleep 60 ; done
 else
 	echo "${PID}.Diamond.ok already existing, pass"
 fi
