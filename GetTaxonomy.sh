@@ -4,9 +4,6 @@ ARG=$1
 source $ARG
 source $CONF
 
-
-<<<<<<< HEAD
-
 FilePath=${PID}_Diamond/${PID}_All.fa.${STASKID}.Diamond_2.tab
 
 TempDefFile=${PID}_protein_TempDefDb.txt
