@@ -4,6 +4,23 @@ ARG=$1
 #WARNING!! Source file is executed (Security, etc.)
 source $ARG
 
+function boolean() {
+  case $1 in
+    TRUE) echo true ;;
+    FALSE) echo false ;;
+    *) echo "Err: Unknown boolean value \"$1\"" 1>&2; exit 1 ;;
+   esac
+}
+
+BLASTN="$(boolean "${BLASTN}")"
+BLASTX="$(boolean "${BLASTX}")"
+
+if [ "$BLASTX" = false ] ; then
+	if [ "$BLASTN" = false ] ; then
+		echo "BlastX and BlastN set as FALSE, nothing to do\nexit"
+		exit 1
+	fi
+fi
 
 echo "------ Check Input existence ------"
 if [ ! -d $SDIR ] ; then
@@ -157,35 +174,42 @@ else
 fi
 echo "------ /Reads assembly------"
 
-echo "------ Launch Blast ------"
-if [ ! -f ${PID}.Blast.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Blast -e Run_Blast.e -o Run_Blast.o ${SDIR}/Run_Blast.sh $ARG"
-	$SCALL $SPARAM $SRENAME ${PID}_Run_Blast -e Run_Blast.e -o Run_Blast.o ${SDIR}/Run_Blast.sh $ARG
-	while [ ! -e ${PID}.Blast.ok ]; do sleep 60 ; done
+echo "------ Split fasta for Blast ------"
+if [ ! -f ${PID}.SplitFasta.ok ]; then
+	echo "$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG"
+	$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG
+	while [ ! -e ${PID}.SplitFasta.ok ]; do sleep 60 ; done
 else
-	echo "${PID}.Blast.ok already existing, pass"
+	echo "${PID}.SplitFasta.ok already existing, pass"
 fi
-echo "------ /Launch Blast------"
+echo "------ /Split fasta for Blast ------"
 
-echo "------ Retrieve Taxonomy data ------"
-if [ ! -f ${PID}.Taxonomy.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG"
-	$SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG
-	while [ ! -e ${PID}.Taxonomy.ok ]; do sleep 60 ; done
-else
-	echo "${PID}.Taxonomy.ok already existing, pass"
+echo "------ Launch Blast treatment------"
+if [ "$BLASTN" = true ] ; then
+	if [ ! -f ${PID}.BlastN.ok ]; then
+		echo "$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastNTreatment.sh $ARG N"
+		$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastNTreatment.sh $ARG N
+	else
+		echo "${PID}.BlastN.ok already existing, pass"
+	fi
 fi
-echo "------ /Retrieve Taxonomy data ------"
+if [ "$BLASTX" = true ] ; then
+	if [ ! -f ${PID}.BlastX.ok ]; then
+		echo "$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastXTreatment.sh $ARG X"
+		$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastXTreatment.sh $ARG X
+	else
+		echo "${PID}.BlastX.ok already existing, pass"
+	fi
+fi
+rm -r ${PID}_ToBlast DEFINITION.txt ACCESSION.txt
+echo "------ /Launch Blast treatment------"
 
-echo "------ Create table ------"
-if [ ! -f ${PID}.Table.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Table -e Table.e -o Table.o ${SDIR}/Run_CreateTable.sh $ARG"
-	$SCALL $SPARAM $SRENAME ${PID}_Table -e Run_Table.e -o Run_Table.o ${SDIR}/Run_CreateTable.sh $ARG
-	while [ ! -e ${PID}.Table.ok ]; do sleep 60 ; done
-else
-	echo "${PID}.Table.ok already existing, pass"
-fi
-echo "------ /Create table ------"
+
+#################################
+#exit
+#echo "$SCALL $SPARAM $SRENAME ${PID}_NTable -e Creation_TableAll.e -o Creation_TableAll.o ${SDIR}/CreateTableFusion.sh $ARG ${nb_jobs}"
+#$SCALL $SPARAM $SRENAME ${PID}_AllTable -e Creation_TableAll.e -o Creation_TableAll.o ${SDIR}/CreateTableFusion.sh $ARG ${nb_jobs}
+#perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_BlastAll_results.tab ${PID}_BlastAll_results.xlsx $((${#PID}+7))
 
 ##echo "------ Clean workdir ------"
 ##if [ ! -f ${PID}.Clean.ok ]; then
