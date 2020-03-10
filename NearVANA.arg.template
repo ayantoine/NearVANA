@@ -23,3 +23,9 @@ PRODEF=
 DBLINEAGE=
 #Cluster Conffile
 CONF=
+#Use BlastX (TRUE/FALSE, beware uppercase)
+BLASTX=
+#Use BlastN (TRUE/FALSE, beware uppercase)
+BLASTN=
+#Use Diamond (TRUE/FALSE, beware uppercase)
+DIAMOND=

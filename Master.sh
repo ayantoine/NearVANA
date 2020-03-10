@@ -13,6 +13,9 @@ function boolean() {
 }
 
 USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
+BLASTN="$(boolean "${BLASTN}")"
+BLASTX="$(boolean "${BLASTX}")"
+DIAMOND="$(boolean "${DIAMOND}")"
 
 echo "------ Check Input existence ------"
 if [ ! -d $SDIR ] ; then
@@ -65,7 +68,7 @@ done
 echo
 echo '> Conf details (/!\ beware bash interpretation for STASKID)'
 source $CONF
-LIST_PARAM=(SCALL SPARAM MULTICPU MULTIMEMORY SPARAM_MULTICPU STASKARRAY SMAXTASK SRENAME SMAXSIMJOB SMAXARRAYSIZE STASKID SPSEUDOTASKID VIRPTDB ALLPTDB)
+LIST_PARAM=(SCALL SPARAM MULTICPU MULTIMEMORY SPARAM_MULTICPU STASKARRAY SMAXTASK SRENAME SMAXSIMJOB SMAXARRAYSIZE STASKID SPSEUDOTASKID VIRPTDB ALLPTDB VIRNTDB ALLNTDB VIRPTDB_DIAMOND ALLPTDB_DIAMOND)
 for i in "${LIST_PARAM[@]}"; do
 	echo "$i: ${!i}"
 done
@@ -235,41 +238,57 @@ else
 fi
 echo "------ /Reads assembly------"
 
-echo "------ Launch Diamond ------"
-if [ ! -f ${PID}.Diamond.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Diamond -e Run_Diamond.e -o Run_Diamond.o ${SDIR}/Run_Diamond.sh $ARG"
-	$SCALL $SPARAM $SRENAME ${PID}_Run_Diamond -e Run_Diamond.e -o Run_Diamond.o ${SDIR}/Run_Diamond.sh $ARG
-	while [ ! -e ${PID}.Diamond.ok ]; do sleep 60 ; done
+echo "------ Split fasta for Blast ------"
+if [ ! -f ${PID}.SplitFasta.ok ]; then
+	echo "$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG"
+	$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG
+	while [ ! -e ${PID}.SplitFasta.ok ]; do sleep 60 ; done
 else
-	echo "${PID}.Diamond.ok already existing, pass"
+	echo "${PID}.SplitFasta.ok already existing, pass"
 fi
-echo "------ /Launch Diamond------"
+echo "------ /Split fasta for Blast ------"
 
-echo "------ Retrieve Taxonomy data ------"
-if [ ! -f ${PID}.Taxonomy.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG"
-	$SCALL $SPARAM $SRENAME ${PID}_Run_Taxo -e Run_Taxo.e -o Run_Taxo.o ${SDIR}/Run_Taxo.sh $ARG
-	while [ ! -e ${PID}.Taxonomy.ok ]; do sleep 60 ; done
-else
-	echo "${PID}.Taxonomy.ok already existing, pass"
-fi
-echo "------ /Retrieve Taxonomy data ------"
-
-echo "------ Create table ------"
-if [ ! -f ${PID}.Table.ok ]; then
-	if [ "$USE_MULTIPLEX" = true ] ; then
-		echo "$SCALL $SPARAM $SRENAME ${PID}_Table -e Table.e -o Table.o ${SDIR}/Run_CreateTable.sh $ARG"
-		$SCALL $SPARAM $SRENAME ${PID}_Table -e Run_Table.e -o Run_Table.o ${SDIR}/Run_CreateTable.sh $ARG
-		while [ ! -e ${PID}.Table.ok ]; do sleep 60 ; done
+echo "------ Launch Blast/Diamond treatment------"
+if [ "$BLASTN" = true ] ; then
+	if [ ! -f ${PID}.BlastN.ok ]; then
+		echo "$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N"
+		$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N
 	else
-		echo "$SCALL $SPARAM $SRENAME ${PID}_Table -e Run_Table.e -o Run_Table.o ${SDIR}/Run_CreateTable_NM.sh $ARG"
-		$SCALL $SPARAM $SRENAME ${PID}_Table -e Run_Table.e -o Run_Table.o ${SDIR}/Run_CreateTable_NM.sh $ARG
-		while [ ! -e ${PID}.Table.ok ]; do sleep 60 ; done
+		echo "${PID}.BlastN.ok already existing, pass"
 	fi
-else
-	echo "${PID}.Table.ok already existing, pass"
 fi
-echo "------ /Create table ------"
+if [ "$BLASTX" = true ] ; then
+	if [ ! -f ${PID}.BlastX.ok ]; then
+		echo "$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X"
+		$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X
+	else
+		echo "${PID}.BlastX.ok already existing, pass"
+	fi
+fi
+if [ "$DIAMOND" = true ] ; then
+	if [ ! -f ${PID}.Diamond.ok ]; then
+		#echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Diamond -e Run_Diamond.e -o Run_Diamond.o ${SDIR}/Run_Diamond.sh $ARG"
+		#$SCALL $SPARAM $SRENAME ${PID}_Run_Diamond -e Run_Diamond.e -o Run_Diamond.o ${SDIR}/Run_Diamond.sh $ARG
+		$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D
+	else
+		echo "${PID}.Diamond.ok already existing, pass"
+	fi
+fi
+rm -r ${PID}_ToBlast DEFINITION.txt ACCESSION.txt
+echo "------ /Launch Blast/Diamond treatment------"
+
+if [ "$BLASTN" = true ] ; then
+	while [ ! -e ${PID}.BlastN.ok ]; do sleep 60 ; done
+fi
+if [ "$BLASTX" = true ] ; then
+	while [ ! -e ${PID}.BlastX.ok ]; do sleep 60 ; done
+fi
+if [ "$DIAMOND" = true ] ; then
+	while [ ! -e ${PID}.Diamond.ok ]; do sleep 60 ; done
+fi
+
+########################################################################
+exit
 
 ##echo "------ Clean workdir ------"
 ##if [ ! -f ${PID}.Clean.ok ]; then

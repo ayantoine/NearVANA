@@ -6,10 +6,10 @@ ARG=$1
 source $ARG
 source $CONF
 
-nb_jobs=$(ls ${PID}_ToDiamond | wc -l)
+nb_jobs=$(ls ${PID}_ToBlast | wc -l)
 
 if [ ! -d "Diamond_Ok" ] ; then mkdir "Diamond_Ok" ; fi
-if [ ! -d ${PID}"_Diamond" ] ; then mkdir ${PID}"_Diamond" ; fi
+if [ ! -d ${PID}"_BlastD" ] ; then mkdir ${PID}"_BlastD" ; fi
 if [ ! -d ${PID}"_log_Diamond" ] ; then mkdir ${PID}"_log_Diamond" ; fi
 
 if [ ! -f ${PID}.Diamond.ok ] ; then
@@ -33,8 +33,8 @@ else
     echo "${PID}.Diamond.ok already existing, do nothing..."
 fi
 
-touch ${PID}.DiamondTask.ok
+touch ${PID}.BlastD.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
-echo "Time Diamond Array: "$delta > Time09-1.txt
+echo "Time Diamond: "$delta > Time10-3.txt

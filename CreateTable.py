@@ -78,7 +78,8 @@ if __name__ == "__main__":
 	parser.add_option("-j","--jobs", dest="jobs")
 	parser.add_option("-p","--pid", dest="pid")
 	parser.add_option("-l","--length", dest="length")
-	parser.add_option("-d","--data", dest="data")
+	parser.add_option("-m","--metadata", dest="metadata")
+	parser.add_option("-t","--task", dest="task")
 
 	(options, args) = parser.parse_args()
 
@@ -98,18 +99,32 @@ if __name__ == "__main__":
 	if not sLengthFile:
 		exit("Error : no length -l defined, process broken")
 	
-	sData=options.data
+	sData=options.metadata
 	if not sData:
-		exit("Error : no data -d defined, process broken")
+		exit("Error : no metadata -m defined, process broken")
+		
+	sTask=options.task
+	if not sTask:
+		exit("Error : no task -t defined, process broken")
 
-	#Half-constant
-	BLAST_OUTPUT=sPID+"_Diamond_results.tab"
-	BLAST_FOLDER=sPID+"_Diamond"
-	BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
-	BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab"
-	TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab.taxo"
-	SHORTSPADES=sPID+"_All.Megahit.contigs2sample.tsv"
-	SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
+	if sTask=="D":
+		#Half-constant
+		BLAST_OUTPUT=sPID+"_Diamond_results.tab"
+		BLAST_FOLDER=sPID+"_Diamond"
+		BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
+		BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab"
+		TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab.taxo"
+		SHORTSPADES=sPID+"_All.Megahit.contigs2sample.tsv"
+		SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
+	else:
+		#Half-constant
+		BLAST_OUTPUT=sPID+"_Blast"+sTask+"_results.tab"
+		BLAST_FOLDER=sPID+"_Blast"+sTask
+		BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
+		BLAST_FILE=sPID+"_All.fa."+REPLACEME+"."+"_Blast"+sTask+"_2.tab"
+		TAXO_FILE=sPID+"_All.fa."+REPLACEME+"."++"_Blast"+sTask+"_2.tab.taxo"
+		SHORTSPADES=sPID+"_All.Megahit.contigs2sample.tsv"
+		SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
 
 ########################################################################
 #Function 	
