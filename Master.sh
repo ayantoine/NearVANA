@@ -267,8 +267,7 @@ if [ "$BLASTX" = true ] ; then
 fi
 if [ "$DIAMOND" = true ] ; then
 	if [ ! -f ${PID}.Diamond.ok ]; then
-		#echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Diamond -e Run_Diamond.e -o Run_Diamond.o ${SDIR}/Run_Diamond.sh $ARG"
-		#$SCALL $SPARAM $SRENAME ${PID}_Run_Diamond -e Run_Diamond.e -o Run_Diamond.o ${SDIR}/Run_Diamond.sh $ARG
+		#echo "$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D"
 		$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D
 	else
 		echo "${PID}.Diamond.ok already existing, pass"

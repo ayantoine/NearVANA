@@ -37,4 +37,4 @@ touch ${PID}.BlastD.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
-echo "Time Diamond: "$delta > Time10-3.txt
+echo "Time Diamond: "$delta > Time10-D.txt

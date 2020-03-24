@@ -94,4 +94,4 @@ fi
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
-echo "Time Taxo${Task}: "$delta > Time11.txt
+echo "Time Taxo${Task}: "$delta > Time11-${Task}.txt
