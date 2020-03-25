@@ -1,1 +1,1 @@
-conda create -n NearVANA2-env bowtie2=2.3.4 spades=3.6.2 blast=2.2.31 FLASH=1.2.11 Cutadapt=1.18 python=3.5 perl-excel-writer-xlsx megahit diamond=0.9.30
+conda create -n NearVANA3-env bowtie2=2.3.4 spades=3.6.2 blast=2.2.31 FLASH=1.2.11 Cutadapt=1.18 python=3.5 perl-excel-writer-xlsx megahit diamond=0.9.30
