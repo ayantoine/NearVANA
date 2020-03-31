@@ -273,7 +273,7 @@ if [ "$DIAMOND" = true ] ; then
 		echo "${PID}.Diamond.ok already existing, pass"
 	fi
 fi
-rm -r ${PID}_ToBlast DEFINITION.txt ACCESSION.txt
+#rm -r ${PID}_ToBlast DEFINITION.txt ACCESSION.txt
 echo "------ /Launch Blast/Diamond treatment------"
 
 if [ "$BLASTN" = true ] ; then
