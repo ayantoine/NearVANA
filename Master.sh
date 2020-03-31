@@ -201,6 +201,14 @@ if [ "$BLASTX" = true ] ; then
 		echo "${PID}.BlastX.ok already existing, pass"
 	fi
 fi
+
+if [ "$BLASTN" = true ] ; then
+	while [ ! -e ${PID}.BlastN.ok ]; do sleep 60 ; done
+fi
+if [ "$BLASTX" = true ] ; then
+	while [ ! -e ${PID}.BlastX.ok ]; do sleep 60 ; done
+fi
+
 rm -r ${PID}_ToBlast DEFINITION.txt ACCESSION.txt
 echo "------ /Launch Blast treatment------"
 
