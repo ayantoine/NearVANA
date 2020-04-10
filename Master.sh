@@ -250,7 +250,7 @@ echo "------ /Split fasta for Blast ------"
 
 echo "------ Launch Blast/Diamond treatment------"
 if [ "$BLASTN" = true ] ; then
-	if [ ! -f ${PID}.BlastN.ok ]; then
+	if [ ! -f ${PID}.BlastTreatmentN.ok ]; then
 		echo "$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N"
 		$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N
 	else
@@ -258,7 +258,7 @@ if [ "$BLASTN" = true ] ; then
 	fi
 fi
 if [ "$BLASTX" = true ] ; then
-	if [ ! -f ${PID}.BlastX.ok ]; then
+	if [ ! -f ${PID}.BlastTreatmentN.ok ]; then
 		echo "$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X"
 		$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X
 	else
@@ -266,8 +266,8 @@ if [ "$BLASTX" = true ] ; then
 	fi
 fi
 if [ "$DIAMOND" = true ] ; then
-	if [ ! -f ${PID}.Diamond.ok ]; then
-		#echo "$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D"
+	if [ ! -f ${PID}.BlastTreatmentN.ok ]; then
+		echo "$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D"
 		$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D
 	else
 		echo "${PID}.Diamond.ok already existing, pass"
