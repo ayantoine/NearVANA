@@ -150,6 +150,8 @@ def ProcessFastq1(dKmer,dEndIndex,sFastq,iIndex,iJobByTask):
 	
 	for sNewLine in open(sFastq):
 		iCount+=1
+		if iCount%500000==0:
+			print("Step1: "+str(iCount)+"...")
 		if iCount<iIndex*iLineByTask+1:
 			continue
 		elif iCount>=(iIndex+1)*iLineByTask+1:
@@ -223,6 +225,8 @@ def ProcessFastq2(dKmer,dEndIndex,sFastq,dSeq1,iIndex,iJobByTask):
 	iLineByTask=iJobByTask*LINE_BY_FASTQ
 	for sNewLine in open(sFastq):
 		iCount+=1
+		if iCount%500000==0:
+			print("Step2: "+str(iCount)+"...")
 		if iCount<iIndex*iLineByTask+1:
 			continue
 		elif iCount>=(iIndex+1)*iLineByTask+1:
@@ -298,7 +302,7 @@ def LoadConfFile(sPath):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	dConf=LoadConfFile(sConf)
+	# dConf=LoadConfFile(sConf)
 	# iJobByTask=GetJobByTask(iQuantity,int(dConf[KEYCONF_SMAXARRAYSIZE]))
 	dKmerRef, dKmerEndIndex=LoadKmerFile(sKmerList)
 	dSeqId2Sample=ProcessFastq1(dKmerRef,dKmerEndIndex,sFastq1,iIndex,iQuantity)
