@@ -94,8 +94,6 @@ else
     echo "Taxo${TASK}_Ok/${STASKID}_Taxo.ok already existing, do nothing..."
 fi
 
-
-
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
-echo "Time Taxo${Task}: "$delta > Time11-${Task}.txt
+echo "Time Taxo${Task}: "$delta #> Time11-${Task}.txt

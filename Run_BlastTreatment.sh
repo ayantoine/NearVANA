@@ -71,6 +71,10 @@ if [ ! -f ${PID}.Taxonomy${TASK}.ok ]; then
 	cat ${PID}_${TASK}_TempDefDb.txt >> ${NUCDEF}
 	rm ${PID}_${TASK}_TempDefDb.txt
 	
+	datetime2=$(date +%s)
+	delta=$((datetime2 - datetime1))
+	echo "Time Taxo: "$delta > Time11-${Task}.txt
+	
 	touch ${PID}.Taxonomy${TASK}.ok
 else
 	echo "${PID}.Taxonomy${TASK}.ok already existing, pass"
@@ -100,8 +104,12 @@ if [ ! -f ${PID}.creation${TASK}.ok ]; then
 	echo "------ /Xlsx conversion ------"
 	datetime2=$(date +%s)
 	delta=$((datetime2 - datetime1))
-	echo "Time Table: "$delta > Time12.txt
+	echo "Time Taxo: "$delta > Time12-${Task}.txt
 else
 	echo "${PID}.creation${TASK}.ok already existing, pass"
 fi
 echo "------ /Create table ------"
+
+echo "------ Create ok tagfile ------"
+touch ${PID}.BlastTreatment${TASK}.ok
+echo "------ /Create ok tagfile ------"

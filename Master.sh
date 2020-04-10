@@ -276,13 +276,13 @@ fi
 echo "------ /Launch Blast/Diamond treatment------"
 
 if [ "$BLASTN" = true ] ; then
-	while [ ! -e ${PID}.BlastN.ok ]; do sleep 60 ; done
+	while [ ! -e ${PID}.BlastTreatmentN.ok ]; do sleep 60 ; done
 fi
 if [ "$BLASTX" = true ] ; then
-	while [ ! -e ${PID}.BlastX.ok ]; do sleep 60 ; done
+	while [ ! -e ${PID}.BlastTreatmentX.ok ]; do sleep 60 ; done
 fi
 if [ "$DIAMOND" = true ] ; then
-	while [ ! -e ${PID}.Diamond.ok ]; do sleep 60 ; done
+	while [ ! -e ${PID}.BlastTreatmentD.ok ]; do sleep 60 ; done
 fi
 
 #rm -r ${PID}_ToBlast DEFINITION.txt ACCESSION.txt
