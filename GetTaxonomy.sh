@@ -8,7 +8,7 @@ source $CONF
 
 Task=$2
 
-if [ ! -f Taxo${TASK}_Ok/${STASKID}_Taxo.ok ] ; then
+if [ ! -f Taxo${Task}_Ok/${STASKID}_Taxo.ok ] ; then
     if [ ${Task} == X ] ; then
 	DBTARGET=${PROACC}
 	DBDEF=${PRODEF}
@@ -89,9 +89,9 @@ if [ ! -f Taxo${TASK}_Ok/${STASKID}_Taxo.ok ] ; then
 		
     done
     
-    touch Taxo${TASK}_Ok/${STASKID}_Taxo.ok
+    touch Taxo${Task}_Ok/${STASKID}_Taxo.ok
 else
-    echo "Taxo${TASK}_Ok/${STASKID}_Taxo.ok already existing, do nothing..."
+    echo "Taxo${Task}_Ok/${STASKID}_Taxo.ok already existing, do nothing..."
 fi
 
 datetime2=$(date +%s)
