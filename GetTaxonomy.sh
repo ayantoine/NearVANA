@@ -8,7 +8,7 @@ source $CONF
 
 Task=$2
 
-if [ ! -f ${PID}.Taxonomy${TASK}.ok ] ; then
+if [ ! -f Taxo${TASK}_Ok/${STASKID}_Taxo.ok ] ; then
     if [ ${Task} == X ] ; then
 	DBTARGET=${PROACC}
 	DBDEF=${PRODEF}
@@ -88,9 +88,13 @@ if [ ! -f ${PID}.Taxonomy${TASK}.ok ] ; then
 	rm ${STASKID}.${ACC}.lineage.txt
 		
     done
+    
+    touch Taxo${TASK}_Ok/${STASKID}_Taxo.ok
 else
-    echo "${PID}.Taxonomy${TASK}.ok already existing, do nothing..."
+    echo "Taxo${TASK}_Ok/${STASKID}_Taxo.ok already existing, do nothing..."
 fi
+
+
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
