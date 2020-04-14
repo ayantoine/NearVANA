@@ -83,6 +83,7 @@ echo "------ /Retrieve Taxonomy data ------"
 
 echo "------ Create table ------"
 if [ ! -f ${PID}.creation${TASK}.ok ]; then
+	nb_jobs=$(ls ${PID}_Blast${TASK}/*_2.tab | wc -l)
 	if [ ! -f ${PID}_All.SPAdes.contigs2sample.tsv ]; then
 		echo "------ Create short-list ------"
 		cut -f2,4 ${PID}_All.SPAdes_reverseAssembly.tsv | sort -u > ${PID}_All.SPAdes.contigs2sample.tsv

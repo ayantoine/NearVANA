@@ -32,6 +32,7 @@ if [ ! -f ${PID}.Blast${TASK}.ok ] ; then
 	    fi
 	    sleep 60
     done
+    rm -r Blast${TASK}_Ok
 else
     echo "${PID}.Blast${TASK}.ok already existing, do nothing..."
 fi
