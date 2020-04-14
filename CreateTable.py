@@ -122,7 +122,7 @@ if __name__ == "__main__":
 		BLAST_FOLDER=sPID+"_Blast"+sTask
 		BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
 		BLAST_FILE=sPID+"_All.fa."+REPLACEME+"."+"_Blast"+sTask+"_2.tab"
-		TAXO_FILE=sPID+"_All.fa."+REPLACEME+"."++"_Blast"+sTask+"_2.tab.taxo"
+		TAXO_FILE=sPID+"_All.fa."+REPLACEME+"."+"_Blast"+sTask+"_2.tab.taxo"
 		SHORTSPADES=sPID+"_All.Megahit.contigs2sample.tsv"
 		SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
 
