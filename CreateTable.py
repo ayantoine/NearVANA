@@ -78,7 +78,7 @@ if __name__ == "__main__":
 	parser.add_option("-j","--jobs", dest="jobs")
 	parser.add_option("-p","--pid", dest="pid")
 	parser.add_option("-l","--length", dest="length")
-	parser.add_option("-m","--metadata", dest="metadata")
+	parser.add_option("-d","--datafile", dest="datafile")
 	parser.add_option("-t","--task", dest="task")
 
 	(options, args) = parser.parse_args()
@@ -99,9 +99,9 @@ if __name__ == "__main__":
 	if not sLengthFile:
 		exit("Error : no length -l defined, process broken")
 	
-	sData=options.metadata
-	if not sData:
-		exit("Error : no metadata -m defined, process broken")
+	sDataFile=options.datafile
+	if not sDataFile:
+		exit("Error : no datafile -d defined, process broken")
 		
 	sTask=options.task
 	if not sTask:
@@ -407,7 +407,7 @@ def LoadLength(sFile):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	dData=LoadData(sData)
+	dData=LoadData(sDataFile)
 	dMetadata=LoadMetadata(dData)
 	dLength=LoadLength(sLengthFile)
 	FILE=open(BLAST_OUTPUT,"w")
