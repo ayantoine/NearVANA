@@ -82,6 +82,9 @@ if [ ! -f ${PID}.Taxonomy${TASK}.ok ] ; then
 	rm ${STASKID}.${ACC}.lineage.txt
 		
     done
+    
+    touch ${PID}.Taxonomy${TASK}.ok
+    
 else
     echo "${PID}.Taxonomy${TASK}.ok already existing, do nothing..."
 fi
