@@ -76,3 +76,5 @@ else
 	echo "${PID}.creation${TASK}.ok already existing, pass"
 fi
 echo "------ /Create table ------"
+
+touch ${PID}.Blast${TASK}Treatment.ok

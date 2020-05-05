@@ -6,20 +6,20 @@ ARG=$1
 source $ARG
 source $CONF
 
-Task=$2
+TASK=$2
 
-if [ ! -f ${PID}.Taxonomy${TASK}.ok ] ; then
-    FilePath=${PID}_Blast${Task}/${PID}_All.fa.${STASKID}.Blast${Task}_2.tab
-    if [ ${Task} == X ] ; then
+if [ ! -f Taxo${TASK}_Ok/${STASKID}.${PID}.Taxonomy${TASK}.ok ] ; then
+    FilePath=${PID}_Blast${TASK}/${PID}_All.fa.${STASKID}.Blast${TASK}_2.tab
+    if [ ${TASK} == X ] ; then
 	DBTARGET=${PROACC}
 	DBDEF=${PRODEF}
 	TAG="protein"
-    elif [ ${Task} == N ] ; then
+    elif [ ${TASK} == N ] ; then
 	DBTARGET=${NUCACC}
 	DBDEF=${NUCDEF}
 	TAG="nucleotide"
     fi
-    TempDefFile=${PID}_${Task}_TempDefDb.txt
+    TempDefFile=${PID}_${TASK}_TempDefDb.txt
     
     echo "Working on file "${FilePath}
     if [ -e ${FilePath}.taxo ] ; then
@@ -83,12 +83,12 @@ if [ ! -f ${PID}.Taxonomy${TASK}.ok ] ; then
 		
     done
     
-    touch ${PID}.Taxonomy${TASK}.ok
+    touch Taxo${TASK}_Ok/${STASKID}.${PID}.Taxonomy${TASK}.ok
     
 else
-    echo "${PID}.Taxonomy${TASK}.ok already existing, do nothing..."
+    echo "Taxo${TASK}_Ok/${STASKID}.${PID}.Taxonomy${TASK}.ok already existing, do nothing..."
 fi
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
-echo "Time Taxo${Task}: "$delta > Time11.txt
+echo "Time Taxo${TASK}: "$delta > Time11.txt
