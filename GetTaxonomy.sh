@@ -83,7 +83,7 @@ if [ ! -f Taxo${TASK}_Ok/${STASKID}.${PID}.Taxonomy${TASK}.ok ] ; then
 		
     done
     
-    touch Taxo${TASK}_Ok/${STASKID}.${PID}.Taxonomy${TASK}.ok
+    touch Taxo${TASK}_Ok/${STASKID}_Taxo.ok
     
 else
     echo "Taxo${TASK}_Ok/${STASKID}.${PID}.Taxonomy${TASK}.ok already existing, do nothing..."
