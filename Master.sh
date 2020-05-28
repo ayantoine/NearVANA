@@ -206,7 +206,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 		echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG"
 		$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG
 		while [ ! -e ${PID}.Substraction.ok ]; do sleep 60 ; done
-		#rm ${PID}_R1.Unsubstracted.fastq ${PID}_R2.Unsubstracted.fastq ${PID}_R0.Unsubstracted.fastq
+		rm ${PID}_R1.Unsubstracted.fastq ${PID}_R2.Unsubstracted.fastq ${PID}_R0.Unsubstracted.fastq
 		touch ${PID}.Cleaning.ok
 	else
 		echo -e "\t- ${PID}.Cleaning.ok existing, pas"
@@ -217,15 +217,15 @@ else
 fi
 echo "------ /Cleaning reads ------"
 
-#echo "------ Reads assembly ------"
-#if [ ! -f ${PID}.Assembly.ok ]; then
-	#echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG"
-	#$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG
-	#while [ ! -e ${PID}.Assembly.ok ]; do sleep 60 ; done
-#else
-	#echo "${PID}.Assembly.ok already existing, pass"
-#fi
-#echo "------ /Reads assembly------"
+echo "------ Reads assembly ------"
+if [ ! -f ${PID}.Assembly.ok ]; then
+	echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG"
+	$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG
+	while [ ! -e ${PID}.Assembly.ok ]; do sleep 60 ; done
+else
+	echo "${PID}.Assembly.ok already existing, pass"
+fi
+echo "------ /Reads assembly------"
 
 #echo "------ Split fasta for Blast ------"
 #if [ ! -f ${PID}.SplitFasta.ok ]; then
