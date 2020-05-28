@@ -98,17 +98,17 @@ fi
 echo "------ /Extract .gz ------"
 
 
-#if [ "$USE_MULTIPLEX" = true ] ; then
-	#echo "------ Demultiplexing reads ------"
-	#if [ ! -f ${PID}.Demultiplexing.ok ]; then
-		#echo "$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing.e -o Demultiplexing.o ${SDIR}/Demultiplexing.sh $ARG"
-		#$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing.e -o Demultiplexing.o ${SDIR}/Demultiplexing.sh $ARG
-		#while [ ! -e ${PID}.Demultiplexing.ok ]; do sleep 60 ; done
-	#else
-		#echo "${PID}.Demultiplexing.ok existing, pass"
-	#fi
-	#echo "------ /Demultiplexing reads -----"
-#fi
+if [ "$USE_MULTIPLEX" = true ] ; then
+	echo "------ Demultiplexing reads ------"
+	if [ ! -f ${PID}.Demultiplexing.ok ]; then
+		echo "$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing.e -o Demultiplexing.o ${SDIR}/Demultiplexing.sh $ARG"
+		$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing.e -o Demultiplexing.o ${SDIR}/Demultiplexing.sh $ARG
+		while [ ! -e ${PID}.Demultiplexing.ok ]; do sleep 60 ; done
+	else
+		echo "${PID}.Demultiplexing.ok existing, pass"
+	fi
+	echo "------ /Demultiplexing reads -----"
+fi
 
 #echo "------ Cleaning reads ------"
 #if [ ! -f ${PID}.Cleaning.ok ]; then
