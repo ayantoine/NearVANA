@@ -161,56 +161,56 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 				cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
 				cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
 				cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
-				#rm -r ${sampleId}
+				rm -r ${sampleId}
 			done
 			touch ${PID}.Substraction-Deinterlacing.ok
 		else
 			echo -e "\t- ${PID}.Substraction-Deinterlacing.ok existing, pas"
 		fi	
-	#else
-		#if [ ! -f ${PID}.CutAdapt.ok ]; then
-			#echo -e "\t- Trim adapters"
-			#echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Run_CutAdapt_NM -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt_NM.sh $ARG"
-			#$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Run_CutAdapt_NM -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt_NM.sh $ARG
-			#while [ ! -e ${PID}.CutAdapt.ok ]; do sleep 60 ; done
-		#else
-			#echo -e "\t- ${PID}.CutAdapt.ok existing, pas"
-		#fi
+	else
+		if [ ! -f ${PID}.CutAdapt.ok ]; then
+			echo -e "\t- Trim adapters"
+			echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Run_CutAdapt_NM -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt_NM.sh $ARG"
+			$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Run_CutAdapt_NM -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt_NM.sh $ARG
+			while [ ! -e ${PID}.CutAdapt.ok ]; do sleep 60 ; done
+		else
+			echo -e "\t- ${PID}.CutAdapt.ok existing, pas"
+		fi
 		
-		#if [ ! -f ${PID}.Substraction-Deinterlacing.ok ]; then
-			#echo -e "\t- PhiX Substraction : deinterlacing"
-			#echo "$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG"
-			#$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG
-			#while [ ! -e ${PID}.Deinterlacing.ok ]; do sleep 60 ; done
-			#rm ${PID}.Deinterlacing.ok
+		if [ ! -f ${PID}.Substraction-Deinterlacing.ok ]; then
+			echo -e "\t- PhiX Substraction : deinterlacing"
+			echo "$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG"
+			$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG
+			while [ ! -e ${PID}.Deinterlacing.ok ]; do sleep 60 ; done
+			rm ${PID}.Deinterlacing.ok
 			
-			#echo -e "\t- PhiX Substraction : Merge deinterlaced subfiles"
-			#touch ${PID}_R1.Unsubstracted.fastq
-			#touch ${PID}_R2.Unsubstracted.fastq
-			#touch ${PID}_R0.Unsubstracted.fastq
+			echo -e "\t- PhiX Substraction : Merge deinterlaced subfiles"
+			touch ${PID}_R1.Unsubstracted.fastq
+			touch ${PID}_R2.Unsubstracted.fastq
+			touch ${PID}_R0.Unsubstracted.fastq
 			
-			#for VARNAME in "${PLATE[@]}"; do
-				#cat ${PID}_${VARNAME}_R1.fastq.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
-				#cat ${PID}_${VARNAME}_R2.fastq.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
-				#cat ${PID}_${VARNAME}_R0.fastq.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
-				#rm ${PID}_${VARNAME}_R*.fastq.trim.deinterlaced
-			#done
-			#touch ${PID}.Substraction-Deinterlacing.ok
-		#else
-			#echo -e "\t- ${PID}.Substraction-Deinterlacing.ok existing, pas"
-		#fi	
+			for VARNAME in "${PLATE[@]}"; do
+				cat ${PID}_${VARNAME}_R1.fastq.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
+				cat ${PID}_${VARNAME}_R2.fastq.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
+				cat ${PID}_${VARNAME}_R0.fastq.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
+				rm ${PID}_${VARNAME}_R*.fastq.trim.deinterlaced
+			done
+			touch ${PID}.Substraction-Deinterlacing.ok
+		else
+			echo -e "\t- ${PID}.Substraction-Deinterlacing.ok existing, pas"
+		fi	
 	fi
 	
-	#if [ ! -f ${PID}.Cleaning.ok ]; then
-		#echo -e "\t- PhiX Substraction : Susbract "${SUBS}
-		#echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG"
-		#$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG
-		#while [ ! -e ${PID}.Substraction.ok ]; do sleep 60 ; done
+	if [ ! -f ${PID}.Cleaning.ok ]; then
+		echo -e "\t- PhiX Substraction : Susbract "${SUBS}
+		echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG"
+		$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG
+		while [ ! -e ${PID}.Substraction.ok ]; do sleep 60 ; done
 		#rm ${PID}_R1.Unsubstracted.fastq ${PID}_R2.Unsubstracted.fastq ${PID}_R0.Unsubstracted.fastq
-		#touch ${PID}.Cleaning.ok
-	#else
-		#echo -e "\t- ${PID}.Cleaning.ok existing, pas"
-	#fi	
+		touch ${PID}.Cleaning.ok
+	else
+		echo -e "\t- ${PID}.Cleaning.ok existing, pas"
+	fi	
 	
 else
 	echo "${PID}.Cleaning.ok already existing, pass"
