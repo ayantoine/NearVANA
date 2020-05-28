@@ -199,7 +199,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 		#else
 			#echo -e "\t- ${PID}.Substraction-Deinterlacing.ok existing, pas"
 		#fi	
-	#fi
+	fi
 	
 	#if [ ! -f ${PID}.Cleaning.ok ]; then
 		#echo -e "\t- PhiX Substraction : Susbract "${SUBS}
