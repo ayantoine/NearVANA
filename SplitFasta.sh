@@ -42,5 +42,5 @@ touch ${PID}.SplitFasta.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
-echo "Time SplitData: "$delta > Time09.txt
+echo "Time SplitData: "$delta > Time08.txt
 

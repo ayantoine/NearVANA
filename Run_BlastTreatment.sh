@@ -19,7 +19,7 @@ USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
 TASK=$2
 
 
-if [ "${Task}" == D ]; then
+if [ "${TASK}" == D ]; then
 	echo "------ Launch Diamond by task ------"
 	if [ ! -f {PID}.Blast${TASK}.ok ]; then
 		echo "$SCALL $SPARAM $SRENAME ${PID}_DiamondTask -e Run_DiamondTask.e -o Run_DiamondTask.o ${SDIR}/Run_DiamondTask.sh $ARG"
@@ -73,7 +73,7 @@ if [ ! -f ${PID}.Taxonomy${TASK}.ok ]; then
 	
 	datetime2=$(date +%s)
 	delta=$((datetime2 - datetime1))
-	echo "Time Taxo: "$delta > Time11-${Task}.txt
+	echo "Time Taxo: "$delta > Time09-${TASK}.txt
 	
 	touch ${PID}.Taxonomy${TASK}.ok
 else
@@ -105,7 +105,7 @@ if [ ! -f ${PID}.creation${TASK}.ok ]; then
 	echo "------ /Xlsx conversion ------"
 	datetime2=$(date +%s)
 	delta=$((datetime2 - datetime1))
-	echo "Time Taxo: "$delta > Time12-${Task}.txt
+	echo "Time Taxo: "$delta > Time10-${TASK}.txt
 else
 	echo "${PID}.creation${TASK}.ok already existing, pass"
 fi
