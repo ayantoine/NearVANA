@@ -52,9 +52,9 @@ OUTPUT_R1_UNITIG=sPID+"_R1.Megahit_unassembled.fastq"
 OUTPUT_R2_UNITIG=sPID+"_R2.Megahit_unassembled.fastq"
 OUTPUT_R0_UNITIG=sPID+"_R0.Megahit_unassembled.fastq"
 
-R0_BASE_FASTQ=sPID+"_R0.Corrected.fastq"
-R1_BASE_FASTQ=sPID+"_R1.Corrected.fastq"
-R2_BASE_FASTQ=sPID+"_R2.Corrected.fastq"
+R0_BASE_FASTQ=sPID+"_R0.Substracted.fastq"
+R1_BASE_FASTQ=sPID+"_R1.Substracted.fastq"
+R2_BASE_FASTQ=sPID+"_R2.Substracted.fastq"
 
 OUTPUT_REJECTED_CONTIG=sPID+"_All.Megahit_rejectedContigs.fa"
 OUTPUT_AMBIGOUS_READ=sPID+"_All.Megahit_ambigousReads.tsv"
