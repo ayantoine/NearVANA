@@ -15,7 +15,7 @@ function boolean() {
 
 USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
 
-#N or X
+#N or X or D
 TASK=$2
 
 
