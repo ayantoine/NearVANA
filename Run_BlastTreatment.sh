@@ -18,8 +18,10 @@ USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
 #N or X or D
 TASK=$2
 
+echo "${TASK}"
 
-if [ "${TASK}" == D ]; then
+
+if [ "${TASK}" == "D" ]; then
 	echo "------ Launch Diamond by task ------"
 	if [ ! -f {PID}.Blast${TASK}.ok ]; then
 		echo "$SCALL $SPARAM $SRENAME ${PID}_DiamondTask -e Run_DiamondTask.e -o Run_DiamondTask.o ${SDIR}/Run_DiamondTask.sh $ARG"
