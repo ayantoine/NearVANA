@@ -50,6 +50,8 @@ if [ ! -f ${PID}.Taxonomy${TASK}.ok ]; then
 	echo "DEFINITION" > DEFINITION.txt
 	echo "ACCESSION" > ACCESSION.txt
 
+	datetime1=$(date +%s)
+
 	if [ ! -d ${PID}"_log_Taxo${TASK}" ] ; then mkdir ${PID}"_log_Taxo${TASK}" ; fi
 	if [ ! -d "Taxo${TASK}_Ok" ] ; then mkdir "Taxo${TASK}_Ok" ; fi
 	touch ${PID}_${TASK}_TempDefDb.txt
