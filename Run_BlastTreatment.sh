@@ -109,7 +109,7 @@ if [ ! -f ${PID}.creation${TASK}.ok ]; then
 	echo "------ /Xlsx conversion ------"
 	datetime2=$(date +%s)
 	delta=$((datetime2 - datetime1))
-	echo "Time Taxo: "$delta > Time10-${TASK}.txt
+	echo "Time Table: "$delta > Time10-${TASK}.txt
 else
 	echo "${PID}.creation${TASK}.ok already existing, pass"
 fi
