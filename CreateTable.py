@@ -114,8 +114,8 @@ if __name__ == "__main__":
 		BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
 		BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab"
 		TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab.taxo"
-		SHORTSPADES=sPID+"_All.Megahit.contigs2sample.tsv"
-		SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
+		SHORTMEGAHIT=sPID+"_All.Megahit.contigs2sample.tsv"
+		# SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
 	else:
 		#Half-constant
 		BLAST_OUTPUT=sPID+"_Blast"+sTask+"_results.tab"
@@ -123,8 +123,8 @@ if __name__ == "__main__":
 		BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
 		BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab"
 		TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab.taxo"
-		SHORTSPADES=sPID+"_All.Megahit.contigs2sample.tsv"
-		SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
+		SHORTMEGAHIT=sPID+"_All.Megahit.contigs2sample.tsv"
+		# SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
 
 ########################################################################
 #Function 	
@@ -415,8 +415,8 @@ if __name__ == "__main__":
 	for iIndex in range(1,iJobs+1):
 		print("Working on index "+str(iIndex))
 		dQuery2Content=LoadQuery(BLAST_FOLDER+"/"+BLAST_INPUT.replace(REPLACEME,str(iIndex)))
-		dContigs2Sample=LoadContigs(SHORTSPADES,dQuery2Content)
-		dContigs2Sample=LoadContigs(SHORTFLASH,dQuery2Content,dContigs2Sample)
+		dContigs2Sample=LoadContigs(SHORTMEGAHIT,dQuery2Content)
+		# dContigs2Sample=LoadContigs(SHORTFLASH,dQuery2Content,dContigs2Sample)
 		dTaxo=LoadTaxo(BLAST_FOLDER+"/"+TAXO_FILE.replace(REPLACEME,str(iIndex)))
 		dBlast=LoadBlast(BLAST_FOLDER+"/"+BLAST_FILE.replace(REPLACEME,str(iIndex)))
 		WriteData(FILE,dBlast,dTaxo,dContigs2Sample,dMetadata,dQuery2Content,dLength)
