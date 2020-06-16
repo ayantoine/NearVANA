@@ -110,7 +110,7 @@ if __name__ == "__main__":
 	if sTask=="D":
 		#Half-constant
 		BLAST_OUTPUT=sPID+"_Diamond_results.tab"
-		BLAST_FOLDER=sPID+"_Diamond"
+		BLAST_FOLDER=sPID+"_Blast"+sTask
 		BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
 		BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab"
 		TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab.taxo"
