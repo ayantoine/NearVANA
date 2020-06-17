@@ -237,67 +237,70 @@ def LoadTaxo(sFile):
 def LoadBlast(sFile):
 	print("Loading file "+str(sFile))
 	dDict={}
-	for sNewLine in open(sFile):
-		sLine=sNewLine.strip()
-		tLine=sLine.split("\t")
-		sQueryId=tLine[BLAST_QUERYIDCOl]
-		try:
-			oCrash=dDict[sQueryId]
-		except KeyError:
-			dDict[sQueryId]={}
-		
-		sSubjectId=DEFAULT
-		sSubjectId=tLine[BLAST_SUBJECTIDCOl]
-		if PIPE in sSubjectId:
-			if PIPE==sSubjectId[-1]:
-				sSubjectId=sSubjectId[:-1]
-			sSubjectId=sSubjectId.split(PIPE)[-1]
-		if sSubjectId==EMPTY:
-			continue
-		sIdentity=DEFAULT
-		if tLine[BLAST_IDENTITYCOl]!="":
-			sIdentity=tLine[BLAST_IDENTITYCOl]
-		sLength=DEFAULT
-		if tLine[BLAST_LENGTHCOl]!="":
-			sLength=tLine[BLAST_LENGTHCOl]
-		sMismatch=DEFAULT
-		if tLine[BLAST_MISMATCHCOl]!="":
-			sMismatch=tLine[BLAST_MISMATCHCOl]
-		sGapOpen=DEFAULT
-		if tLine[BLAST_GAPOPENCOl]!="":
-			sGapOpen=tLine[BLAST_GAPOPENCOl]
-		sQueryStart=DEFAULT
-		if tLine[BLAST_QUERYSTARTCOl]!="":
-			sQueryStart=tLine[BLAST_QUERYSTARTCOl]
-		sQueryEnd=DEFAULT
-		if tLine[BLAST_QUERYENDCOl]!="":
-			sQueryEnd=tLine[BLAST_QUERYENDCOl]
-		sSubjectStart=DEFAULT
-		if tLine[BLAST_SUBJECTSTARTCOl]!="":
-			sSubjectStart=tLine[BLAST_SUBJECTSTARTCOl]
-		sSubjectEnd=DEFAULT
-		if tLine[BLAST_SUBJECTENDCOl]!="":
-			sSubjectEnd=tLine[BLAST_SUBJECTENDCOl]
-		sEvalue=DEFAULT
-		if tLine[BLAST_EVALUECOl]!="":
-			sEvalue=tLine[BLAST_EVALUECOl]
-		sBitScore=DEFAULT
-		if tLine[BLAST_BITSCORECOl]!="":
-			sBitScore=tLine[BLAST_BITSCORECOl]
-					
-		dDict[sQueryId][len(dDict[sQueryId])+1]={
-			"SubjectId":sSubjectId,
-			"Identity":sIdentity,
-			"Length":sLength,
-			"Mismatch":sMismatch,
-			"GapOpen":sGapOpen,
-			"QueryStart":sQueryStart,
-			"QueryEnd":sQueryEnd,
-			"SubjectStart":sSubjectStart,
-			"SubjectEnd":sSubjectEnd,
-			"Evalue":sEvalue,
-			"BitScore":sBitScore
-			}
+	try:
+		for sNewLine in open(sFile):
+			sLine=sNewLine.strip()
+			tLine=sLine.split("\t")
+			sQueryId=tLine[BLAST_QUERYIDCOl]
+			try:
+				oCrash=dDict[sQueryId]
+			except KeyError:
+				dDict[sQueryId]={}
+			
+			sSubjectId=DEFAULT
+			sSubjectId=tLine[BLAST_SUBJECTIDCOl]
+			if PIPE in sSubjectId:
+				if PIPE==sSubjectId[-1]:
+					sSubjectId=sSubjectId[:-1]
+				sSubjectId=sSubjectId.split(PIPE)[-1]
+			if sSubjectId==EMPTY:
+				continue
+			sIdentity=DEFAULT
+			if tLine[BLAST_IDENTITYCOl]!="":
+				sIdentity=tLine[BLAST_IDENTITYCOl]
+			sLength=DEFAULT
+			if tLine[BLAST_LENGTHCOl]!="":
+				sLength=tLine[BLAST_LENGTHCOl]
+			sMismatch=DEFAULT
+			if tLine[BLAST_MISMATCHCOl]!="":
+				sMismatch=tLine[BLAST_MISMATCHCOl]
+			sGapOpen=DEFAULT
+			if tLine[BLAST_GAPOPENCOl]!="":
+				sGapOpen=tLine[BLAST_GAPOPENCOl]
+			sQueryStart=DEFAULT
+			if tLine[BLAST_QUERYSTARTCOl]!="":
+				sQueryStart=tLine[BLAST_QUERYSTARTCOl]
+			sQueryEnd=DEFAULT
+			if tLine[BLAST_QUERYENDCOl]!="":
+				sQueryEnd=tLine[BLAST_QUERYENDCOl]
+			sSubjectStart=DEFAULT
+			if tLine[BLAST_SUBJECTSTARTCOl]!="":
+				sSubjectStart=tLine[BLAST_SUBJECTSTARTCOl]
+			sSubjectEnd=DEFAULT
+			if tLine[BLAST_SUBJECTENDCOl]!="":
+				sSubjectEnd=tLine[BLAST_SUBJECTENDCOl]
+			sEvalue=DEFAULT
+			if tLine[BLAST_EVALUECOl]!="":
+				sEvalue=tLine[BLAST_EVALUECOl]
+			sBitScore=DEFAULT
+			if tLine[BLAST_BITSCORECOl]!="":
+				sBitScore=tLine[BLAST_BITSCORECOl]
+						
+			dDict[sQueryId][len(dDict[sQueryId])+1]={
+				"SubjectId":sSubjectId,
+				"Identity":sIdentity,
+				"Length":sLength,
+				"Mismatch":sMismatch,
+				"GapOpen":sGapOpen,
+				"QueryStart":sQueryStart,
+				"QueryEnd":sQueryEnd,
+				"SubjectStart":sSubjectStart,
+				"SubjectEnd":sSubjectEnd,
+				"Evalue":sEvalue,
+				"BitScore":sBitScore
+				}
+	except FileNotFoundError:
+		pass
 	return dDict
 
 def LoadQuery(sFile):
