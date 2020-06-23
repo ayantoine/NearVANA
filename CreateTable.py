@@ -9,11 +9,14 @@ sCurrentVersionScript="v1"
 iTime1=time.time()
 ########################################################################
 '''
+V2-2020/02/14
+Adapt to Diamond and Demultiplexing
+
 V1-2019/11/06
 Create tsv bilan from Blast data
 
-python CreateTable.py -t TASK -i JOBS -p PID
-TASK: X or N
+python CreateTable.py -d DATA -i JOBS -p PID
+DATA: Data argfile
 JOBS: jobs number
 PID: Plaque Id
 '''
@@ -61,22 +64,24 @@ TAXO_DEFCOL=4
 DEFAULT="."
 
 EMPTY=""
+DIESE="#"
+EQUAL="="
+OPEN_PARENTHESIS="("
+CLOSE_PARENTHESIS=")"
+SPACE=" "
+PIPE="|"
 
 ########################################################################
 #Options
 if __name__ == "__main__":
 	parser = OptionParser()
-	parser.add_option("-t","--task", dest="task")
 	parser.add_option("-j","--jobs", dest="jobs")
 	parser.add_option("-p","--pid", dest="pid")
-	parser.add_option("-m","--meta", dest="meta")
 	parser.add_option("-l","--length", dest="length")
+	parser.add_option("-d","--datafile", dest="datafile")
+	parser.add_option("-t","--task", dest="task")
 
 	(options, args) = parser.parse_args()
-
-	sTask=options.task
-	if not sTask:
-		exit("Error : no task -t defined, process broken")
 
 	sJobs=options.jobs
 	if not sJobs:
@@ -90,58 +95,96 @@ if __name__ == "__main__":
 	if not sPID:
 		exit("Error : no pid -p defined, process broken")
 
-	sMeta=options.meta
-	if not sMeta:
-		exit("Error : no meta -m defined, process broken")
-
 	sLengthFile=options.length
 	if not sLengthFile:
 		exit("Error : no length -l defined, process broken")
+	
+	sDataFile=options.datafile
+	if not sDataFile:
+		exit("Error : no datafile -d defined, process broken")
+		
+	sTask=options.task
+	if not sTask:
+		exit("Error : no task -t defined, process broken")
 
-	#Half-constant
-	BLAST_OUTPUT=sPID+"_Blast"+sTask+"_results.tab"
-	BLAST_FOLDER=sPID+"_Blast"+sTask
-	BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
-	BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab"
-	TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab.taxo"
-	SHORTSPADES=sPID+"_All.SPAdes.contigs2sample.tsv"
-	SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
+	if sTask=="D":
+		#Half-constant
+		BLAST_OUTPUT=sPID+"_Blast"+sTask+"_results.tab"
+		BLAST_FOLDER=sPID+"_Blast"+sTask
+		BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
+		BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab"
+		TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab.taxo"
+		SHORTMEGAHIT=sPID+"_All.Megahit.contigs2sample.tsv"
+		# SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
+	else:
+		#Half-constant
+		BLAST_OUTPUT=sPID+"_Blast"+sTask+"_results.tab"
+		BLAST_FOLDER=sPID+"_Blast"+sTask
+		BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
+		BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab"
+		TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab.taxo"
+		SHORTMEGAHIT=sPID+"_All.Megahit.contigs2sample.tsv"
+		# SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
 
 ########################################################################
 #Function 	
-def LoadMetadata(sFile):
+def LoadData(sFile):
 	print("Loading file "+str(sFile))
 	dDict={}
+	bFirst=True
 	for sNewLine in open(sFile):
-		sLine=sNewLine.replace("\n","")
-		if len(sLine)==0:
+		if sNewLine[0]==DIESE:
 			continue
-		tLine=sLine.split("\t")
-		
-		sHost=DEFAULT
-		if tLine[META_HOSTCOL]!="":
-			sHost=tLine[META_HOSTCOL]
-		sLocation=DEFAULT
-		if tLine[META_LOCATIONCOL]!="":
-			sLocation=tLine[META_LOCATIONCOL]
-		sDate=DEFAULT
-		if tLine[META_DATECOL]!="":
-			sDate=tLine[META_DATECOL]
-		sIndividuals=DEFAULT
-		if tLine[META_INDIVIDUALSCOL]!="":
-			sIndividuals=tLine[META_INDIVIDUALSCOL]
-		sWeight=DEFAULT
-		if tLine[META_WEIGHTCOL]!="":
-			sWeight=tLine[META_WEIGHTCOL]
-		
-		dDict[tLine[META_SAMPLECOL]]={
-			"Host":sHost,
-			"Location":sLocation,
-			"Date":sDate,
-			"Individuals":sIndividuals,
-			"Weight":sWeight
-			}
+		if bFirst:
+			bFirst=False
+			continue
+		sLine=sNewLine.strip()
+		if sLine==EMPTY:
+			continue
+		tLine=sLine.split(EQUAL)
+		sPlateId=tLine[0]
+		sListOfData=tLine[1].replace(OPEN_PARENTHESIS,EMPTY).replace(CLOSE_PARENTHESIS,EMPTY)
+		tListOfData=sListOfData.split(SPACE)
+		sMeta=tListOfData[2]
+		dDict[sPlateId]=sMeta
+	return dDict
+
+def LoadMetadata(dData):
+	dDict={}
+	for sPlateId in dData:
+		dDict[sPlateId]={}
+		sFile=dData[sPlateId]
+		print("Loading file "+str(sFile))
+		for sNewLine in open(sFile):
+			sLine=sNewLine.replace("\n","")
+			if len(sLine)==0:
+				continue
+			tLine=sLine.split("\t")
 			
+			sHost=DEFAULT
+			if tLine[META_HOSTCOL]!="":
+				sHost=tLine[META_HOSTCOL]
+			sLocation=DEFAULT
+			if tLine[META_LOCATIONCOL]!="":
+				sLocation=tLine[META_LOCATIONCOL]
+			sDate=DEFAULT
+			if tLine[META_DATECOL]!="":
+				sDate=tLine[META_DATECOL]
+			sIndividuals=DEFAULT
+			if tLine[META_INDIVIDUALSCOL]!="":
+				sIndividuals=tLine[META_INDIVIDUALSCOL]
+			sWeight=DEFAULT
+			if tLine[META_WEIGHTCOL]!="":
+				sWeight=tLine[META_WEIGHTCOL]
+			
+			dDict[sPlateId][tLine[META_SAMPLECOL]]={
+				"Host":sHost,
+				"Location":sLocation,
+				"Date":sDate,
+				"Individuals":sIndividuals,
+				"Weight":sWeight
+				}
+				
 	return dDict
 
 def LoadContigs(sFile,dRef,dDict={}):
@@ -194,66 +237,70 @@ def LoadTaxo(sFile):
 def LoadBlast(sFile):
 	print("Loading file "+str(sFile))
 	dDict={}
-	for sNewLine in open(sFile):
-		sLine=sNewLine.strip()
-		tLine=sLine.split("\t")
-		sQueryId=tLine[BLAST_QUERYIDCOl]
-		try:
-			oCrash=dDict[sQueryId]
-		except KeyError:
-			dDict[sQueryId]={}
-		
-		sSubjectId=DEFAULT
-		if tLine[BLAST_SUBJECTIDCOl]!="":
+	try:
+		for sNewLine in open(sFile):
+			sLine=sNewLine.strip()
+			tLine=sLine.split("\t")
+			sQueryId=tLine[BLAST_QUERYIDCOl]
+			try:
+				oCrash=dDict[sQueryId]
+			except KeyError:
+				dDict[sQueryId]={}
+			
+			sSubjectId=DEFAULT
 			sSubjectId=tLine[BLAST_SUBJECTIDCOl]
-			tSubjectId=sSubjectId.split("|")
-			sSubjectId=tSubjectId[3]
+			if PIPE in sSubjectId:
+				if PIPE==sSubjectId[-1]:
+					sSubjectId=sSubjectId[:-1]
+				sSubjectId=sSubjectId.split(PIPE)[-1]
 			if sSubjectId==EMPTY:
 				continue
-		sIdentity=DEFAULT
-		if tLine[BLAST_IDENTITYCOl]!="":
-			sIdentity=tLine[BLAST_IDENTITYCOl]
-		sLength=DEFAULT
-		if tLine[BLAST_LENGTHCOl]!="":
-			sLength=tLine[BLAST_LENGTHCOl]
-		sMismatch=DEFAULT
-		if tLine[BLAST_MISMATCHCOl]!="":
-			sMismatch=tLine[BLAST_MISMATCHCOl]
-		sGapOpen=DEFAULT
-		if tLine[BLAST_GAPOPENCOl]!="":
-			sGapOpen=tLine[BLAST_GAPOPENCOl]
-		sQueryStart=DEFAULT
-		if tLine[BLAST_QUERYSTARTCOl]!="":
-			sQueryStart=tLine[BLAST_QUERYSTARTCOl]
-		sQueryEnd=DEFAULT
-		if tLine[BLAST_QUERYENDCOl]!="":
-			sQueryEnd=tLine[BLAST_QUERYENDCOl]
-		sSubjectStart=DEFAULT
-		if tLine[BLAST_SUBJECTSTARTCOl]!="":
-			sSubjectStart=tLine[BLAST_SUBJECTSTARTCOl]
-		sSubjectEnd=DEFAULT
-		if tLine[BLAST_SUBJECTENDCOl]!="":
-			sSubjectEnd=tLine[BLAST_SUBJECTENDCOl]
-		sEvalue=DEFAULT
-		if tLine[BLAST_EVALUECOl]!="":
-			sEvalue=tLine[BLAST_EVALUECOl]
-		sBitScore=DEFAULT
-		if tLine[BLAST_BITSCORECOl]!="":
-			sBitScore=tLine[BLAST_BITSCORECOl]
-					
-		dDict[sQueryId][len(dDict[sQueryId])+1]={
-			"SubjectId":sSubjectId,
-			"Identity":sIdentity,
-			"Length":sLength,
-			"Mismatch":sMismatch,
-			"GapOpen":sGapOpen,
-			"QueryStart":sQueryStart,
-			"QueryEnd":sQueryEnd,
-			"SubjectStart":sSubjectStart,
-			"SubjectEnd":sSubjectEnd,
-			"Evalue":sEvalue,
-			"BitScore":sBitScore
-			}
+			sIdentity=DEFAULT
+			if tLine[BLAST_IDENTITYCOl]!="":
+				sIdentity=tLine[BLAST_IDENTITYCOl]
+			sLength=DEFAULT
+			if tLine[BLAST_LENGTHCOl]!="":
+				sLength=tLine[BLAST_LENGTHCOl]
+			sMismatch=DEFAULT
+			if tLine[BLAST_MISMATCHCOl]!="":
+				sMismatch=tLine[BLAST_MISMATCHCOl]
+			sGapOpen=DEFAULT
+			if tLine[BLAST_GAPOPENCOl]!="":
+				sGapOpen=tLine[BLAST_GAPOPENCOl]
+			sQueryStart=DEFAULT
+			if tLine[BLAST_QUERYSTARTCOl]!="":
+				sQueryStart=tLine[BLAST_QUERYSTARTCOl]
+			sQueryEnd=DEFAULT
+			if tLine[BLAST_QUERYENDCOl]!="":
+				sQueryEnd=tLine[BLAST_QUERYENDCOl]
+			sSubjectStart=DEFAULT
+			if tLine[BLAST_SUBJECTSTARTCOl]!="":
+				sSubjectStart=tLine[BLAST_SUBJECTSTARTCOl]
+			sSubjectEnd=DEFAULT
+			if tLine[BLAST_SUBJECTENDCOl]!="":
+				sSubjectEnd=tLine[BLAST_SUBJECTENDCOl]
+			sEvalue=DEFAULT
+			if tLine[BLAST_EVALUECOl]!="":
+				sEvalue=tLine[BLAST_EVALUECOl]
+			sBitScore=DEFAULT
+			if tLine[BLAST_BITSCORECOl]!="":
+				sBitScore=tLine[BLAST_BITSCORECOl]
+						
+			dDict[sQueryId][len(dDict[sQueryId])+1]={
+				"SubjectId":sSubjectId,
+				"Identity":sIdentity,
+				"Length":sLength,
+				"Mismatch":sMismatch,
+				"GapOpen":sGapOpen,
+				"QueryStart":sQueryStart,
+				"QueryEnd":sQueryEnd,
+				"SubjectStart":sSubjectStart,
+				"SubjectEnd":sSubjectEnd,
+				"Evalue":sEvalue,
+				"BitScore":sBitScore
+				}
+	except FileNotFoundError:
+		pass
 	return dDict
 
 def LoadQuery(sFile):
@@ -287,36 +334,54 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 			fCover=round(float(iCoverSize)/iQuerySize*100,2)
 			
 			try:
-				tSample=dContigs[sQuery]
+				tGlobalSample=dContigs[sQuery]
 			except KeyError:
-				tSample=[sQuery.split("_")[-1]]
-			
+				tGlobalSample=[sQuery.split("_")[-1]]
+						
 			if CONTIG in sQuery:
 				sReadQuantity=sQuery.split("(")[-1].split(")")[0]
 			else:
 				sReadQuantity="1"
 			sSubjectId=dBlast[sQuery][iRank]["SubjectId"]
 			
-			sTaxo=dTaxo[sSubjectId]["Lineage"]
-			tTaxo=sTaxo.replace("; ",";").split(";")
-			iMinSize=0
-			for oTaxo in tTaxo:
-				try:
-					iMinSize=dLength[oTaxo]
-				except KeyError:
-					continue
-			if iMinSize==0:
-				fFragment="N/A"
-			else:
-				fFragment=round(float(iQuerySize)/iMinSize*100,2)
+			try:
+				sTaxo=dTaxo[sSubjectId]["Lineage"]
+				tTaxo=sTaxo.replace("; ",";").split(";")
+				iMinSize=0
+				for oTaxo in tTaxo:
+					try:
+						iMinSize=dLength[oTaxo]
+					except KeyError:
+						continue
+				if iMinSize==0:
+					fFragment="N/A"
+				else:
+					fFragment=round(float(iQuerySize)/iMinSize*100,2)
+					
+				sOrganism=dTaxo[sSubjectId]["Organism"]
+				sSuperkingdom=dTaxo[sSubjectId]["Superkingdom"]
+				sLineage=dTaxo[sSubjectId]["Lineage"]
+				sDefinition=dTaxo[sSubjectId]["Definition"]
+
+			except KeyError:
+				sTaxo="unknown"
+				fFragment="unknown"
+				sOrganism="unknown"
+				sSuperkingdom="unknown"
+				sLineage="unknown"
+				sDefinition="unknown"
 				
-			for sSample in tSample:
-				tLine=[sRank,sQuery,sSample,sReadQuantity,str(iQuerySize),
-				dMetadata[sSample]["Location"],dMetadata[sSample]["Date"],
-				dMetadata[sSample]["Host"],dMetadata[sSample]["Individuals"],
-				dMetadata[sSample]["Weight"],sSubjectId,
-				dTaxo[sSubjectId]["Organism"],dTaxo[sSubjectId]["Superkingdom"],
-				dTaxo[sSubjectId]["Lineage"],dTaxo[sSubjectId]["Definition"],str(fFragment),
+			for sGlobalSample in tGlobalSample:
+				for sPlateId in dMetadata:
+					if sPlateId in sGlobalSample:
+						break
+				sSampleId=sGlobalSample.replace(sPlateId,EMPTY)
+				tLine=[sRank,sQuery,sGlobalSample,sReadQuantity,str(iQuerySize),
+				dMetadata[sPlateId][sSampleId]["Location"],dMetadata[sPlateId][sSampleId]["Date"],
+				dMetadata[sPlateId][sSampleId]["Host"],dMetadata[sPlateId][sSampleId]["Individuals"],
+				dMetadata[sPlateId][sSampleId]["Weight"],sSubjectId,
+				sOrganism,sSuperkingdom,
+				sLineage,sDefinition,str(fFragment),
 				dBlast[sQuery][iRank]["Identity"],
 				str(fCover),dBlast[sQuery][iRank]["Length"],dBlast[sQuery][iRank]["Mismatch"],
 				dBlast[sQuery][iRank]["GapOpen"],dBlast[sQuery][iRank]["QueryStart"],
@@ -345,15 +410,16 @@ def LoadLength(sFile):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	dMetadata=LoadMetadata(sMeta)
+	dData=LoadData(sDataFile)
+	dMetadata=LoadMetadata(dData)
 	dLength=LoadLength(sLengthFile)
 	FILE=open(BLAST_OUTPUT,"w")
 	FILE.write(HEADER)
 	for iIndex in range(1,iJobs+1):
 		print("Working on index "+str(iIndex))
 		dQuery2Content=LoadQuery(BLAST_FOLDER+"/"+BLAST_INPUT.replace(REPLACEME,str(iIndex)))
-		dContigs2Sample=LoadContigs(SHORTSPADES,dQuery2Content)
-		dContigs2Sample=LoadContigs(SHORTFLASH,dQuery2Content,dContigs2Sample)
+		dContigs2Sample=LoadContigs(SHORTMEGAHIT,dQuery2Content)
+		# dContigs2Sample=LoadContigs(SHORTFLASH,dQuery2Content,dContigs2Sample)
 		dTaxo=LoadTaxo(BLAST_FOLDER+"/"+TAXO_FILE.replace(REPLACEME,str(iIndex)))
 		dBlast=LoadBlast(BLAST_FOLDER+"/"+BLAST_FILE.replace(REPLACEME,str(iIndex)))
 		WriteData(FILE,dBlast,dTaxo,dContigs2Sample,dMetadata,dQuery2Content,dLength)

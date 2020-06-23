@@ -21,6 +21,8 @@ elif [ ${TASK} == X ]; then
     TAG="protein"
 fi
 
+nb_jobs=$(ls ${PID}_ToBlast | wc -l)
+
 if [ ! -f Blast${TASK}_Ok/${STASKID}_Blast${TASK}.ok ]; then
     echo "------ Viral database blast ------"
     echo "${BLAST} ${BLAST_OPT} -strand both -query ${PID}"_ToBlast"/${PID}_All.fa.${STASKID} -db ${VIRDB} -evalue 0.001 -max_target_seqs 1 -max_hsps 1 -outfmt 6 -out ${PID}"_Blast${TASK}"/${PID}_All.fa.${STASKID}.Blast${TASK}_1.tab"
@@ -37,3 +39,4 @@ if [ ! -f Blast${TASK}_Ok/${STASKID}_Blast${TASK}.ok ]; then
 else
     echo "File Blast${TASK}_Ok/${STASKID}_Blast${TASK}.ok already present. Assume there is no need to launch Blast on this index-array."
 fi
+

@@ -10,9 +10,11 @@ sCurrentVersionScript="v3"
 iTime1=time.time()
 ########################################################################
 '''
+V4-2020/02/11
+Adapt to multi-plate analysis
+
 V3-2020/01/21
 Adapt to array wioth limited value
-
 V2-2019/10/30
 Work with index on base file instead multiple subfile (decrease memory usage)
 V1-2019/07/01
@@ -64,6 +66,7 @@ parser.add_option("-t","--tagfile", dest="tagfile")
 parser.add_option("-i","--index", dest="index")
 parser.add_option("-q","--quantity", dest="quantity")
 parser.add_option("-c","--conffile", dest="conffile")
+parser.add_option("-v","--varname", dest="varname")
 
 (options, args) = parser.parse_args()
 
@@ -107,6 +110,10 @@ except ValueError:
 sConf=options.conffile
 if not sConf:
 	exit("Error : no conffile -c defined, process broken")
+	
+sVarName=options.varname
+if not sVarName:
+	exit("Error : no varname -v defined, process broken")
 
 sHyperName=sWorkDir+"/"+str(iIndex)+"_"+HYPER_SUFFIX
 sHypo1Name=sWorkDir+"/"+str(iIndex)+"_"+HYPO1_SUFFIX
@@ -143,6 +150,8 @@ def ProcessFastq1(dKmer,dEndIndex,sFastq,iIndex,iJobByTask):
 	
 	for sNewLine in open(sFastq):
 		iCount+=1
+		if iCount%500000==0:
+			print("Step1: "+str(iCount)+"...")
 		if iCount<iIndex*iLineByTask+1:
 			continue
 		elif iCount>=(iIndex+1)*iLineByTask+1:
@@ -216,6 +225,8 @@ def ProcessFastq2(dKmer,dEndIndex,sFastq,dSeq1,iIndex,iJobByTask):
 	iLineByTask=iJobByTask*LINE_BY_FASTQ
 	for sNewLine in open(sFastq):
 		iCount+=1
+		if iCount%500000==0:
+			print("Step2: "+str(iCount)+"...")
 		if iCount<iIndex*iLineByTask+1:
 			continue
 		elif iCount>=(iIndex+1)*iLineByTask+1:
@@ -291,7 +302,7 @@ def LoadConfFile(sPath):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	dConf=LoadConfFile(sConf)
+	# dConf=LoadConfFile(sConf)
 	# iJobByTask=GetJobByTask(iQuantity,int(dConf[KEYCONF_SMAXARRAYSIZE]))
 	dKmerRef, dKmerEndIndex=LoadKmerFile(sKmerList)
 	dSeqId2Sample=ProcessFastq1(dKmerRef,dKmerEndIndex,sFastq1,iIndex,iQuantity)

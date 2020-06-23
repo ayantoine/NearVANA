@@ -13,7 +13,7 @@ iTime1=time.time()
 V1-2019/11/04
 Extract Sequences from Mapping and dispatch them among file.
 
-python MappingReverseSPAdes.py -i INPUT -p PID
+python MappingReverseMegahit.py -i INPUT -p PID
 INPUT: path of the mapping file
 PID: Project id
 '''
@@ -24,7 +24,7 @@ NO_MAPPING="*"
 COL_SEQID=0 #! count col from 0
 COL_MAPPING=2 
 
-CONTIG_BASENAME="Contigs_Spades"
+CONTIG_BASENAME="Contigs_Megahit"
 
 
 ########################################################################
@@ -44,20 +44,20 @@ if not sPID:
 	exit("Error : no pid -p defined, process broken")
 
 #Half-Constant
-SPADES_ASSEMBLY_OUTPUT=sPID+"_Temp.SPAdes_contigs.fa"
+MEGAHIT_ASSEMBLY_OUTPUT=sPID+"_Temp.Megahit_contigs.fa"
 
-OUTPUT_FILENAME=sPID+"_All.SPAdes_reverseAssembly.tsv"
-OUTPUT_SPADES_CONTIG=sPID+"_All.SPAdes_contigs.fa"
-OUTPUT_R1_UNITIG=sPID+"_R1.SPAdes_unassembled.fastq"
-OUTPUT_R2_UNITIG=sPID+"_R2.SPAdes_unassembled.fastq"
-OUTPUT_R0_UNITIG=sPID+"_R0.SPAdes_unassembled.fastq"
+OUTPUT_FILENAME=sPID+"_All.Megahit_reverseAssembly.tsv"
+OUTPUT_SPADES_CONTIG=sPID+"_All.Megahit_contigs.fa"
+OUTPUT_R1_UNITIG=sPID+"_R1.Megahit_unassembled.fastq"
+OUTPUT_R2_UNITIG=sPID+"_R2.Megahit_unassembled.fastq"
+OUTPUT_R0_UNITIG=sPID+"_R0.Megahit_unassembled.fastq"
 
-R0_BASE_FASTQ=sPID+"_R0.Corrected.fastq"
-R1_BASE_FASTQ=sPID+"_R1.Corrected.fastq"
-R2_BASE_FASTQ=sPID+"_R2.Corrected.fastq"
+R0_BASE_FASTQ=sPID+"_R0.Substracted.fastq"
+R1_BASE_FASTQ=sPID+"_R1.Substracted.fastq"
+R2_BASE_FASTQ=sPID+"_R2.Substracted.fastq"
 
-OUTPUT_REJECTED_CONTIG=sPID+"_All.SPAdes_rejectedContigs.fa"
-OUTPUT_AMBIGOUS_READ=sPID+"_All.SPAdes_ambigousReads.tsv"
+OUTPUT_REJECTED_CONTIG=sPID+"_All.Megahit_rejectedContigs.fa"
+OUTPUT_AMBIGOUS_READ=sPID+"_All.Megahit_ambigousReads.tsv"
 
 dBASEtoTARGET={
 		R0_BASE_FASTQ:OUTPUT_R0_UNITIG,
@@ -158,11 +158,12 @@ def WriteContigFasta(dDict):
 	FILE=open(OUTPUT_SPADES_CONTIG,"w")
 	FILE2=open(OUTPUT_REJECTED_CONTIG,"w")
 	bWriteIt=False
-	for sNewLine in open(SPADES_ASSEMBLY_OUTPUT):
+	for sNewLine in open(MEGAHIT_ASSEMBLY_OUTPUT):
 		if ">" in sNewLine:
 			sContigName=sNewLine[1:-1]
+			sShortContigName=sContigName.split(" ")[0]
 			try:
-				sNewName=dDict[sContigName]
+				sNewName=dDict[sShortContigName]
 				bWriteIt=True
 			except KeyError:
 				bWriteIt=False

@@ -1,23 +1,31 @@
 #!/bin/bash
 
+datetime1=$(date +%s)
+
 ARG=$1
 source $ARG
 source $CONF
 
-TASK_ARRAY=(N X)
+Task=$2
 
-for Task in ${TASK_ARRAY[@]}; do
-    FilePath=${PID}_Blast${Task}/${PID}_All.fa.${STASKID}.Blast${Task}_2.tab
+if [ ! -f Taxo${Task}_Ok/${STASKID}_Taxo.ok ] ; then
     if [ ${Task} == X ] ; then
 	DBTARGET=${PROACC}
 	DBDEF=${PRODEF}
 	TAG="protein"
+	FilePath=${PID}_Blast${Task}/${PID}_All.fa.${STASKID}.Blast${Task}_2.tab
     elif [ ${Task} == N ] ; then
 	DBTARGET=${NUCACC}
 	DBDEF=${NUCDEF}
 	TAG="nucleotide"
+	FilePath=${PID}_Blast${Task}/${PID}_All.fa.${STASKID}.Blast${Task}_2.tab
+    elif [ ${Task} == D ] ; then
+	DBTARGET=${PROACC}
+	DBDEF=${PRODEF}
+	TAG="protein"
+	FilePath=${PID}_Blast${Task}/${PID}_All.fa.${STASKID}.Diamond_2.tab
     fi
-    TempDefFile=${PID}_${TAG}_TempDefDb.txt
+    TempDefFile=${PID}_${Task}_TempDefDb.txt
     
     echo "Working on file "${FilePath}
     if [ -e ${FilePath}.taxo ] ; then
@@ -80,6 +88,12 @@ for Task in ${TASK_ARRAY[@]}; do
 	rm ${STASKID}.${ACC}.lineage.txt
 		
     done
-done
+    
+    touch Taxo${Task}_Ok/${STASKID}_Taxo.ok
+else
+    echo "Taxo${Task}_Ok/${STASKID}_Taxo.ok already existing, do nothing..."
+fi
 
-touch Taxo_Ok/${STASKID}_Taxo.ok
+datetime2=$(date +%s)
+delta=$((datetime2 - datetime1))
+echo "Time Taxo${Task}: "$delta #> Time11-${Task}.txt

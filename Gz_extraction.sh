@@ -4,9 +4,16 @@ datetime1=$(date +%s)
 
 ARG=$1
 source $ARG
+source $DATA
 
-zcat ${R1} > ${PID}_R1.fastq
-zcat ${R2} > ${PID}_R2.fastq
+for VARNAME in "${PLATE[@]}"; do
+	VAR_R1_FILE="${VARNAME}[0]"
+	VAR_R2_FILE="${VARNAME}[1]"
+	
+	zcat ${!VAR_R1_FILE} > ${PID}_${VARNAME}_R1.fastq
+	zcat ${!VAR_R2_FILE} > ${PID}_${VARNAME}_R2.fastq
+	
+done
 
 touch ${PID}.extraction.ok
 
