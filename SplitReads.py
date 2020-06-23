@@ -39,6 +39,7 @@ parser.add_option("-r","--ref", dest="ref")
 parser.add_option("-s","--sample", dest="sample")
 parser.add_option("-i","--pairid", dest="pairid")
 parser.add_option("-o","--output", dest="output")
+parser.add_option("-u","--use_unassigned", dest="use_unassigned")
 
 (options, args) = parser.parse_args()
 
@@ -62,6 +63,12 @@ sOutput=options.output
 if not sOutput:
 	exit("Error : no output -o defined, process broken")
 
+sUnassigned=options.use_unassigned
+if not sUnassigned:
+	bUnassigned=False
+else:
+	bUnassigned=True
+
 ########################################################################
 #Function 	
 def LoadRef(sPath,sSample,sPair):
@@ -72,7 +79,13 @@ def LoadRef(sPath,sSample,sPair):
 				sLine=sNewLine.strip()
 				tLine=sLine.split("\t")
 				sSeqName=tLine[0]
-				iEndIndex=tLine[2]
+				try:
+					iEndIndex=tLine[2]
+				except IndexError:
+					if bUnassigned:
+						iEndIndex=0
+					else:
+						exit("Error L88 : unable to extract iEndIndex in:\n"+sNewLine)
 				dResult[sSeqName]=int(iEndIndex)
 	return dResult
 

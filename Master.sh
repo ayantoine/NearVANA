@@ -13,6 +13,7 @@ function boolean() {
 }
 
 USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
+USE_KEEPUNASSIGNED="$(boolean "${UNASSIGNED}")"
 BLASTN="$(boolean "${BLASTN}")"
 BLASTX="$(boolean "${BLASTX}")"
 DIAMOND="$(boolean "${DIAMOND}")"
@@ -60,7 +61,7 @@ echo "------ /Check Input existence ------"
 
 echo "------ Show variable value ------"
 echo "> Args details"
-List_NONFILE=(PID DATA MULTIPLEX ADAP SUBS NUCACC NUCDEF PROACC PRODEF DBLINEAGE VIRMINLEN CONF)
+List_NONFILE=(PID DATA MULTIPLEX UNASSIGNED BLASTN BLASTX DIAMOND ADAP SUBS NUCACC NUCDEF PROACC PRODEF DBLINEAGE VIRMINLEN CONF)
 for i in "${List_NONFILE[@]}"; do
 	echo "$i: ${!i}"
 done
@@ -78,11 +79,13 @@ echo "------ Get Sample list ------"
 declare -a SAMPLE_LIST
 for VARNAME in "${PLATE[@]}"; do
 	VAR_SAMPLE_FILE="${VARNAME}[3]"
-	#echo "${!VAR_SAMPLE_FILE}"
 	while read c1 leftovers; do
 		SAMPLE_LIST+=(${VARNAME}${c1})
 	done < ${!VAR_SAMPLE_FILE}
 done
+if [ "$USE_KEEPUNASSIGNED" = true ] ; then
+	SAMPLE_LIST+=("UnassignedReads")
+fi
 echo "${SAMPLE_LIST[@]}"
 echo "------ /Get Sample list ------"
 

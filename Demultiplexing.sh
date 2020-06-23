@@ -35,9 +35,9 @@ for VARNAME in "${PLATE[@]}"; do
 	
 	echo "------ Merge subdata ------"
 	cat ${PID}_${VARNAME}_Demultiplexing/*_Hyper_Identified* > ${PID}_${VARNAME}_Hyper_Identified.tsv
-	#cat ${PID}_${VARNAME}_Demultiplexing/*_Hypo_1_Identified* > ${PID}_${VARNAME}_Hypo_1_Identified.tsv
+	cat ${PID}_${VARNAME}_Demultiplexing/*_Hypo_1_Identified* > ${PID}_${VARNAME}_Hypo_1_Identified.tsv
 	cat ${PID}_${VARNAME}_Demultiplexing/*_Hypo_2_Identified* > ${PID}_${VARNAME}_Hypo_2_Identified.tsv
-	#cat ${PID}_${VARNAME}_Demultiplexing/*_Ambiguous_1* > ${PID}_${VARNAME}_Ambiguous_1.tsv
+	cat ${PID}_${VARNAME}_Demultiplexing/*_Ambiguous_1* > ${PID}_${VARNAME}_Ambiguous_1.tsv
 	cat ${PID}_${VARNAME}_Demultiplexing/*_Ambiguous_2* > ${PID}_${VARNAME}_Ambiguous_2.tsv
 	cat ${PID}_${VARNAME}_Demultiplexing/*_Unidentified* > ${PID}_${VARNAME}_Unidentified.tsv
 	echo "------ /Merge subdata ------"
@@ -48,8 +48,12 @@ for VARNAME in "${PLATE[@]}"; do
 	echo "------ Write output ------"
 	echo "python ${SDIR}/ConcatenateFile.py -o ${PID}_${VARNAME}_Demultiplexing_Hyper.tsv -l ${PID}_${VARNAME}_Hyper_Identified.tsv,${PID}_${VARNAME}_Hypo_2_Identified.tsv,${PID}_${VARNAME}_Ambiguous_2.tsv,${PID}_${VARNAME}_Unidentified.tsv"
 	python ${SDIR}/ConcatenateFile.py -o ${PID}_${VARNAME}_Demultiplexing_Hyper.tsv -l ${PID}_${VARNAME}_Hyper_Identified.tsv,${PID}_${VARNAME}_Hypo_2_Identified.tsv,${PID}_${VARNAME}_Ambiguous_2.tsv,${PID}_${VARNAME}_Unidentified.tsv
+	echo "python ${SDIR}/ConcatenateFile.py -o ${PID}_${VARNAME}_Demultiplexing_Global.tsv -l ${PID}_${VARNAME}_Hyper_Identified.tsv,${PID}_${VARNAME}_Hypo_1_Identified.tsv,${PID}_${VARNAME}_Ambiguous_1.tsv,${PID}_${VARNAME}_Unidentified.tsv"
+	python ${SDIR}/ConcatenateFile.py -o ${PID}_${VARNAME}_Demultiplexing_Global.tsv -l ${PID}_${VARNAME}_Hyper_Identified.tsv,${PID}_${VARNAME}_Hypo_1_Identified.tsv,${PID}_${VARNAME}_Ambiguous_1.tsv,${PID}_${VARNAME}_Unidentified.tsv
 	echo "python ${SDIR}/CountDistribution.py -i ${PID}_${VARNAME}_Demultiplexing_Hyper.tsv -o ${PID}_${VARNAME}_Demultiplexing_Hyper_Distribution.tsv"
 	python ${SDIR}/CountDistribution.py -i ${PID}_${VARNAME}_Demultiplexing_Hyper.tsv -o ${PID}_${VARNAME}_Demultiplexing_Hyper_Distribution.tsv
+	echo "python ${SDIR}/CountDistribution.py -i ${PID}_${VARNAME}_Demultiplexing_Global.tsv -o ${PID}_${VARNAME}_Demultiplexing_Global_Distribution.tsv"
+	python ${SDIR}/CountDistribution.py -i ${PID}_${VARNAME}_Demultiplexing_Global.tsv -o ${PID}_${VARNAME}_Demultiplexing_Global_Distribution.tsv
 	echo "------ /Write output ------"
 	
 	echo "------ Bilan ------"
@@ -58,9 +62,9 @@ for VARNAME in "${PLATE[@]}"; do
 	echo "------ /Bilan ------"
 
 	echo "------ Store supplementary data ------"
-	#gzip -f ${PID}_${VARNAME}_Hypo_1_Identified.tsv > ${PID}_Hypo_1_Identified.tsv.gz
+	gzip -f ${PID}_${VARNAME}_Hypo_1_Identified.tsv > ${PID}_Hypo_1_Identified.tsv.gz
 	gzip -f ${PID}_${VARNAME}_Hypo_2_Identified.tsv > ${PID}_${VARNAME}_Hypo_2_Identified.tsv.gz
-	#gzip -f $${PID}_${VARNAME}_Ambiguous_1.tsv > ${PID}_Ambiguous_1.tsv.gz
+	gzip -f $${PID}_${VARNAME}_Ambiguous_1.tsv > ${PID}_Ambiguous_1.tsv.gz
 	gzip -f ${PID}_${VARNAME}_Ambiguous_2.tsv > ${PID}_${VARNAME}_Ambiguous_2.tsv.gz
 	gzip -f ${PID}_${VARNAME}_Unidentified.tsv > ${PID}_${VARNAME}_Unidentified.tsv.gz
 	echo "------ /Store supplementary data ------"

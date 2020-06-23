@@ -2,6 +2,14 @@
 
 datetime1=$(date +%s)
 
+function boolean() {
+  case $1 in
+    TRUE) echo true ;;
+    FALSE) echo false ;;
+    *) echo "Err: Unknown boolean value \"$1\"" 1>&2; exit 1 ;;
+   esac
+}
+
 ARG=$1
 source $ARG
 source $CONF
@@ -12,18 +20,27 @@ PAIR=$3
 VARNAME=$4
 VAR_DODE="${VARNAME}[3]"
 
+USE_KEEPUNASSIGNED="$(boolean "${UNASSIGNED}")"
+
 echo "------ Get Subsample list ------"
 declare -a SAMPLE_LIST
 while read c1 leftovers; do
 	SAMPLE_LIST+=(${VARNAME}${c1})
 done < ${!VAR_DODE}
+if [ "$USE_KEEPUNASSIGNED" = true ] ; then
+	SAMPLE_LIST+=("UnassignedReads")
+fi
 echo "${SAMPLE_LIST[@]}"
 echo "------ /Get Subsample list ------"
 
 SAMPLE=${SAMPLE_LIST[${STASKID}-1]}
 
 echo "------ Split fastq by sample ------"
-python ${SDIR}/SplitReads.py -f ${FASTQ} -r ${PID}_${VARNAME}_Hyper_Identified.tsv -s ${SAMPLE} -i ${PAIR} -o ${SAMPLE}_${PID}_R${PAIR}.fastq.split
+if  [ "$USE_KEEPUNASSIGNED" = true ] ; then
+	python ${SDIR}/SplitReads.py -u true -f ${FASTQ} -r ${PID}_${VARNAME}_Global_Identified.tsv -s ${SAMPLE} -i ${PAIR} -o ${SAMPLE}_${PID}_R${PAIR}.fastq.split
+else
+	python ${SDIR}/SplitReads.py -f ${FASTQ} -r ${PID}_${VARNAME}_Hyper_Identified.tsv -s ${SAMPLE} -i ${PAIR} -o ${SAMPLE}_${PID}_R${PAIR}.fastq.split
+fi
 echo "------ /Split fastq by sample ------"
 
 echo "Creating ok file"

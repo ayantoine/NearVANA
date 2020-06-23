@@ -2,10 +2,20 @@
 
 datetime1=$(date +%s)
 
+function boolean() {
+  case $1 in
+    TRUE) echo true ;;
+    FALSE) echo false ;;
+    *) echo "Err: Unknown boolean value \"$1\"" 1>&2; exit 1 ;;
+   esac
+}
+
 ARG=$1
 source $ARG
 source $CONF
 source $DATA
+
+USE_KEEPUNASSIGNED="$(boolean "${UNASSIGNED}")"
 
 echo "------ Get Subsample list ------"
 declare -a SAMPLE_LIST
@@ -16,6 +26,9 @@ for VARNAME in "${PLATE[@]}"; do
 		SAMPLE_LIST+=(${VARNAME}${c1})
 	done < ${!VAR_SAMPLE_FILE}
 done
+if [ "$USE_KEEPUNASSIGNED" = true ] ; then
+	SAMPLE_LIST+=("UnassignedReads")
+fi
 echo "${SAMPLE_LIST[@]}"
 echo "------ /Get Subsample list ------"
 
