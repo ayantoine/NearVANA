@@ -42,8 +42,8 @@ for VARNAME in "${PLATE[@]}"; do
 	cat ${PID}_${VARNAME}_Demultiplexing/*_Unidentified* > ${PID}_${VARNAME}_Unidentified.tsv
 	echo "------ /Merge subdata ------"
 	
-	rm -r ${PID}_${VARNAME}_Demultiplexing/
-	rm ./QsubAssignation.sh
+	#rm -r ${PID}_${VARNAME}_Demultiplexing/
+	#rm ./QsubAssignation.sh
 	
 	echo "------ Write output ------"
 	echo "python ${SDIR}/ConcatenateFile.py -o ${PID}_${VARNAME}_Demultiplexing_Hyper.tsv -l ${PID}_${VARNAME}_Hyper_Identified.tsv,${PID}_${VARNAME}_Hypo_2_Identified.tsv,${PID}_${VARNAME}_Ambiguous_2.tsv,${PID}_${VARNAME}_Unidentified.tsv"
@@ -61,13 +61,13 @@ for VARNAME in "${PLATE[@]}"; do
 	echo $(expr $(cat ${PID}_${VARNAME}_R1.fastq ${PID}_${VARNAME}_R1.fastq | wc -l | cut -d " " -f1) / 4 )" sequences in "${!VAR_R1_FILE}" and "${!VAR_R2_FILE}
 	echo "------ /Bilan ------"
 
-	echo "------ Store supplementary data ------"
-	gzip -f ${PID}_${VARNAME}_Hypo_1_Identified.tsv > ${PID}_Hypo_1_Identified.tsv.gz
-	gzip -f ${PID}_${VARNAME}_Hypo_2_Identified.tsv > ${PID}_${VARNAME}_Hypo_2_Identified.tsv.gz
-	gzip -f $${PID}_${VARNAME}_Ambiguous_1.tsv > ${PID}_Ambiguous_1.tsv.gz
-	gzip -f ${PID}_${VARNAME}_Ambiguous_2.tsv > ${PID}_${VARNAME}_Ambiguous_2.tsv.gz
-	gzip -f ${PID}_${VARNAME}_Unidentified.tsv > ${PID}_${VARNAME}_Unidentified.tsv.gz
-	echo "------ /Store supplementary data ------"
+	#echo "------ Store supplementary data ------"
+	#gzip -f ${PID}_${VARNAME}_Hypo_1_Identified.tsv > ${PID}_${VARNAME}_Hypo_1_Identified.tsv.gz
+	#gzip -f ${PID}_${VARNAME}_Hypo_2_Identified.tsv > ${PID}_${VARNAME}_Hypo_2_Identified.tsv.gz
+	#gzip -f ${PID}_${VARNAME}_Ambiguous_1.tsv > ${PID}_${VARNAME}_Ambiguous_1.tsv.gz
+	#gzip -f ${PID}_${VARNAME}_Ambiguous_2.tsv > ${PID}_${VARNAME}_Ambiguous_2.tsv.gz
+	#gzip -f ${PID}_${VARNAME}_Unidentified.tsv > ${PID}_${VARNAME}_Unidentified.tsv.gz
+	#echo "------ /Store supplementary data ------"
 	
 	#rm ${PID}_${VARNAME}_Hypo_2_Identified.tsv ${PID}_${VARNAME}_Ambiguous_2.tsv ${PID}_${VARNAME}_Unidentified.tsv
 	
