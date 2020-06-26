@@ -108,7 +108,10 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 				try:
 					iEndIndex=dList[sSeqName[1:-1]] 
 					sSeqName=sSeqName.replace("\n"," "+sSID+"\n") 
-					FILE.write(sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:])
+					sLine=sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:]
+					if sLine.count("\n")!=4:
+						continue
+					FILE.write()
 					iSeqAssociated+=1
 				except KeyError:
 					pass
@@ -126,13 +129,12 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 		try:
 			iEndIndex=dList[sSeqName[1:-1]] #remove starting @ and ending \n
 			sSeqName=sSeqName.replace("\n"," "+sSID+"\n") 
-			sNewContent=sContent[iEndIndex:]
-			sNewQuality=sQuality[iEndIndex:]
-			if len(sContent)==0:
-				sNewContent="\n"
-				sNewQuality="\n"
-			FILE.write(sSeqName+sNewContent+sInterline+sNewQuality)
-			iSeqAssociated+=1
+			sLine=sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:]
+			if sLine.count("\n")!=4:
+				pass
+			else:
+				FILE.write()
+				iSeqAssociated+=1
 		except KeyError:
 			pass
 	
