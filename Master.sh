@@ -128,25 +128,25 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 				$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}
 				while [ ! -e ${PID}_${VARNAME}_R1.fastq.split.ok ]; do sleep 60 ; done
 				while [ ! -e ${PID}_${VARNAME}_R2.fastq.split.ok ]; do sleep 60 ; done
-				#rm ${PID}_${VARNAME}_R1.fastq ${PID}_${VARNAME}_R2.fastq
+				rm ${PID}_${VARNAME}_R1.fastq ${PID}_${VARNAME}_R2.fastq
 			done
 			touch ${PID}.SplitReads.ok
 		else
 			echo -e "\t- ${PID}.SplitReads.ok existing, pas"
 		fi
 		
-		#if [ ! -f ${PID}.CutAdapt.ok ]; then
-			#echo -e "\t- Trim adapters"
-			#echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_CutAdapt -e Run_R1_CutAdapt.e -o Run_R1_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG ${PID}_R1.fastq"
-			#$SCALL $SPARAM $SRENAME ${PID}_Run_CutAdapt -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG
-			#while [ ! -e ${PID}.CutAdapt.ok ]; do sleep 60 ; done
-			#for sampleId in "${SAMPLE_LIST[@]}"; do
-				#rm ${sampleId}/${sampleId}_${PID}_R1.fastq.split
-				#rm ${sampleId}/${sampleId}_${PID}_R2.fastq.split
-			#done
-		#else
-			#echo -e "\t- ${PID}.CutAdapt.ok existing, pas"
-		#fi
+		if [ ! -f ${PID}.CutAdapt.ok ]; then
+			echo -e "\t- Trim adapters"
+			echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_CutAdapt -e Run_R1_CutAdapt.e -o Run_R1_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG ${PID}_R1.fastq"
+			$SCALL $SPARAM $SRENAME ${PID}_Run_CutAdapt -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG
+			while [ ! -e ${PID}.CutAdapt.ok ]; do sleep 60 ; done
+			for sampleId in "${SAMPLE_LIST[@]}"; do
+				rm ${sampleId}/${sampleId}_${PID}_R1.fastq.split
+				rm ${sampleId}/${sampleId}_${PID}_R2.fastq.split
+			done
+		else
+			echo -e "\t- ${PID}.CutAdapt.ok existing, pas"
+		fi
 		
 		#if [ ! -f ${PID}.Substraction-Deinterlacing.ok ]; then
 			#echo -e "\t- PhiX Substraction : deinterlacing"
