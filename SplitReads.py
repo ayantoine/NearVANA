@@ -31,6 +31,9 @@ PAIRID: id of the pair end file
 ILLUMINA_PAIR_TAG=":N:0:"
 
 SPLIT_TAG="split"
+
+NO_SAMPLE="..."
+NO_INDEX="."
 ########################################################################
 #Options
 parser = OptionParser()
@@ -74,17 +77,17 @@ else:
 def LoadRef(sPath,sSample,sPair,bKeepUnassigned):
 	dResult={}
 	if bKeepUnassigned:
-		sSample="..."
+		sSample=NO_SAMPLE
 	for sNewLine in open(sPath):
 		if sSample in sNewLine:
 			if sPair+ILLUMINA_PAIR_TAG in sNewLine:
 				sLine=sNewLine.strip()
 				tLine=sLine.split("\t")
 				sSeqName=tLine[0]
-				iEndIndex=tLine[2]
-				dResult[sSeqName]=int(iEndIndex)
-				print(dResult)
-				exit()
+				sEndIndex=tLine[2]
+				if sEndIndex==NO_INDEX:
+					sEndIndex="0"
+				dResult[sSeqName]=int(sEndIndex)
 	return dResult
 
 def WriteSplitFastq(sPath,dList,sSID,sOut):
