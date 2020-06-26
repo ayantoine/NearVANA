@@ -10,7 +10,6 @@ function boolean() {
    esac
 }
 
-
 ARG=$1
 source $ARG
 source $CONF
@@ -20,6 +19,7 @@ FASTQ=$2
 PAIR=$3
 VARNAME=$4
 VAR_DODE="${VARNAME}[3]"
+USE_KEEPUNASSIGNED="$(boolean "${UNASSIGNED}")"
 
 echo "------ Launch SplitReads array ------"
 nb_jobs=$(cut -f1 ${!VAR_DODE} | wc -l)
