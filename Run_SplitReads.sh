@@ -23,8 +23,11 @@ VAR_DODE="${VARNAME}[3]"
 
 echo "------ Launch SplitReads array ------"
 nb_jobs=$(cut -f1 ${!VAR_DODE} | wc -l)
+echo $nb_jobs
+echo $USE_KEEPUNASSIGNED
 if [ "$USE_KEEPUNASSIGNED" = true ] ; then
-	let $nb_jobs++
+	echo $nb_jobs
+	let nb_jobs++
 fi
 
 echo $nb_jobs
