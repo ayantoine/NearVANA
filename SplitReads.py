@@ -32,8 +32,11 @@ ILLUMINA_PAIR_TAG=":N:0:"
 
 SPLIT_TAG="split"
 
+UNASSIGNED="UnassignedReads"
 NO_SAMPLE="..."
 NO_INDEX="."
+
+DEBUG=True
 ########################################################################
 #Options
 parser = OptionParser()
@@ -76,7 +79,7 @@ else:
 #Function 	
 def LoadRef(sPath,sSample,sPair,bKeepUnassigned):
 	dResult={}
-	if bKeepUnassigned:
+	if bKeepUnassigned and sSample==UNASSIGNED:
 		sSample=NO_SAMPLE
 	for sNewLine in open(sPath):
 		if sSample in sNewLine:
@@ -103,12 +106,7 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 		if iLineCounter%4==1:
 			if sSeqName!="":
 				try:
-					iEndIndex=dList[sSeqName[1:-1]] #remove starting @ and ending \n
-					# print(iEndIndex)
-					# print(sSeqName)
-					# print(sContent)
-					# print(sInterline)
-					# print(sQuality)
+					iEndIndex=dList[sSeqName[1:-1]] 
 					sSeqName=sSeqName.replace("\n"," "+sSID+"\n") 
 					FILE.write(sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:])
 					iSeqAssociated+=1
