@@ -111,7 +111,7 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 					sLine=sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:]
 					if sLine.count("\n")!=4:
 						continue
-					FILE.write()
+					FILE.write(sLine)
 					iSeqAssociated+=1
 				except KeyError:
 					pass
@@ -133,7 +133,7 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 			if sLine.count("\n")!=4:
 				pass
 			else:
-				FILE.write()
+				FILE.write(sLine)
 				iSeqAssociated+=1
 		except KeyError:
 			pass
