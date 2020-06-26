@@ -148,28 +148,28 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 			echo -e "\t- ${PID}.CutAdapt.ok existing, pas"
 		fi
 		
-		#if [ ! -f ${PID}.Substraction-Deinterlacing.ok ]; then
-			#echo -e "\t- PhiX Substraction : deinterlacing"
-			#echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Correction -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG"
-			#$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG
-			#while [ ! -e ${PID}.Deinterlacing.ok ]; do sleep 60 ; done
-			#rm ${PID}.Deinterlacing.ok
+		if [ ! -f ${PID}.Substraction-Deinterlacing.ok ]; then
+			echo -e "\t- PhiX Substraction : deinterlacing"
+			echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Correction -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG"
+			$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG
+			while [ ! -e ${PID}.Deinterlacing.ok ]; do sleep 60 ; done
+			rm ${PID}.Deinterlacing.ok
 				
-			#echo -e "\t- PhiX Substraction : Merge deinterlaced subfiles"
-			#touch ${PID}_R1.Unsubstracted.fastq
-			#touch ${PID}_R2.Unsubstracted.fastq
-			#touch ${PID}_R0.Unsubstracted.fastq
+			echo -e "\t- PhiX Substraction : Merge deinterlaced subfiles"
+			touch ${PID}_R1.Unsubstracted.fastq
+			touch ${PID}_R2.Unsubstracted.fastq
+			touch ${PID}_R0.Unsubstracted.fastq
 			
-			#for sampleId in "${SAMPLE_LIST[@]}"; do
-				#cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
-				#cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
-				#cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
-				#rm -r ${sampleId}
-			#done
-			#touch ${PID}.Substraction-Deinterlacing.ok
-		#else
-			#echo -e "\t- ${PID}.Substraction-Deinterlacing.ok existing, pas"
-		#fi	
+			for sampleId in "${SAMPLE_LIST[@]}"; do
+				cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
+				cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
+				cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
+				rm -r ${sampleId}
+			done
+			touch ${PID}.Substraction-Deinterlacing.ok
+		else
+			echo -e "\t- ${PID}.Substraction-Deinterlacing.ok existing, pas"
+		fi	
 	#else
 		#if [ ! -f ${PID}.CutAdapt.ok ]; then
 			#echo -e "\t- Trim adapters"
