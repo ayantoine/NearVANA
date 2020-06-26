@@ -71,22 +71,20 @@ else:
 
 ########################################################################
 #Function 	
-def LoadRef(sPath,sSample,sPair):
+def LoadRef(sPath,sSample,sPair,bKeepUnassigned):
 	dResult={}
+	if bKeepUnassigned:
+		sSample="..."
 	for sNewLine in open(sPath):
 		if sSample in sNewLine:
 			if sPair+ILLUMINA_PAIR_TAG in sNewLine:
 				sLine=sNewLine.strip()
 				tLine=sLine.split("\t")
 				sSeqName=tLine[0]
-				try:
-					iEndIndex=tLine[2]
-				except IndexError:
-					if bUnassigned:
-						iEndIndex=0
-					else:
-						exit("Error L88 : unable to extract iEndIndex in:\n"+sNewLine)
+				iEndIndex=tLine[2]
 				dResult[sSeqName]=int(iEndIndex)
+				print(dResult)
+				exit()
 	return dResult
 
 def WriteSplitFastq(sPath,dList,sSID,sOut):
@@ -138,9 +136,7 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	print("sRef,sSampleId,sPairId",sRef,sSampleId,sPairId)
-	exit()
-	dListOfSeq=LoadRef(sRef,sSampleId,sPairId)
+	dListOfSeq=LoadRef(sRef,sSampleId,sPairId,bUnassigned)
 	WriteSplitFastq(sFastq,dListOfSeq,sSampleId,sOutput)
 	
 	
