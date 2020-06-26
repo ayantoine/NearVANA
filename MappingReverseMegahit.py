@@ -149,7 +149,7 @@ def WriteTab(dContig2Read,dContig2Sample):
 		tRead=dContig2Read[sKey]
 		sName=dContigId2NewId[sKey]
 		for sRead in sorted(tRead):
-			FILE.write(sRead+"\t"+sName+"\t"+sKey+"\t"+"-".join(tSample)+"\n")
+			FILE.write(sRead+"\t"+sName+"\t"+sKey+"\t"+"-".join(sorted(tSample))+"\n")
 	FILE.close()
 	
 	return dContigId2NewId
