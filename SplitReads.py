@@ -101,6 +101,7 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 	sQuality=""
 	iLineCounter=0
 	iSeqAssociated=0
+	iEmptySeq=0
 	for sNewLine in open(sPath):
 		iLineCounter+=1
 		if iLineCounter%4==1:
@@ -110,6 +111,7 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 					sSeqName=sSeqName.replace("\n"," "+sSID+"\n") 
 					sLine=sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:]
 					if sLine.count("\n")!=4:
+						iEmptySeq+=1
 						continue
 					FILE.write(sLine)
 					iSeqAssociated+=1
@@ -131,6 +133,7 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 			sSeqName=sSeqName.replace("\n"," "+sSID+"\n") 
 			sLine=sSeqName+sContent[iEndIndex:]+sInterline+sQuality[iEndIndex:]
 			if sLine.count("\n")!=4:
+				iEmptySeq+=1
 				pass
 			else:
 				FILE.write(sLine)
@@ -139,6 +142,7 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 			pass
 	
 	print(sSID+"/"+sSID+"_"+sPath+"."+SPLIT_TAG+" contains "+str(iSeqAssociated)+" sequences")
+	print(str(iEmptySeq)+" empty sequences were rejected")
 	FILE.close()
 		
 ########################################################################
