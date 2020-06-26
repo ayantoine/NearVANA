@@ -32,7 +32,7 @@ echo $nb_jobs
 #if [ ! -d "SplitReads${VARNAME}-${PAIR}_Ok" ] ; then mkdir "SplitReads${VARNAME}-${PAIR}_Ok" ; fi
 #if [ ! -d ${PID}"_log_SplitReads${VARNAME}-${PAIR}" ] ; then mkdir ${PID}"_log_SplitReads${VARNAME}-${PAIR}" ; fi
 #echo "$SCALL $SPARAM $SRENAME ${PID}_${PAIR}-SplitReads ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_SplitReads${VARNAME}-${PAIR}"/${PID}_SplitReads${VARNAME}-${PAIR}.e${SPSEUDOTASKID} -o ${PID}"_log_SplitReads${VARNAME}-${PAIR}"/${PID}_SplitReads${VARNAME}-${PAIR}.o${SPSEUDOTASKID} ${SDIR}/SplitReads.sh ${ARG} ${FASTQ} ${PAIR} ${VARNAME}"
-#$SCALL $SPARAM $SRENAME ${PID}_${PAIR}-SplitReads ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_SplitReads${VARNAME}-${PAIR}"/${PID}_SplitReads${VARNAME}-${PAIR}.e${SPSEUDOTASKID} -o ${PID}"_log_SplitReads${VARNAME}-${PAIR}"/${PID}_SplitReads${VARNAME}-${PAIR}.o${SPSEUDOTASKID} ${SDIR}/SplitReads.sh ${ARG} ${FASTQ} ${PAIR} ${VARNAME}
+# $SCALL $SPARAM $SRENAME ${PID}_${PAIR}-SplitReads ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_SplitReads${VARNAME}-${PAIR}"/${PID}_SplitReads${VARNAME}-${PAIR}.e${SPSEUDOTASKID} -o ${PID}"_log_SplitReads${VARNAME}-${PAIR}"/${PID}_SplitReads${VARNAME}-${PAIR}.o${SPSEUDOTASKID} ${SDIR}/SplitReads.sh ${ARG} ${FASTQ} ${PAIR} ${VARNAME}
 #while true ; do
 	#if [ $(ls SplitReads${VARNAME}-${PAIR}_Ok/ | wc -l) -eq 0 ]
 		#then
