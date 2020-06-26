@@ -2,6 +2,15 @@
 
 datetime1=$(date +%s)
 
+function boolean() {
+  case $1 in
+    TRUE) echo true ;;
+    FALSE) echo false ;;
+    *) echo "Err: Unknown boolean value \"$1\"" 1>&2; exit 1 ;;
+   esac
+}
+
+
 ARG=$1
 source $ARG
 source $CONF
@@ -14,6 +23,9 @@ VAR_DODE="${VARNAME}[3]"
 
 echo "------ Launch SplitReads array ------"
 nb_jobs=$(cut -f1 ${!VAR_DODE} | wc -l)
+if [ "$USE_KEEPUNASSIGNED" = true ] ; then
+	let nb_jobs++
+fi
 if [ ! -d "SplitReads${VARNAME}-${PAIR}_Ok" ] ; then mkdir "SplitReads${VARNAME}-${PAIR}_Ok" ; fi
 if [ ! -d ${PID}"_log_SplitReads${VARNAME}-${PAIR}" ] ; then mkdir ${PID}"_log_SplitReads${VARNAME}-${PAIR}" ; fi
 echo "$SCALL $SPARAM $SRENAME ${PID}_${PAIR}-SplitReads ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_SplitReads${VARNAME}-${PAIR}"/${PID}_SplitReads${VARNAME}-${PAIR}.e${SPSEUDOTASKID} -o ${PID}"_log_SplitReads${VARNAME}-${PAIR}"/${PID}_SplitReads${VARNAME}-${PAIR}.o${SPSEUDOTASKID} ${SDIR}/SplitReads.sh ${ARG} ${FASTQ} ${PAIR} ${VARNAME}"
