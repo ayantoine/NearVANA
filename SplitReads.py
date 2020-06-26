@@ -138,6 +138,8 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
+	print("sRef,sSampleId,sPairId",sRef,sSampleId,sPairId)
+	exit()
 	dListOfSeq=LoadRef(sRef,sSampleId,sPairId)
 	WriteSplitFastq(sFastq,dListOfSeq,sSampleId,sOutput)
 	
