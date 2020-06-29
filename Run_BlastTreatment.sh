@@ -91,7 +91,7 @@ if [ ! -f ${PID}.creation${TASK}.ok ]; then
 	if [ ! -f ${PID}_All.Megahit.contigs2sample.tsv ]; then
 		echo "------ Create short-list ------"
 		cut -f2,4 ${PID}_All.Megahit_reverseAssembly.tsv | sort -u > ${PID}_All.Megahit.contigs2sample.tsv
-		cut -f2,4 ${PID}_All.FLASH_reverseAssembly.tsv | sort -u > ${PID}_All.FLASH.contigs2sample.tsv
+		#cut -f2,4 ${PID}_All.FLASH_reverseAssembly.tsv | sort -u > ${PID}_All.FLASH.contigs2sample.tsv
 		echo "------ /Create short-list ------"
 	fi
 	datetime1=$(date +%s)
