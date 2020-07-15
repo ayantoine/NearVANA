@@ -35,6 +35,8 @@ REPLACEME="REPLACE-ME"
 SAMPLE_SEPARATOR="-"
 CONTIG="Contig"
 
+UNASSIGNED_READS="UnassignedReads"
+
 META_SAMPLECOL=0
 META_HOSTCOL=1
 META_LOCATIONCOL=3
@@ -372,23 +374,38 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 				sDefinition="unknown"
 				
 			for sGlobalSample in tGlobalSample:
-				for sPlateId in dMetadata:
-					if sPlateId in sGlobalSample:
-						break
-				sSampleId=sGlobalSample.replace(sPlateId,EMPTY)
-				tLine=[sRank,sQuery,sGlobalSample,sReadQuantity,str(iQuerySize),
-				dMetadata[sPlateId][sSampleId]["Location"],dMetadata[sPlateId][sSampleId]["Date"],
-				dMetadata[sPlateId][sSampleId]["Host"],dMetadata[sPlateId][sSampleId]["Individuals"],
-				dMetadata[sPlateId][sSampleId]["Weight"],sSubjectId,
-				sOrganism,sSuperkingdom,
-				sLineage,sDefinition,str(fFragment),
-				dBlast[sQuery][iRank]["Identity"],
-				str(fCover),dBlast[sQuery][iRank]["Length"],dBlast[sQuery][iRank]["Mismatch"],
-				dBlast[sQuery][iRank]["GapOpen"],dBlast[sQuery][iRank]["QueryStart"],
-				dBlast[sQuery][iRank]["QueryEnd"],dBlast[sQuery][iRank]["SubjectStart"],
-				dBlast[sQuery][iRank]["SubjectEnd"],dBlast[sQuery][iRank]["Evalue"],
-				dBlast[sQuery][iRank]["BitScore"],dContent[sQuery]
-				]
+				if sGlobalSample!=UNASSIGNED_READS:
+					for sPlateId in dMetadata:
+						if sPlateId in sGlobalSample:
+							break
+					sSampleId=sGlobalSample.replace(sPlateId,EMPTY)
+					tLine=[sRank,sQuery,sGlobalSample,sReadQuantity,str(iQuerySize),
+					dMetadata[sPlateId][sSampleId]["Location"],dMetadata[sPlateId][sSampleId]["Date"],
+					dMetadata[sPlateId][sSampleId]["Host"],dMetadata[sPlateId][sSampleId]["Individuals"],
+					dMetadata[sPlateId][sSampleId]["Weight"],sSubjectId,
+					sOrganism,sSuperkingdom,
+					sLineage,sDefinition,str(fFragment),
+					dBlast[sQuery][iRank]["Identity"],
+					str(fCover),dBlast[sQuery][iRank]["Length"],dBlast[sQuery][iRank]["Mismatch"],
+					dBlast[sQuery][iRank]["GapOpen"],dBlast[sQuery][iRank]["QueryStart"],
+					dBlast[sQuery][iRank]["QueryEnd"],dBlast[sQuery][iRank]["SubjectStart"],
+					dBlast[sQuery][iRank]["SubjectEnd"],dBlast[sQuery][iRank]["Evalue"],
+					dBlast[sQuery][iRank]["BitScore"],dContent[sQuery]
+					]
+				else:
+					tLine=[sRank,sQuery,sGlobalSample,sReadQuantity,str(iQuerySize),
+					DEFAULT,DEFAULT,
+					DEFAULT,DEFAULT,
+					DEFAULT,sSubjectId,
+					sOrganism,sSuperkingdom,
+					sLineage,sDefinition,str(fFragment),
+					dBlast[sQuery][iRank]["Identity"],
+					str(fCover),dBlast[sQuery][iRank]["Length"],dBlast[sQuery][iRank]["Mismatch"],
+					dBlast[sQuery][iRank]["GapOpen"],dBlast[sQuery][iRank]["QueryStart"],
+					dBlast[sQuery][iRank]["QueryEnd"],dBlast[sQuery][iRank]["SubjectStart"],
+					dBlast[sQuery][iRank]["SubjectEnd"],dBlast[sQuery][iRank]["Evalue"],
+					dBlast[sQuery][iRank]["BitScore"],dContent[sQuery]
+					]
 				FILE.write("\t".join(tLine)+"\n")
 						
 # HEADER_LIST=["Hit rank","Query Seq-Id","Sample","Read quantity","Sequence length","Location","Date","Host",
