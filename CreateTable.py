@@ -324,8 +324,9 @@ def LoadQuery(sFile):
 
 def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 	for sQuery in dBlast:
+		# print("sQuery",sQuery)
 		for iRank in dBlast[sQuery]:
-			
+			# print("iRank",iRank)
 			if iRank==1:
 				sRank=BEST_HIT
 			else:
@@ -339,12 +340,17 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 				tGlobalSample=dContigs[sQuery]
 			except KeyError:
 				tGlobalSample=[sQuery.split("_")[-1]]
+			
+			# print("tGlobalSample",tGlobalSample)
 						
 			if CONTIG in sQuery:
 				sReadQuantity=sQuery.split("(")[-1].split(")")[0]
 			else:
 				sReadQuantity="1"
 			sSubjectId=dBlast[sQuery][iRank]["SubjectId"]
+			
+			# print("sReadQuantity",sReadQuantity)
+			# print("sSubjectId",sSubjectId)
 			
 			try:
 				sTaxo=dTaxo[sSubjectId]["Lineage"]
@@ -374,10 +380,13 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 				sDefinition="unknown"
 				
 			for sGlobalSample in tGlobalSample:
+				# print("sGlobalSample",sGlobalSample)
 				if sGlobalSample!=UNASSIGNED_READS:
 					for sPlateId in dMetadata:
+						# print("sPlateId",sPlateId)
 						if sPlateId in sGlobalSample:
 							break
+								
 					sSampleId=sGlobalSample.replace(sPlateId,EMPTY)
 					tLine=[sRank,sQuery,sGlobalSample,sReadQuantity,str(iQuerySize),
 					dMetadata[sPlateId][sSampleId]["Location"],dMetadata[sPlateId][sSampleId]["Date"],
@@ -446,4 +455,3 @@ if __name__ == "__main__":
 iTime2=time.time()
 iDeltaTime=iTime2-iTime1
 print("Script done: "+str(iDeltaTime))
-
