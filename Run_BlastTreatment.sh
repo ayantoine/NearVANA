@@ -23,7 +23,7 @@ echo "${TASK}"
 
 if [ "${TASK}" == "D" ]; then
 	echo "------ Launch Diamond by task ------"
-	if [ ! -f {PID}.Blast${TASK}.ok ]; then
+	if [ ! -f ${PID}.Blast${TASK}.ok ]; then
 		echo "$SCALL $SPARAM $SRENAME ${PID}_DiamondTask -e Run_DiamondTask.e -o Run_DiamondTask.o ${SDIR}/Run_DiamondTask.sh $ARG"
 		$SCALL $SPARAM $SRENAME ${PID}_DiamondTask -e Run_DiamondTask.e -o Run_DiamondTask.o ${SDIR}/Run_DiamondTask.sh $ARG
 		while [ ! -e ${PID}.Blast${TASK}.ok ]; do sleep 60 ; done
@@ -33,7 +33,7 @@ if [ "${TASK}" == "D" ]; then
 	echo "------ /Launch Diamond by task ------"
 else
 	echo "------ Launch Blast by task ------"
-	if [ ! -f {PID}.Blast${TASK}.ok ]; then
+	if [ ! -f ${PID}.Blast${TASK}.ok ]; then
 		echo "$SCALL $SPARAM $SRENAME ${PID}_${TASK}_Blast -e Run_Blast${TASK}.e -o Run_Blast${TASK}.o ${SDIR}/Run_BlastTask.sh $ARG ${TASK}"
 		$SCALL $SPARAM $SRENAME ${PID}_${TASK}_Blast -e Run_Blast${TASK}.e -o Run_Blast${TASK}.o ${SDIR}/Run_BlastTask.sh $ARG ${TASK}
 		while [ ! -e ${PID}.Blast${TASK}.ok ]; do sleep 60 ; done
