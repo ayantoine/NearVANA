@@ -113,166 +113,166 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 	echo "------ /Demultiplexing reads -----"
 fi
 
-echo "------ Cleaning reads ------"
-if [ ! -f ${PID}.Cleaning.ok ]; then
-	if [ "$USE_MULTIPLEX" = true ] ; then
-		if [ ! -f ${PID}.SplitReads.ok ]; then
-			echo -e "\t- Cleaning linkers"
-			for sampleId in "${SAMPLE_LIST[@]}"; do
-				mkdir $sampleId	
-			done
-			for VARNAME in "${PLATE[@]}"; do
-				echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_${VARNAME}_R1_SplitReads.e -o Run_${VARNAME}_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R1.fastq 1 ${VARNAME}"
-				$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_${VARNAME}_R1_SplitReads.e -o Run_${VARNAME}_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R1.fastq 1 ${VARNAME}
-				echo "$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}"
-				$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}
-				while [ ! -e ${PID}_${VARNAME}_R1.fastq.split.ok ]; do sleep 60 ; done
-				while [ ! -e ${PID}_${VARNAME}_R2.fastq.split.ok ]; do sleep 60 ; done
-				rm ${PID}_${VARNAME}_R1.fastq ${PID}_${VARNAME}_R2.fastq
-			done
-			touch ${PID}.SplitReads.ok
-		else
-			echo -e "\t- ${PID}.SplitReads.ok existing, pas"
-		fi
+#echo "------ Cleaning reads ------"
+#if [ ! -f ${PID}.Cleaning.ok ]; then
+	#if [ "$USE_MULTIPLEX" = true ] ; then
+		#if [ ! -f ${PID}.SplitReads.ok ]; then
+			#echo -e "\t- Cleaning linkers"
+			#for sampleId in "${SAMPLE_LIST[@]}"; do
+				#mkdir $sampleId	
+			#done
+			#for VARNAME in "${PLATE[@]}"; do
+				#echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_${VARNAME}_R1_SplitReads.e -o Run_${VARNAME}_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R1.fastq 1 ${VARNAME}"
+				#$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_${VARNAME}_R1_SplitReads.e -o Run_${VARNAME}_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R1.fastq 1 ${VARNAME}
+				#echo "$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}"
+				#$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}
+				#while [ ! -e ${PID}_${VARNAME}_R1.fastq.split.ok ]; do sleep 60 ; done
+				#while [ ! -e ${PID}_${VARNAME}_R2.fastq.split.ok ]; do sleep 60 ; done
+				#rm ${PID}_${VARNAME}_R1.fastq ${PID}_${VARNAME}_R2.fastq
+			#done
+			#touch ${PID}.SplitReads.ok
+		#else
+			#echo -e "\t- ${PID}.SplitReads.ok existing, pas"
+		#fi
 		
-		if [ ! -f ${PID}.CutAdapt.ok ]; then
-			echo -e "\t- Trim adapters"
-			echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_CutAdapt -e Run_R1_CutAdapt.e -o Run_R1_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG ${PID}_R1.fastq"
-			$SCALL $SPARAM $SRENAME ${PID}_Run_CutAdapt -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG
-			while [ ! -e ${PID}.CutAdapt.ok ]; do sleep 60 ; done
-			for sampleId in "${SAMPLE_LIST[@]}"; do
-				rm ${sampleId}/${sampleId}_${PID}_R1.fastq.split
-				rm ${sampleId}/${sampleId}_${PID}_R2.fastq.split
-			done
-		else
-			echo -e "\t- ${PID}.CutAdapt.ok existing, pas"
-		fi
+		#if [ ! -f ${PID}.CutAdapt.ok ]; then
+			#echo -e "\t- Trim adapters"
+			#echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_CutAdapt -e Run_R1_CutAdapt.e -o Run_R1_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG ${PID}_R1.fastq"
+			#$SCALL $SPARAM $SRENAME ${PID}_Run_CutAdapt -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG
+			#while [ ! -e ${PID}.CutAdapt.ok ]; do sleep 60 ; done
+			#for sampleId in "${SAMPLE_LIST[@]}"; do
+				#rm ${sampleId}/${sampleId}_${PID}_R1.fastq.split
+				#rm ${sampleId}/${sampleId}_${PID}_R2.fastq.split
+			#done
+		#else
+			#echo -e "\t- ${PID}.CutAdapt.ok existing, pas"
+		#fi
 		
-		if [ ! -f ${PID}.Substraction-Deinterlacing.ok ]; then
-			echo -e "\t- PhiX Substraction : deinterlacing"
-			echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Correction -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG"
-			$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG
-			while [ ! -e ${PID}.Deinterlacing.ok ]; do sleep 60 ; done
-			rm ${PID}.Deinterlacing.ok
+		#if [ ! -f ${PID}.Substraction-Deinterlacing.ok ]; then
+			#echo -e "\t- PhiX Substraction : deinterlacing"
+			#echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Correction -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG"
+			#$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG
+			#while [ ! -e ${PID}.Deinterlacing.ok ]; do sleep 60 ; done
+			#rm ${PID}.Deinterlacing.ok
 				
-			echo -e "\t- PhiX Substraction : Merge deinterlaced subfiles"
-			touch ${PID}_R1.Unsubstracted.fastq
-			touch ${PID}_R2.Unsubstracted.fastq
-			touch ${PID}_R0.Unsubstracted.fastq
+			#echo -e "\t- PhiX Substraction : Merge deinterlaced subfiles"
+			#touch ${PID}_R1.Unsubstracted.fastq
+			#touch ${PID}_R2.Unsubstracted.fastq
+			#touch ${PID}_R0.Unsubstracted.fastq
 			
-			for sampleId in "${SAMPLE_LIST[@]}"; do
-				cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
-				cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
-				cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
-				rm -r ${sampleId}
-			done
-			touch ${PID}.Substraction-Deinterlacing.ok
-		else
-			echo -e "\t- ${PID}.Substraction-Deinterlacing.ok existing, pas"
-		fi	
-	else
-		if [ ! -f ${PID}.CutAdapt.ok ]; then
-			echo -e "\t- Trim adapters"
-			echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Run_CutAdapt_NM -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt_NM.sh $ARG"
-			$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Run_CutAdapt_NM -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt_NM.sh $ARG
-			while [ ! -e ${PID}.CutAdapt.ok ]; do sleep 60 ; done
-		else
-			echo -e "\t- ${PID}.CutAdapt.ok existing, pas"
-		fi
+			#for sampleId in "${SAMPLE_LIST[@]}"; do
+				#cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
+				#cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
+				#cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
+				#rm -r ${sampleId}
+			#done
+			#touch ${PID}.Substraction-Deinterlacing.ok
+		#else
+			#echo -e "\t- ${PID}.Substraction-Deinterlacing.ok existing, pas"
+		#fi	
+	#else
+		#if [ ! -f ${PID}.CutAdapt.ok ]; then
+			#echo -e "\t- Trim adapters"
+			#echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Run_CutAdapt_NM -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt_NM.sh $ARG"
+			#$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Run_CutAdapt_NM -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt_NM.sh $ARG
+			#while [ ! -e ${PID}.CutAdapt.ok ]; do sleep 60 ; done
+		#else
+			#echo -e "\t- ${PID}.CutAdapt.ok existing, pas"
+		#fi
 		
-		if [ ! -f ${PID}.Substraction-Deinterlacing.ok ]; then
-			echo -e "\t- PhiX Substraction : deinterlacing"
-			echo "$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG"
-			$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG
-			while [ ! -e ${PID}.Deinterlacing.ok ]; do sleep 60 ; done
-			rm ${PID}.Deinterlacing.ok
+		#if [ ! -f ${PID}.Substraction-Deinterlacing.ok ]; then
+			#echo -e "\t- PhiX Substraction : deinterlacing"
+			#echo "$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG"
+			#$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG
+			#while [ ! -e ${PID}.Deinterlacing.ok ]; do sleep 60 ; done
+			#rm ${PID}.Deinterlacing.ok
 			
-			echo -e "\t- PhiX Substraction : Merge deinterlaced subfiles"
-			touch ${PID}_R1.Unsubstracted.fastq
-			touch ${PID}_R2.Unsubstracted.fastq
-			touch ${PID}_R0.Unsubstracted.fastq
+			#echo -e "\t- PhiX Substraction : Merge deinterlaced subfiles"
+			#touch ${PID}_R1.Unsubstracted.fastq
+			#touch ${PID}_R2.Unsubstracted.fastq
+			#touch ${PID}_R0.Unsubstracted.fastq
 			
-			for VARNAME in "${PLATE[@]}"; do
-				cat ${PID}_${VARNAME}_R1.fastq.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
-				cat ${PID}_${VARNAME}_R2.fastq.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
-				cat ${PID}_${VARNAME}_R0.fastq.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
-				rm ${PID}_${VARNAME}_R*.fastq.trim.deinterlaced
-			done
-			touch ${PID}.Substraction-Deinterlacing.ok
-		else
-			echo -e "\t- ${PID}.Substraction-Deinterlacing.ok existing, pas"
-		fi	
-	fi
+			#for VARNAME in "${PLATE[@]}"; do
+				#cat ${PID}_${VARNAME}_R1.fastq.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
+				#cat ${PID}_${VARNAME}_R2.fastq.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
+				#cat ${PID}_${VARNAME}_R0.fastq.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
+				#rm ${PID}_${VARNAME}_R*.fastq.trim.deinterlaced
+			#done
+			#touch ${PID}.Substraction-Deinterlacing.ok
+		#else
+			#echo -e "\t- ${PID}.Substraction-Deinterlacing.ok existing, pas"
+		#fi	
+	#fi
 	
-	if [ ! -f ${PID}.Cleaning.ok ]; then
-		echo -e "\t- PhiX Substraction : Susbract "${SUBS}
-		echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG"
-		$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG
-		while [ ! -e ${PID}.Substraction.ok ]; do sleep 60 ; done
-		rm ${PID}_R1.Unsubstracted.fastq ${PID}_R2.Unsubstracted.fastq ${PID}_R0.Unsubstracted.fastq
-		touch ${PID}.Cleaning.ok
-	else
-		echo -e "\t- ${PID}.Cleaning.ok existing, pas"
-	fi	
+	#if [ ! -f ${PID}.Cleaning.ok ]; then
+		#echo -e "\t- PhiX Substraction : Susbract "${SUBS}
+		#echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG"
+		#$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG
+		#while [ ! -e ${PID}.Substraction.ok ]; do sleep 60 ; done
+		#rm ${PID}_R1.Unsubstracted.fastq ${PID}_R2.Unsubstracted.fastq ${PID}_R0.Unsubstracted.fastq
+		#touch ${PID}.Cleaning.ok
+	#else
+		#echo -e "\t- ${PID}.Cleaning.ok existing, pas"
+	#fi	
 	
-else
-	echo "${PID}.Cleaning.ok already existing, pass"
-fi
-echo "------ /Cleaning reads ------"
+#else
+	#echo "${PID}.Cleaning.ok already existing, pass"
+#fi
+#echo "------ /Cleaning reads ------"
 
-echo "------ Reads assembly ------"
-if [ ! -f ${PID}.Assembly.ok ]; then
-	echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG"
-	$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG
-	while [ ! -e ${PID}.Assembly.ok ]; do sleep 60 ; done
-else
-	echo "${PID}.Assembly.ok already existing, pass"
-fi
-echo "------ /Reads assembly------"
+#echo "------ Reads assembly ------"
+#if [ ! -f ${PID}.Assembly.ok ]; then
+	#echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG"
+	#$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG
+	#while [ ! -e ${PID}.Assembly.ok ]; do sleep 60 ; done
+#else
+	#echo "${PID}.Assembly.ok already existing, pass"
+#fi
+#echo "------ /Reads assembly------"
 
-echo "------ Split fasta for Blast ------"
-if [ ! -f ${PID}.SplitFasta.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG"
-	$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG
-	while [ ! -e ${PID}.SplitFasta.ok ]; do sleep 60 ; done
-else
-	echo "${PID}.SplitFasta.ok already existing, pass"
-fi
-echo "------ /Split fasta for Blast ------"
+#echo "------ Split fasta for Blast ------"
+#if [ ! -f ${PID}.SplitFasta.ok ]; then
+	#echo "$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG"
+	#$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG
+	#while [ ! -e ${PID}.SplitFasta.ok ]; do sleep 60 ; done
+#else
+	#echo "${PID}.SplitFasta.ok already existing, pass"
+#fi
+#echo "------ /Split fasta for Blast ------"
 
-echo "------ Launch Blast/Diamond treatment------"
-if [ "$BLASTN" = true ] ; then
-	if [ ! -f ${PID}.BlastTreatmentN.ok ]; then
-		echo "$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N"
-		$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N
-	else
-		echo "${PID}.BlastTreatmentN.ok already existing, pass"
-	fi
-fi
-if [ "$BLASTX" = true ] ; then
-	if [ ! -f ${PID}.BlastTreatmentX.ok ]; then
-		echo "$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X"
-		$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X
-	else
-		echo "${PID}.BlastTreatmentX.ok already existing, pass"
-	fi
-fi
-if [ "$DIAMOND" = true ] ; then
-	if [ ! -f ${PID}.BlastTreatmentDiamond.ok ]; then
-		echo "$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D"
-		$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D
-	else
-		echo "${PID}.BlastTreatmentDiamond.ok already existing, pass"
-	fi
-fi
-echo "------ /Launch Blast/Diamond treatment------"
+#echo "------ Launch Blast/Diamond treatment------"
+#if [ "$BLASTN" = true ] ; then
+	#if [ ! -f ${PID}.BlastTreatmentN.ok ]; then
+		#echo "$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N"
+		#$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N
+	#else
+		#echo "${PID}.BlastTreatmentN.ok already existing, pass"
+	#fi
+#fi
+#if [ "$BLASTX" = true ] ; then
+	#if [ ! -f ${PID}.BlastTreatmentX.ok ]; then
+		#echo "$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X"
+		#$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X
+	#else
+		#echo "${PID}.BlastTreatmentX.ok already existing, pass"
+	#fi
+#fi
+#if [ "$DIAMOND" = true ] ; then
+	#if [ ! -f ${PID}.BlastTreatmentDiamond.ok ]; then
+		#echo "$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D"
+		#$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D
+	#else
+		#echo "${PID}.BlastTreatmentDiamond.ok already existing, pass"
+	#fi
+#fi
+#echo "------ /Launch Blast/Diamond treatment------"
 
-if [ "$BLASTN" = true ] ; then
-	while [ ! -e ${PID}.BlastTreatmentN.ok ]; do sleep 60 ; done
-fi
-if [ "$BLASTX" = true ] ; then
-	while [ ! -e ${PID}.BlastTreatmentX.ok ]; do sleep 60 ; done
-fi
-if [ "$DIAMOND" = true ] ; then
-	while [ ! -e ${PID}.BlastTreatmentD.ok ]; do sleep 60 ; done
-fi
+#if [ "$BLASTN" = true ] ; then
+	#while [ ! -e ${PID}.BlastTreatmentN.ok ]; do sleep 60 ; done
+#fi
+#if [ "$BLASTX" = true ] ; then
+	#while [ ! -e ${PID}.BlastTreatmentX.ok ]; do sleep 60 ; done
+#fi
+#if [ "$DIAMOND" = true ] ; then
+	#while [ ! -e ${PID}.BlastTreatmentD.ok ]; do sleep 60 ; done
+#fi
