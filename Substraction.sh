@@ -21,6 +21,12 @@ echo "------ /Mapping extraction ------"
 rm ${PID}"_"${SUBS}"_"${PID}_R1.Unsubstracted.fastq"_"${PID}_R2.Unsubstracted.fastq"_bwt_ete.sam"
 rm *.bt2
 
+echo "------ Store data ------"
+gzip -f ${PID}_R0.PhiX.fastq > ${PID}_R0.PhiX.fastq.gz
+gzip -f ${PID}_R1.PhiX.fastq > ${PID}_R1.PhiX.fastq.gz
+gzip -f ${PID}_R2.PhiX.fastq > ${PID}_R2.PhiX.fastq.gz
+echo "------ Store data ------"
+
 touch ${PID}.Substraction.ok
 
 datetime2=$(date +%s)
