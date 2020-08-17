@@ -42,8 +42,8 @@ for VARNAME in "${PLATE[@]}"; do
 	cat ${PID}_${VARNAME}_Demultiplexing/*_Unidentified* > ${PID}_${VARNAME}_Unidentified.tsv
 	echo "------ /Merge subdata ------"
 	
-	#rm -r ${PID}_${VARNAME}_Demultiplexing/
-	#rm ./QsubAssignation.sh
+	rm -r ${PID}_${VARNAME}_Demultiplexing/
+	rm ./QsubAssignation.sh
 	
 	echo "------ Write output ------"
 	echo "python ${SDIR}/ConcatenateFile.py -o ${PID}_${VARNAME}_Demultiplexing_Hyper.tsv -l ${PID}_${VARNAME}_Hyper_Identified.tsv,${PID}_${VARNAME}_Hypo_2_Identified.tsv,${PID}_${VARNAME}_Ambiguous_2.tsv,${PID}_${VARNAME}_Unidentified.tsv"
