@@ -32,8 +32,9 @@ gzip -f ${PID}_R2.Substracted.fastq > ${PID}_R2.Substracted.fastq.gz
 echo "------ /Compress Corrected.fastq ------"
 
 echo "------ Merge Assembly ------"
-touch ${PID}_All.fa
-cat ${PID}_All.Megahit_contigs.fa >> ${PID}_All.fa
+#touch ${PID}_All.fa
+#cat ${PID}_All.Megahit_contigs.fa >> ${PID}_All.fa
+mv ${PID}_All.Megahit_contigs.fa ${PID}_All.fa
 echo "------ /Merge Assembly ------"
 
 rm ${PID}_All.Megahit_contigs.fa
