@@ -221,59 +221,59 @@ else
 fi
 echo "------ /Cleaning reads ------"
 
-#echo "------ Reads assembly ------"
-#if [ ! -f ${PID}.Assembly.ok ]; then
-	#echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG"
-	#$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG
-	#while [ ! -e ${PID}.Assembly.ok ]; do sleep 60 ; done
-#else
-	#echo "${PID}.Assembly.ok already existing, pass"
-#fi
-#echo "------ /Reads assembly------"
+echo "------ Reads assembly ------"
+if [ ! -f ${PID}.Assembly.ok ]; then
+	echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG"
+	$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Assembly -e Assembly.e -o Assembly.o ${SDIR}/Assembly.sh $ARG
+	while [ ! -e ${PID}.Assembly.ok ]; do sleep 60 ; done
+else
+	echo "${PID}.Assembly.ok already existing, pass"
+fi
+echo "------ /Reads assembly------"
 
-#echo "------ Split fasta for Blast ------"
-#if [ ! -f ${PID}.SplitFasta.ok ]; then
-	#echo "$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG"
-	#$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG
-	#while [ ! -e ${PID}.SplitFasta.ok ]; do sleep 60 ; done
-#else
-	#echo "${PID}.SplitFasta.ok already existing, pass"
-#fi
-#echo "------ /Split fasta for Blast ------"
+echo "------ Split fasta for Blast ------"
+if [ ! -f ${PID}.SplitFasta.ok ]; then
+	echo "$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG"
+	$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG
+	while [ ! -e ${PID}.SplitFasta.ok ]; do sleep 60 ; done
+else
+	echo "${PID}.SplitFasta.ok already existing, pass"
+fi
+echo "------ /Split fasta for Blast ------"
 
-#echo "------ Launch Blast/Diamond treatment------"
-#if [ "$BLASTN" = true ] ; then
-	#if [ ! -f ${PID}.BlastTreatmentN.ok ]; then
-		#echo "$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N"
-		#$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N
-	#else
-		#echo "${PID}.BlastTreatmentN.ok already existing, pass"
-	#fi
-#fi
-#if [ "$BLASTX" = true ] ; then
-	#if [ ! -f ${PID}.BlastTreatmentX.ok ]; then
-		#echo "$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X"
-		#$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X
-	#else
-		#echo "${PID}.BlastTreatmentX.ok already existing, pass"
-	#fi
-#fi
-#if [ "$DIAMOND" = true ] ; then
-	#if [ ! -f ${PID}.BlastTreatmentDiamond.ok ]; then
-		#echo "$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D"
-		#$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D
-	#else
-		#echo "${PID}.BlastTreatmentDiamond.ok already existing, pass"
-	#fi
-#fi
-#echo "------ /Launch Blast/Diamond treatment------"
+echo "------ Launch Blast/Diamond treatment------"
+if [ "$BLASTN" = true ] ; then
+	if [ ! -f ${PID}.BlastTreatmentN.ok ]; then
+		echo "$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N"
+		$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N
+	else
+		echo "${PID}.BlastTreatmentN.ok already existing, pass"
+	fi
+fi
+if [ "$BLASTX" = true ] ; then
+	if [ ! -f ${PID}.BlastTreatmentX.ok ]; then
+		echo "$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X"
+		$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X
+	else
+		echo "${PID}.BlastTreatmentX.ok already existing, pass"
+	fi
+fi
+if [ "$DIAMOND" = true ] ; then
+	if [ ! -f ${PID}.BlastTreatmentDiamond.ok ]; then
+		echo "$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D"
+		$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D
+	else
+		echo "${PID}.BlastTreatmentDiamond.ok already existing, pass"
+	fi
+fi
+echo "------ /Launch Blast/Diamond treatment------"
 
-#if [ "$BLASTN" = true ] ; then
-	#while [ ! -e ${PID}.BlastTreatmentN.ok ]; do sleep 60 ; done
-#fi
-#if [ "$BLASTX" = true ] ; then
-	#while [ ! -e ${PID}.BlastTreatmentX.ok ]; do sleep 60 ; done
-#fi
-#if [ "$DIAMOND" = true ] ; then
-	#while [ ! -e ${PID}.BlastTreatmentD.ok ]; do sleep 60 ; done
-#fi
+if [ "$BLASTN" = true ] ; then
+	while [ ! -e ${PID}.BlastTreatmentN.ok ]; do sleep 60 ; done
+fi
+if [ "$BLASTX" = true ] ; then
+	while [ ! -e ${PID}.BlastTreatmentX.ok ]; do sleep 60 ; done
+fi
+if [ "$DIAMOND" = true ] ; then
+	while [ ! -e ${PID}.BlastTreatmentD.ok ]; do sleep 60 ; done
+fi
