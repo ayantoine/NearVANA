@@ -2,10 +2,20 @@
 
 datetime1=$(date +%s)
 
+function boolean() {
+  case $1 in
+    TRUE) echo true ;;
+    FALSE) echo false ;;
+    *) echo "Err: Unknown boolean value \"$1\"" 1>&2; exit 1 ;;
+   esac
+}
+
 ARG=$1
 source $ARG
 source $CONF
 source $DATA
+
+USE_KEEPUNASSIGNED="$(boolean "${UNASSIGNED}")"
 
 for VARNAME in "${PLATE[@]}"; do
 	VAR_R1_FILE="${VARNAME}[0]"
