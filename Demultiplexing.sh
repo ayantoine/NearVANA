@@ -84,7 +84,7 @@ for VARNAME in "${PLATE[@]}"; do
 	if [ "$USE_KEEPUNASSIGNED" = true ] ; then
 		gzip -f ${PID}_${VARNAME}_Hyper_Identified.tsv > ${PID}_${VARNAME}_Hyper_Identified.tsv.gz
 	else
-		gzip -f ${PID}_${VARNAME}_Demultiplexing_Global.tsv > ${PID}_${VARNAME}_Demultiplexing_Global.gz
+		gzip -f ${PID}_${VARNAME}_Demultiplexing_Global.tsv > ${PID}_${VARNAME}_Demultiplexing_Global.tsv.gz
 	fi
 	echo "------ /Store unused data ------"
 	

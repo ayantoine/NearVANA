@@ -56,7 +56,7 @@ echo "------ /Launch Trim array ------"
 
 echo "------ Store used data ------"
     if [ "$USE_KEEPUNASSIGNED" = true ] ; then
-	    gzip -f ${PID}_${VARNAME}_Demultiplexing_Global.tsv > ${PID}_${VARNAME}_Demultiplexing_Global.gz
+	    gzip -f ${PID}_${VARNAME}_Demultiplexing_Global.tsv > ${PID}_${VARNAME}_Demultiplexing_Global.tsv.gz
     else
 	    gzip -f ${PID}_${VARNAME}_Hyper_Identified.tsv > ${PID}_${VARNAME}_Hyper_Identified.tsv.gz
     fi
