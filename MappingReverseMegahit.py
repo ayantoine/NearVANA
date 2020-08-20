@@ -65,16 +65,35 @@ dBASEtoTARGET={
 		R2_BASE_FASTQ:OUTPUT_R2_UNITIG
 	}
 
+print("MEGAHIT_ASSEMBLY_OUTPUT:",MEGAHIT_ASSEMBLY_OUTPUT)
+print("OUTPUT_FILENAME:",OUTPUT_FILENAME)
+print("OUTPUT_SPADES_CONTIG:",OUTPUT_SPADES_CONTIG)
+print("OUTPUT_R1_UNITIG:",OUTPUT_R1_UNITIG)
+print("OUTPUT_R2_UNITIG:",OUTPUT_R2_UNITIG)
+print("OUTPUT_R0_UNITIG:",OUTPUT_R0_UNITIG)
+print("R0_BASE_FASTQ:",R0_BASE_FASTQ)
+print("R1_BASE_FASTQ:",R1_BASE_FASTQ)
+print("R2_BASE_FASTQ:",R2_BASE_FASTQ)
+print("OUTPUT_REJECTED_CONTIG:",OUTPUT_REJECTED_CONTIG)
+print("OUTPUT_AMBIGOUS_READ:",OUTPUT_AMBIGOUS_READ)
+print("dBASEtoTARGET:",dBASEtoTARGET)
+
 ########################################################################
 #Function 	
 def Parse(sPath):
+	print("Parsing "+sPath)
 	dContig2Read={}
 	dContig2Sample={}
 	
 	dPair2Contig={}
 	dPair2Read2Contig={}
 
+	iLineCounter=0
+
 	for sNewLine in open(sPath):
+		iLineCounter+=1
+		if iLineCounter%50000==0:
+			print("Reading line "+str(iLineCounter)+"...")
 		if sNewLine[0]==REJECT_TAG:
 			continue
 		sLine=sNewLine.strip()
@@ -202,7 +221,11 @@ def WriteLostData(dDict):
 #MAIN
 if __name__ == "__main__":
 	setLost,dContig2Read,dContig2Sample=Parse(sInput)
+	print("len(setLost):",len(setLost))
+	print("len(dContig2Read):",len(dContig2Read))
+	print("len(dContig2Sample):",len(dContig2Sample))
 	dContig2Name=WriteTab(dContig2Read,dContig2Sample)
+	print("len(dContig2Name):",len(dContig2Name))
 	WriteContigFasta(dContig2Name)
 	WriteLostData(dContig2Read)
 
