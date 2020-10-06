@@ -115,7 +115,9 @@ fi
 
 echo "------ Cleaning reads ------"
 if [ ! -f ${PID}.Cleaning.ok ]; then
+	echo "->1"
 	if [ "$USE_MULTIPLEX" = true ] ; then
+		echo "->2"
 		if [ ! -f ${PID}.SplitReads.ok ]; then
 			echo -e "\t- Cleaning linkers"
 			for sampleId in "${SAMPLE_LIST[@]}"; do
