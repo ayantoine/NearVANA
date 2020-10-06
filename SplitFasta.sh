@@ -32,7 +32,7 @@ echo "Number of sequences per job: "$CHUNCK
 echo "Number of generated jobs: "$nb_jobs
 echo "Number of simultaneous tasks: "$nb_task
 echo "------ /Configure job array ------"
-rm Target.txt
+#rm Target.txt
 
 echo "------ Compress All.fa ------"
 gzip -f ${PID}_All.fa > ${PID}_All.fa.gz

@@ -17,7 +17,7 @@ cat ${PID}_log_Correction/corrected/${PID}_R_unpaired.* >> ${PID}_R0.Corrected.f
 
 mv ${PID}"_log_Correction"/corrected/configs/config.info ${PID}"_log_Correction"
 mv ${PID}"_log_Correction"/corrected/corrected.yaml ${PID}"_log_Correction"
-rm -r ${PID}"_log_Correction"/tmp ${PID}"_log_Correction"/corrected
+#rm -r ${PID}"_log_Correction"/tmp ${PID}"_log_Correction"/corrected
 
 touch ${PID}.Correction.ok
 
