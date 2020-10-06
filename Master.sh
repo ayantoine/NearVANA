@@ -146,7 +146,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 			#for sampleId in "${SAMPLE_LIST[@]}"; do
 				#rm ${sampleId}/${sampleId}_${PID}_R1.fastq.split
 				#rm ${sampleId}/${sampleId}_${PID}_R2.fastq.split
-			done
+			#done
 		else
 			echo -e "\t- ${PID}.CutAdapt.ok existing, pas"
 		fi
