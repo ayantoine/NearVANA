@@ -94,7 +94,8 @@ def LoadRef(sPath,sSample,sPair,bKeepUnassigned):
 	return dResult
 
 def WriteSplitFastq(sPath,dList,sSID,sOut):
-	FILE=open(sSID+"/"+sOut,"w")
+	if 
+	FILE=open(sSID+"/"+sOut,"a")
 	sSeqName=""
 	sContent=""
 	sInterline=""
