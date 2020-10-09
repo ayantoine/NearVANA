@@ -10,6 +10,9 @@ sCurrentVersionScript="v1"
 iTime1=time.time()
 ########################################################################
 '''
+V2-2020/10/09
+Rework Reads and Pairs comptability
+
 V1-2019/11/04
 Extract Sequences from Mapping and dispatch them among file.
 
