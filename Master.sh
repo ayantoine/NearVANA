@@ -127,11 +127,11 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 				echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_${VARNAME}_R1_SplitReads.e -o Run_${VARNAME}_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R1.fastq 1 ${VARNAME}"
 				$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_${VARNAME}_R1_SplitReads.e -o Run_${VARNAME}_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R1.fastq 1 ${VARNAME}
 				while [ ! -e ${PID}_${VARNAME}_R1.fastq.split.ok ]; do sleep 60 ; done
-				#rm ${PID}_${VARNAME}_R1.fastq
+				rm ${PID}_${VARNAME}_R1.fastq
 				echo "$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}"
 				$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}
 				while [ ! -e ${PID}_${VARNAME}_R2.fastq.split.ok ]; do sleep 60 ; done
-				#rm ${PID}_${VARNAME}_R2.fastq
+				rm ${PID}_${VARNAME}_R2.fastq
 			done
 			touch ${PID}.SplitReads.ok
 		else
@@ -143,10 +143,10 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 			echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_CutAdapt -e Run_R1_CutAdapt.e -o Run_R1_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG ${PID}_R1.fastq"
 			$SCALL $SPARAM $SRENAME ${PID}_Run_CutAdapt -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG
 			while [ ! -e ${PID}.CutAdapt.ok ]; do sleep 60 ; done
-			#for sampleId in "${SAMPLE_LIST[@]}"; do
-				#rm ${sampleId}/${sampleId}_${PID}_R1.fastq.split
-				#rm ${sampleId}/${sampleId}_${PID}_R2.fastq.split
-			#done
+			for sampleId in "${SAMPLE_LIST[@]}"; do
+				rm ${sampleId}/${sampleId}_${PID}_R1.fastq.split
+				rm ${sampleId}/${sampleId}_${PID}_R2.fastq.split
+			done
 		else
 			echo -e "\t- ${PID}.CutAdapt.ok existing, pas"
 		fi
@@ -167,7 +167,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 				cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
 				cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
 				cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
-				#rm -r ${sampleId}
+				rm -r ${sampleId}
 			done
 			touch ${PID}.Substraction-Deinterlacing.ok
 		else
@@ -199,7 +199,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 				cat ${PID}_${VARNAME}_R1.fastq.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
 				cat ${PID}_${VARNAME}_R2.fastq.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
 				cat ${PID}_${VARNAME}_R0.fastq.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
-				#rm ${PID}_${VARNAME}_R*.fastq.trim.deinterlaced
+				rm ${PID}_${VARNAME}_R*.fastq.trim.deinterlaced
 			done
 			touch ${PID}.Substraction-Deinterlacing.ok
 		else
@@ -212,7 +212,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 		echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG"
 		$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG
 		while [ ! -e ${PID}.Substraction.ok ]; do sleep 60 ; done
-		#rm ${PID}_R1.Unsubstracted.fastq ${PID}_R2.Unsubstracted.fastq ${PID}_R0.Unsubstracted.fastq
+		rm ${PID}_R1.Unsubstracted.fastq ${PID}_R2.Unsubstracted.fastq ${PID}_R0.Unsubstracted.fastq
 		touch ${PID}.Cleaning.ok
 	else
 		echo -e "\t- ${PID}.Cleaning.ok existing, pas"

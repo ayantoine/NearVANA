@@ -19,12 +19,12 @@ if [ -s "${PID}_R0.Substracted.fastq" ]; then
 else
 	bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -S reads2contigs.sam
 fi
-rm *.bt2
+#rm *.bt2
 echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam"
 python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam
 echo "------ /Megahit reverse-mapping ------"
 
-rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
+#rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
 
 echo "------ Compress Corrected.fastq ------"
 gzip -f ${PID}_R0.Substracted.fastq > ${PID}_R0.Substracted.fastq.gz
@@ -36,7 +36,7 @@ echo "------ Merge Assembly ------"
 mv ${PID}_All.Megahit_contigs.fa ${PID}_All.fa
 echo "------ /Merge Assembly ------"
 
-rm ${PID}_All.Megahit_contigs.fa
+#rm ${PID}_All.Megahit_contigs.fa
 
 touch ${PID}.Assembly.ok
 
