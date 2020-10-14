@@ -83,96 +83,30 @@ print("dBASEtoTARGET:",dBASEtoTARGET)
 
 ########################################################################
 #Function 	
-# def Parse(sPath):
-	# print("Parsing "+sPath)
-	# dContig2Read={}
-	# dContig2Sample={}
-	
-	# dPair2Contig={}
-	# dPair2Read2Contig={}
-
-	# iLineCounter=0
-
-	# for sNewLine in open(sPath):
-		# iLineCounter+=1
-		# if iLineCounter%50000==0:
-			# print("Reading line "+str(iLineCounter)+"...")
-		# if sNewLine[0]==REJECT_TAG:
-			# continue
-		# sLine=sNewLine.strip()
-		# tLine=sLine.split("\t")
-		# sMap=tLine[COL_MAPPING]
-		# sId=tLine[COL_SEQID]
-		
-		# try:
-			# dContig2Read[sMap].add(sId)
-		# except KeyError:
-			# dContig2Read[sMap]=set([sId])
-			
-		# try:
-			# dContig2Sample[sMap].add(sId.split("_")[-1])
-		# except KeyError:
-			# dContig2Sample[sMap]=set([sId.split("_")[-1]])
-			
-		# try:
-			# dPair2Contig[sId.split("_")[0]].add(sMap)
-		# except KeyError:
-			# dPair2Contig[sId.split("_")[0]]=set([sMap])
-		
-		# try:
-			# dPair2Read2Contig[sId.split("_")[0]][sId]=sMap
-		# except KeyError:
-			# dPair2Read2Contig[sId.split("_")[0]]={sId:sMap}
-	
-	# setLost=set([])
-	# FILE=open(OUTPUT_AMBIGOUS_READ,"w")
-	# iPairOk=0
-	# iPairLost=0
-	# iPairHalfLost=0
-	# iPairAmbigous=0
-	# for sKey in dPair2Contig:
-		# if NO_MAPPING in dPair2Contig[sKey] and len(dPair2Contig[sKey])==1:
-			# iPairLost+=1
-			# setLost.add(sKey)
-		# elif NO_MAPPING in dPair2Contig[sKey] and len(dPair2Contig[sKey])!=1:
-			# iPairHalfLost+=1
-		# elif NO_MAPPING not in dPair2Contig[sKey] and len(dPair2Contig[sKey])==1:
-			# iPairOk+=1
-		# elif NO_MAPPING not in dPair2Contig[sKey] and len(dPair2Contig[sKey])!=1:
-			# iPairAmbigous+=1
-			# for sRead in dPair2Read2Contig[sKey]:
-				# FILE.write(sRead+"\t"+dPair2Read2Contig[sKey][sRead]+"\n")
-		# else:
-			# exit("ERROR-90: FATAL!")
-	# FILE.close()
-			
-	# print("Pair mapped:",iPairOk)
-	# print("Pair with ambigous mapping:",iPairAmbigous)
-	# print("Pair with only one read mapped:",iPairHalfLost)
-	# print("Pair without mapping",iPairLost)
-
-	# return setLost,dContig2Read,dContig2Sample
-
 def Parse(sPath):
 	print("Parsing "+sPath)
 	dContig2Read={}
 	dContig2Sample={}
-	dRead2Contig={}
 	
-	dPair2Reads={}
+	dPair2Contig={}
+	dPair2Read2Contig={}
 
 	iLineCounter=0
+	iTimeStart=time.time()
 
 	for sNewLine in open(sPath):
 		iLineCounter+=1
 		if iLineCounter%50000==0:
-			print("Reading line "+str(iLineCounter)+"...")
+			iTimeCurrent=time.time()
+			iDelta=iTimeCurrent-iTimeStart
+			iTimeStart=time.time()
+			print("Reading line "+str(iLineCounter)+"...\t"+str(iDelta))
 		if sNewLine[0]==REJECT_TAG:
 			continue
 		sLine=sNewLine.strip()
 		tLine=sLine.split("\t")
-		sMap=tLine[COL_MAPPING] #Match or not
-		sId=tLine[COL_SEQID]	#Read id
+		sMap=tLine[COL_MAPPING]
+		sId=tLine[COL_SEQID]
 		
 		try:
 			dContig2Read[sMap].add(sId)
@@ -185,122 +119,210 @@ def Parse(sPath):
 			dContig2Sample[sMap]=set([sId.split("_")[-1]])
 			
 		try:
-			dRead2Contig[sId].add(sMap)
+			dPair2Contig[sId.split("_")[0]].add(sMap)
 		except KeyError:
-			dRead2Contig[sId]=set([sMap])
-			
-		try:
-			dPair2Reads[sId.split("_")[0]].add(sId)
-		except KeyError:
-			dPair2Reads[sId.split("_")[0]]=set([sId])
+			dPair2Contig[sId.split("_")[0]]=set([sMap])
+		
+		# try:
+			# dPair2Read2Contig[sId.split("_")[0]][sId]=sMap
+		# except KeyError:
+			# dPair2Read2Contig[sId.split("_")[0]]={sId:sMap}
 	
 	setLost=set([])
 	FILE=open(OUTPUT_AMBIGOUS_READ,"w")
-	iReadOk=0
-	iReadLost=0
-	iReadAmbigous=0
-	for sKey in dRead2Contig:
-		if NO_MAPPING in dRead2Contig[sKey] and len(dRead2Contig[sKey])==1:
-			iReadLost+=1
+	iPairOk=0
+	iPairLost=0
+	iPairHalfLost=0
+	iPairAmbigous=0
+	for sKey in dPair2Contig:
+		if NO_MAPPING in dPair2Contig[sKey] and len(dPair2Contig[sKey])==1:
+			iPairLost+=1
 			setLost.add(sKey)
-		elif NO_MAPPING in dRead2Contig[sKey] and len(dRead2Contig[sKey])!=1:
-			exit("ERROR-198: {} have both NoMapping and Mapping".format(sKey))
-		elif NO_MAPPING not in dRead2Contig[sKey] and len(dRead2Contig[sKey])==1:
-			iReadOk+=1
-		elif NO_MAPPING not in dRead2Contig[sKey] and len(dRead2Contig[sKey])!=1:
-			iReadAmbigous+=1
-			for sContig in sorted(dRead2Contig[sKey]):
-				FILE.write(sKey+"\t"+sContig+"\n")
-		else:
-			exit("ERROR-90: FATAL!")
+		# elif NO_MAPPING in dPair2Contig[sKey] and len(dPair2Contig[sKey])!=1:
+			# iPairHalfLost+=1
+		# elif NO_MAPPING not in dPair2Contig[sKey] and len(dPair2Contig[sKey])==1:
+			# iPairOk+=1
+		# elif NO_MAPPING not in dPair2Contig[sKey] and len(dPair2Contig[sKey])!=1:
+			# iPairAmbigous+=1
+			# for sRead in dPair2Read2Contig[sKey]:
+				# FILE.write(sRead+"\t"+dPair2Read2Contig[sKey][sRead]+"\n")
+		# else:
+			# exit("ERROR-90: FATAL!")
 	FILE.close()
 			
-	print("Reads mapped:",iReadOk)
-	print("Reads with ambigous mapping:",iReadAmbigous)
-	print("Reads without mapping",iReadLost)
-	
-	iNoMapping=0
-	iPartialMapping=0
-	iPartialAmbigousMapping=0
-	iSimilarMapping=0
-	iDissimilarMapping=0
-	iPartialSimilarAmbigousMapping=0
-	iPartialDissimilarAmbigousMapping=0
-	iSimilarAmbigousMapping=0
-	iDissimilarAmbigousMapping=0
-	iFuzzyAmbigousMapping=0
-	
-	for sPair in dPair2Reads:
-		if len(dPair2Reads[sPair])==2:
-			tPair=list(dPair2Reads[sPair])
-			sPair1=tPair[0]
-			sPair2=tPair[1]
-			tTarget1=dRead2Contig[sPair1]
-			tTarget2=dRead2Contig[sPair2]
-			iCase1=0
-			iCase2=0
-			if NO_MAPPING in tTarget1:
-				iCase1=1
-			elif len(tTarget1)==1:
-				iCase1=2
-			elif len(tTarget1)>1:
-				iCase1=3
-			else:
-				exit("ERROR-235: FATAL!")
-			if NO_MAPPING in tTarget2:
-				iCase2=1
-			elif len(tTarget2)==1:
-				iCase2=2
-			elif len(tTarget2)>1:
-				iCase2=3
-			else:
-				exit("ERROR-243: FATAL!")
-			if iCase1==1 and iCase2==1:
-				iNoMapping+=1
-			elif 1 in [iCase1,iCase2] and 2 in [iCase1,iCase2]:
-				iPartialMapping+=1
-			elif 1 in [iCase1,iCase2] and 3 in [iCase1,iCase2]:
-				iPartialAmbigousMapping+=1
-			elif iCase1==2 and iCase2==2:
-				if tTarget1[0]==tTarget2[0]:
-					iSimilarMapping+=1
-				else:
-					iDissimilarMapping+=1
-			elif 2 in [iCase1,iCase2] and 3 in [iCase1,iCase2]:
-				if len(tTarget1)<len(tTarget2):
-					sSingle=tTarget1[0]
-					tMultiple=tTarget2
-				else:
-					sSingle=tTarget2[0]
-					tMultiple=tTarget1
-				if sSingle in tMultiple:
-					iPartialSimilarAmbigousMapping+=1
-				else:
-					iPartialDissimilarAmbigousMapping+=1
-			elif iCase1==3 and iCase2==3:
-				tDelta=[X for X in tTarget1 if X not in tTarget2]
-				if len(tDelta)==0:
-					iSimilarAmbigousMapping+=1
-				elif len(tDelta)==len(tTarget1):
-					iDissimilarAmbigousMapping+=1
-				else:
-					iFuzzyAmbigousMapping+=1
-			else:
-				exit("ERROR-286: FATAL!")
+	# print("Pair mapped:",iPairOk)
+	# print("Pair with ambigous mapping:",iPairAmbigous)
+	# print("Pair with only one read mapped:",iPairHalfLost)
+	print("Pair without mapping",iPairLost)
 
-	print("Pair fate:")
-	print("NoMapping",iNoMapping,"(R1:None, R2:None)")
-	print("PartialMapping",iPartialMapping,"(R1:None, R2:C1')")
-	print("iPartialAmbigousMapping",iPartialAmbigousMapping,"(R1:None, R2:C1',C2')")
-	print("iSimilarMapping",iSimilarMapping,"(R1:C1, R2:C1' ; C1==C1')")
-	print("iDissimilarMapping",iDissimilarMapping,"(R1:C1, R2:C1' ; C1=/=C1')")
-	print("iPartialSimilarAmbigousMapping",iPartialSimilarAmbigousMapping,"(R1:C1, R2:C1',C2' ; C1 in C1',C2')")
-	print("iPartialDissimilarAmbigousMapping",iPartialSimilarAmbigousMapping,"(R1:C1, R2:C1',C2' ; C1 not in C1',C2')")
-	print("iSimilarAmbigousMapping",iSimilarAmbigousMapping,"(R1:C1,C2, R2:C1',C2' ; C1,C2 == C1',C2')")
-	print("iDissimilarAmbigousMapping",iDissimilarAmbigousMapping,"(R1:C1,C2, R2:C1',C2' ; C1,C2 =/= C1',C2')")
-	print("iFuzzyAmbigousMapping",iFuzzyAmbigousMapping,"(R1:C1,C2, R2:C1',C2' ; C1 in C1',C2' and C2 not in C1',C2')")
-	
 	return setLost,dContig2Read,dContig2Sample
+
+# def Parse(sPath):
+	# print("Parsing "+sPath)
+	# dContig2Read={}
+	# dContig2Sample={}
+	# dRead2Contig={}
+	
+	# dPair2Reads={}
+
+	# iLineCounter=0
+	# iTimeStart=time.time()
+
+	# for sNewLine in open(sPath):
+		# iLineCounter+=1
+		# if iLineCounter%50000==0:
+			# iTimeCurrent=time.time()
+			# iDelta=iTimeCurrent-iTimeStart
+			# iTimeStart=time.time()
+			# print("Reading line "+str(iLineCounter)+"...\t"+str(iDelta))
+		# if sNewLine[0]==REJECT_TAG:
+			# continue
+		# sLine=sNewLine.strip()
+		# tLine=sLine.split("\t")
+		# sMap=tLine[COL_MAPPING] #Match or not
+		# sId=tLine[COL_SEQID]	#Read id
+		
+		# try:
+			# dContig2Read[sMap][sId]=True
+		# except KeyError:
+			# dContig2Read[sMap]={sId:True}
+			
+		# try:
+			# dContig2Sample[sMap][sId.split("_")[-1]]=True
+		# except KeyError:
+			# dContig2Sample[sMap]={sId.split("_")[-1]:True}
+			
+		# try:
+			# dRead2Contig[sId][sMap]=True
+		# except KeyError:
+			# dRead2Contig[sId]={sMap:True}
+			
+		# try:
+			# dPair2Reads[sId.split("_")[0]][sId]=True
+		# except KeyError:
+			# dPair2Reads[sId.split("_")[0]]={sId:True}
+	
+	# setLost=set([])
+	# FILE=open(OUTPUT_AMBIGOUS_READ,"w")
+	# iReadOk=0
+	# iReadLost=0
+	# iReadAmbigous=0
+	# iCounter=0
+	# iTimeStart=time.time()
+	# for sKey in dRead2Contig:
+		# iCounter+=1
+		# if iCounter%50000==0:
+			# iTimeCurrent=time.time()
+			# iDelta=iTimeCurrent-iTimeStart
+			# iTimeStart=time.time()
+			# print("Processing line "+str(iCounter)+"...\t"+str(iDelta))
+		# try:
+			# oCrash=dRead2Contig[sKey][NO_MAPPING]
+			# bMapping=False
+		# except KeyError:
+			# bMapping=True
+		# iSize=len(dRead2Contig[sKey])
+		# if not bMapping and iSize==1:
+			# iReadLost+=1
+			# setLost.add(sKey)
+		# elif not bMapping and iSize!=1:
+			# exit("ERROR-198: {} have both NoMapping and Mapping".format(sKey))
+		# elif bMapping and iSize==1:
+			# iReadOk+=1
+		# elif bMapping and iSize!=1:
+			# iReadAmbigous+=1
+			# for sContig in sorted(dRead2Contig[sKey]):
+				# FILE.write(sKey+"\t"+sContig+"\n")
+		# else:
+			# exit("ERROR-90: FATAL!")
+	# FILE.close()
+			
+	# print("Reads mapped:",iReadOk)
+	# print("Reads with ambigous mapping:",iReadAmbigous)
+	# print("Reads without mapping",iReadLost)
+	
+	# iNoMapping=0
+	# iPartialMapping=0
+	# iPartialAmbigousMapping=0
+	# iSimilarMapping=0
+	# iDissimilarMapping=0
+	# iPartialSimilarAmbigousMapping=0
+	# iPartialDissimilarAmbigousMapping=0
+	# iSimilarAmbigousMapping=0
+	# iDissimilarAmbigousMapping=0
+	# iFuzzyAmbigousMapping=0
+	
+	# for sPair in dPair2Reads:
+		# if len(dPair2Reads[sPair])==2:
+			# tPair=list(dPair2Reads[sPair].keys())
+			# sPair1=tPair[0]
+			# sPair2=tPair[1]
+			# tTarget1=list(dRead2Contig[sPair1].keys())
+			# tTarget2=list(dRead2Contig[sPair2].keys())
+			# iCase1=0
+			# iCase2=0
+			# if NO_MAPPING in tTarget1:
+				# iCase1=1
+			# elif len(tTarget1)==1:
+				# iCase1=2
+			# elif len(tTarget1)>1:
+				# iCase1=3
+			# else:
+				# exit("ERROR-235: FATAL!")
+			# if NO_MAPPING in tTarget2:
+				# iCase2=1
+			# elif len(tTarget2)==1:
+				# iCase2=2
+			# elif len(tTarget2)>1:
+				# iCase2=3
+			# else:
+				# exit("ERROR-243: FATAL!")
+			# if iCase1==1 and iCase2==1:
+				# iNoMapping+=1
+			# elif 1 in [iCase1,iCase2] and 2 in [iCase1,iCase2]:
+				# iPartialMapping+=1
+			# elif 1 in [iCase1,iCase2] and 3 in [iCase1,iCase2]:
+				# iPartialAmbigousMapping+=1
+			# elif iCase1==2 and iCase2==2:
+				# if tTarget1[0]==tTarget2[0]:
+					# iSimilarMapping+=1
+				# else:
+					# iDissimilarMapping+=1
+			# elif 2 in [iCase1,iCase2] and 3 in [iCase1,iCase2]:
+				# if len(tTarget1)<len(tTarget2):
+					# sSingle=tTarget1[0]
+					# tMultiple=tTarget2
+				# else:
+					# sSingle=tTarget2[0]
+					# tMultiple=tTarget1
+				# if sSingle in tMultiple:
+					# iPartialSimilarAmbigousMapping+=1
+				# else:
+					# iPartialDissimilarAmbigousMapping+=1
+			# elif iCase1==3 and iCase2==3:
+				# tDelta=[X for X in tTarget1 if X not in tTarget2]
+				# if len(tDelta)==0:
+					# iSimilarAmbigousMapping+=1
+				# elif len(tDelta)==len(tTarget1):
+					# iDissimilarAmbigousMapping+=1
+				# else:
+					# iFuzzyAmbigousMapping+=1
+			# else:
+				# exit("ERROR-286: FATAL!")
+
+	# print("Pair fate:")
+	# print("NoMapping",iNoMapping,"(R1:None, R2:None)")
+	# print("PartialMapping",iPartialMapping,"(R1:None, R2:C1')")
+	# print("iPartialAmbigousMapping",iPartialAmbigousMapping,"(R1:None, R2:C1',C2')")
+	# print("iSimilarMapping",iSimilarMapping,"(R1:C1, R2:C1' ; C1==C1')")
+	# print("iDissimilarMapping",iDissimilarMapping,"(R1:C1, R2:C1' ; C1=/=C1')")
+	# print("iPartialSimilarAmbigousMapping",iPartialSimilarAmbigousMapping,"(R1:C1, R2:C1',C2' ; C1 in C1',C2')")
+	# print("iPartialDissimilarAmbigousMapping",iPartialSimilarAmbigousMapping,"(R1:C1, R2:C1',C2' ; C1 not in C1',C2')")
+	# print("iSimilarAmbigousMapping",iSimilarAmbigousMapping,"(R1:C1,C2, R2:C1',C2' ; C1,C2 == C1',C2')")
+	# print("iDissimilarAmbigousMapping",iDissimilarAmbigousMapping,"(R1:C1,C2, R2:C1',C2' ; C1,C2 =/= C1',C2')")
+	# print("iFuzzyAmbigousMapping",iFuzzyAmbigousMapping,"(R1:C1,C2, R2:C1',C2' ; C1 in C1',C2' and C2 not in C1',C2')")
+	
+	# return setLost,dContig2Read,dContig2Sample
 
 def WriteTab(dContig2Read,dContig2Sample):
 	dContigId2NewId={}
