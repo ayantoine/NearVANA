@@ -39,9 +39,12 @@ if [ ! -f Taxo${Task}_Ok/${STASKID}_Taxo.ok ] ; then
 	while [ ! -e ${STASKID}.${ACC}.target.txt ]; do sleep 1 ; done
 	
 	TAXID=$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBTARGET} | cut -f2)
+	echo ${ACC}"\t"${TAXID}
 	echo "^"${TAXID}"\t" > ${STASKID}.${ACC}.taxid.txt 
 	while [ ! -e ${STASKID}.${ACC}.taxid.txt ]; do sleep 1 ; done
-	grep -m 1 -P -f ${STASKID}.${ACC}.taxid.txt ${DBLINEAGE} > ${STASKID}.${ACC}.lineage.txt
+	LINEAGE=$(grep -m 1 -P -f ${STASKID}.${ACC}.taxid.txt ${DBLINEAGE})
+	echo ${ACC}"\t"${LINEAGE}
+	echo ${LINEAGE} > ${STASKID}.${ACC}.lineage.txt
 	while [ ! -e ${STASKID}.${ACC}.lineage.txt ]; do sleep 1 ; done
 	ACCorganism=$(cut -f2 ${STASKID}.${ACC}.lineage.txt)
 	ACClineage=$(cut -f3 ${STASKID}.${ACC}.lineage.txt)
