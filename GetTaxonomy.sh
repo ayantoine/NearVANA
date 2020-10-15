@@ -44,7 +44,7 @@ if [ ! -f Taxo${Task}_Ok/${STASKID}_Taxo.ok ] ; then
 	    do
 	    let "TEST++"
 	    TAXID=$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBTARGET} | cut -f2)
-	    echo ${TEST}":"${TAXID}
+	    #echo ${TEST}":"${TAXID}
 	    if [ ${#TAXID} -ge 2 ]; then
 		break
 	    fi
@@ -52,11 +52,11 @@ if [ ! -f Taxo${Task}_Ok/${STASKID}_Taxo.ok ] ; then
 		break
 	    fi
 	done
+	echo "DEBUG=$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBTARGET} | cut -f2)"
+	#echo "Test "${TEST}
 	
-	echo "Test "${TEST}
 	
-	
-	TAXID=$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBTARGET} | cut -f2)
+	#TAXID=$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBTARGET} | cut -f2)
 	echo ${ACC}"\t"${TAXID}
 	echo "^"${TAXID}"\t" > ${STASKID}.${ACC}.taxid.txt 
 	while [ ! -e ${STASKID}.${ACC}.taxid.txt ]; do sleep 1 ; done
