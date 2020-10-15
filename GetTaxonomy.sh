@@ -49,6 +49,8 @@ if [ ! -f Taxo${Task}_Ok/${STASKID}_Taxo.ok ] ; then
 	    fi
 	done
 	
+	echo "Test "${TEST}
+	
 	
 	TAXID=$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBTARGET} | cut -f2)
 	echo ${ACC}"\t"${TAXID}
