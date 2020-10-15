@@ -42,11 +42,12 @@ if [ ! -f Taxo${Task}_Ok/${STASKID}_Taxo.ok ] ; then
 	TEST=0
 	while true
 	    do
+	    TEST++
 	    TAXID=$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBTARGET} | cut -f2)
+	    echo ${TEST}":"${TAXID}
 	    if [ ${#TAXID} -ge 2 ]; then
 		break
 	    fi
-	    TEST++
 	    if [[ ${TEST} -eq 5 ]] ; then
 		break
 	    fi
