@@ -52,7 +52,7 @@ if [ ! -f Taxo${Task}_Ok/${STASKID}_Taxo.ok ] ; then
 		break
 	    fi
 	done
-	echo "DEBUG=$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBTARGET} | cut -f2)"
+	echo "DEBUG=\$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBTARGET} | cut -f2)"
 	#echo "Test "${TEST}
 	
 	
