@@ -55,7 +55,6 @@ if [ ! -f Taxo${Task}_Ok/${STASKID}_Taxo.ok ] ; then
 	echo "DEBUG=\$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBTARGET} | cut -f2)"
 	#echo "Test "${TEST}
 	
-	
 	#TAXID=$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBTARGET} | cut -f2)
 	echo ${ACC}"\t"${TAXID}
 	echo "^"${TAXID}"\t" > ${STASKID}.${ACC}.taxid.txt 
