@@ -38,6 +38,18 @@ if [ ! -f Taxo${Task}_Ok/${STASKID}_Taxo.ok ] ; then
 	echo ^${ACC} > ${STASKID}.${ACC}.target.txt
 	while [ ! -e ${STASKID}.${ACC}.target.txt ]; do sleep 1 ; done
 	
+	TAXID=""
+	TEST=0
+	while [ ! -z ${TAXID}] ; 
+	    do
+	    TAXID=$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBTARGET} | cut -f2)
+	    TEST++
+	    if [[ ${TEST} -eq 5 ]] ; then
+		break
+	    fi
+	done
+	
+	
 	TAXID=$(grep -m 1 -f ${STASKID}.${ACC}.target.txt ${DBTARGET} | cut -f2)
 	echo ${ACC}"\t"${TAXID}
 	echo "^"${TAXID}"\t" > ${STASKID}.${ACC}.taxid.txt 
@@ -84,6 +96,7 @@ if [ ! -f Taxo${Task}_Ok/${STASKID}_Taxo.ok ] ; then
 	fi
 	
 	result="${ACC}\t${ACCorganism}\t${ACCsupKingdom}\t${ACClineage}\t${ACCdefinition}\n"
+	echo ${result}
 	printf "${result}" >> ${FilePath}.taxo
 	
 	rm ${STASKID}.${ACC}.target.txt
