@@ -9,6 +9,9 @@ sCurrentVersionScript="v1"
 iTime1=time.time()
 ########################################################################
 '''
+V2-2020/10/22
+Memory consummation explode for RNAseq. Try a ligther way to do.
+
 V1-2019/10/23
 Scan two Pair-end Fastq, reorder and extract singlet.
 Replace space in name by underscore "_"
@@ -45,18 +48,45 @@ if not sR2Fastq:
 
 ########################################################################
 #Function 	
+# def GetRootName(sPath):
+	# setName=set()
+	# iLineCount=0
+	# for sNewLine in open(sPath):
+		# iLineCount+=1
+		# if iLineCount%4==1:
+			# sRoot=sNewLine.split(" ")[0]
+			# # print(sRoot)
+			# setName.add(sRoot)
+	# return setName
+
 def GetRootName(sPath):
-	setName=set()
+	dDict={}
 	iLineCount=0
 	for sNewLine in open(sPath):
 		iLineCount+=1
 		if iLineCount%4==1:
 			sRoot=sNewLine.split(" ")[0]
-			# print(sRoot)
-			setName.add(sRoot)
-	return setName
-
-def WriteFile(tListFastq,setCommon):
+			dDict[sRoot]=True
+	return dDict
+	
+def IntersectRootName(dBase,sPath):
+	dDict={}
+	iLineCount=0
+	for sNewLine in open(sPath):
+		iLineCount+=1
+		if iLineCount%4==1:
+			sRoot=sNewLine.split(" ")[0]
+			try:
+				oCrash=dBase[sRoot]
+				dDict[sRoot]=True
+				del dBase[sRoot]
+			except KeyError:
+				continue
+				
+	return dDict
+	
+	
+def WriteFile(tListFastq,dCommon): #,setCommon):
 	sFileR1=tListFastq[0]+DEINTERLACING
 	sFileR2=tListFastq[1]+DEINTERLACING
 	sFileR0=sFileR1.replace(R1,R0)
@@ -84,10 +114,13 @@ def WriteFile(tListFastq,setCommon):
 				if sSeqName!="":
 					sRootName=sSeqName.split(" ")[0]
 					sSeqNewName=sSeqName.replace(SPACE,NOSPACE)
-					if sRootName in setCommon:
+					# if sRootName in setCommon:
+					try:
+						oCrash=dCommon[sRootName]
 						iFileCount+=1
 						oTarget.write(sSeqNewName+sContent+sInterline+sQuality)
-					else:
+					# else:
+					except KeyError:
 						iSingletCount+=1
 						FILER0.write(sSeqNewName+sContent+sInterline+sQuality)
 				sSeqName=sNewLine
@@ -103,10 +136,13 @@ def WriteFile(tListFastq,setCommon):
 		if sSeqName!="":
 			sRootName=sSeqName.split(" ")[0]
 			sSeqNewName=sSeqName.replace(SPACE,NOSPACE)
-			if sRootName in setCommon:
+			# if sRootName in setCommon:
+			try:
+				oCrash=dCommon[sRootName]
 				iFileCount+=1
 				oTarget.write(sSeqNewName+sContent+sInterline+sQuality)
-			else:
+			# else:
+			except KeyError:
 				iSingletCount+=1
 				FILER0.write(sSeqNewName+sContent+sInterline+sQuality) 
 		print(tName[iIndex]+" contains "+str(iFileCount)+" sequences")
@@ -116,13 +152,16 @@ def WriteFile(tListFastq,setCommon):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	setR1RootName=GetRootName(sR1Fastq)
+	# setR1RootName=GetRootName(sR1Fastq)
 	# print(len(setR1RootName))
-	setR2RootName=GetRootName(sR2Fastq)
+	# setR2RootName=GetRootName(sR2Fastq)
 	# print(len(setR2RootName))
-	setRXRootName_intersection=setR1RootName & setR2RootName
+	# setRXRootName_intersection=setR1RootName & setR2RootName
 	# print(len(setRXRootName_intersection))
-	WriteFile([sR1Fastq,sR2Fastq],setRXRootName_intersection)
+	dR1RootName=GetRootName(sR1Fastq)
+	dRXRootName_intersection=IntersectRootName(dR1RootName,sR2Fastq)
+	# WriteFile([sR1Fastq,sR2Fastq],setRXRootName_intersection)
+	WriteFile([sR1Fastq,sR2Fastq],dRXRootName_intersection)
 		
 ########################################################################    
 iTime2=time.time()
