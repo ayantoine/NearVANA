@@ -14,6 +14,7 @@ function boolean() {
 
 USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
 USE_KEEPUNASSIGNED="$(boolean "${UNASSIGNED}")"
+USE_SUBSTRACTION="$(boolean "${SUBSTRACTION}")"
 BLASTN="$(boolean "${BLASTN}")"
 BLASTX="$(boolean "${BLASTX}")"
 DIAMOND="$(boolean "${DIAMOND}")"
@@ -23,7 +24,10 @@ if [ ! -d $SDIR ] ; then
 	echo "Directory SDIR ${SDIR} does not exists"
 	exit 1
 fi
-LIST_FILE=($DATA $ADAP $SUBS $NUCACC $NUCDEF $PROACC $PRODEF $DBLINEAGE $VIRMINLEN $CONF)
+LIST_FILE=($DATA $ADAP $NUCACC $NUCDEF $PROACC $PRODEF $DBLINEAGE $VIRMINLEN $CONF)
+if [ "$USE_SUBSTRACTION" = true ] ; then
+	LIST_FILE+=($SUBS)
+fi
 for i in "${LIST_FILE[@]}"; do
 	if [ ! -f $i ]; then
 		echo "File $i does not exists"
@@ -205,16 +209,22 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 		fi	
 	fi
 	
-	if [ ! -f ${PID}.Cleaning.ok ]; then
-		echo -e "\t- PhiX Substraction : Susbract "${SUBS}
-		echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG"
-		$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG
-		while [ ! -e ${PID}.Substraction.ok ]; do sleep 60 ; done
-		rm ${PID}_R1.Unsubstracted.fastq ${PID}_R2.Unsubstracted.fastq ${PID}_R0.Unsubstracted.fastq
-		touch ${PID}.Cleaning.ok
+	if [ "$USE_SUBSTRACTION" = true ] ; then
+		if [ ! -f ${PID}.Cleaning.ok ]; then
+			echo -e "\t- PhiX Substraction : Susbract "${SUBS}
+			echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG"
+			$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG
+			while [ ! -e ${PID}.Substraction.ok ]; do sleep 60 ; done
+			rm ${PID}_R1.Unsubstracted.fastq ${PID}_R2.Unsubstracted.fastq ${PID}_R0.Unsubstracted.fastq
+			touch ${PID}.Cleaning.ok
+		else
+			echo -e "\t- ${PID}.Cleaning.ok existing, pas"
+		fi	
 	else
-		echo -e "\t- ${PID}.Cleaning.ok existing, pas"
-	fi	
+		mv ${PID}_R1.Unsubstracted.fastq ${PID}_R1.Substracted.fastq
+		mv ${PID}_R2.Unsubstracted.fastq ${PID}_R2.Substracted.fastq
+		mv ${PID}_R0.Unsubstracted.fastq ${PID}_R0.Substracted.fastq
+	fi
 	
 else
 	echo "${PID}.Cleaning.ok already existing, pass"
