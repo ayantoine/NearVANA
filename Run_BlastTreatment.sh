@@ -45,9 +45,8 @@ fi
 
 echo "------ Retrieve Taxonomy data ------"
 if [ ! -f ${PID}.Taxonomy${TASK}.ok ]; then
-	#nb_jobs=$(ls ${PID}_Blast${TASK}/*_1.tab | wc -l)
-	nb_jobs=$(ls ${PID}_Blast${TASK}/*_2.tab | wc -l)
-
+	nb_jobs=$(ls ${PID}_Blast${TASK}/*_1.tab | wc -l)
+	
 	echo "DEFINITION" > DEFINITION.txt
 	echo "ACCESSION" > ACCESSION.txt
 
@@ -88,8 +87,7 @@ echo "------ /Retrieve Taxonomy data ------"
 
 echo "------ Create table ------"
 if [ ! -f ${PID}.creation${TASK}.ok ]; then
-	#nb_jobs=$(ls ${PID}_Blast${TASK}/*_1.tab | wc -l)
-	nb_jobs=$(ls ${PID}_Blast${TASK}/*_2.tab | wc -l)
+	nb_jobs=$(ls ${PID}_Blast${TASK}/*_1.tab | wc -l)
 	if [ ! -f ${PID}_All.Megahit.contigs2sample.tsv ]; then
 		echo "------ Create short-list ------"
 		cut -f2,4 ${PID}_All.Megahit_reverseAssembly.tsv | sort -u > ${PID}_All.Megahit.contigs2sample.tsv
