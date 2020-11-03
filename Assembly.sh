@@ -21,7 +21,7 @@ else
 fi
 rm *.bt2
 echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam"
-python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam
+python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${USE_MULTIPLEX}
 echo "------ /Megahit reverse-mapping ------"
 
 rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
