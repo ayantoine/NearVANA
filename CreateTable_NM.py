@@ -61,6 +61,7 @@ EQUAL="="
 OPEN_PARENTHESIS="("
 CLOSE_PARENTHESIS=")"
 SPACE=""
+PIPE="|"
 
 ########################################################################
 #Options
@@ -69,6 +70,7 @@ if __name__ == "__main__":
 	parser.add_option("-j","--jobs", dest="jobs")
 	parser.add_option("-p","--pid", dest="pid")
 	parser.add_option("-l","--length", dest="length")
+	parser.add_option("-d","--datafile", dest="datafile")
 	parser.add_option("-t","--task", dest="task")
 
 	(options, args) = parser.parse_args()
@@ -88,6 +90,10 @@ if __name__ == "__main__":
 	sLengthFile=options.length
 	if not sLengthFile:
 		exit("Error : no length -l defined, process broken")
+	
+	sDataFile=options.datafile
+	if not sDataFile:
+		exit("Error : no datafile -d defined, process broken")
 		
 	sTask=options.task
 	if not sTask:
@@ -95,25 +101,45 @@ if __name__ == "__main__":
 
 	if sTask=="D":
 		#Half-constant
-		BLAST_OUTPUT=sPID+"_Diamond_results.tab"
-		BLAST_FOLDER=sPID+"_Diamond"
+		BLAST_OUTPUT=sPID+"_Blast"+sTask+"_results.tab"
+		BLAST_FOLDER=sPID+"_Blast"+sTask
 		BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
 		BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab"
 		TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab.taxo"
-		SHORTSPADES=sPID+"_All.Megahit.contigs2sample.tsv"
-		SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
+		SHORTMEGAHIT=sPID+"_All.Megahit.contigs2sample.tsv"
 	else:
 		#Half-constant
 		BLAST_OUTPUT=sPID+"_Blast"+sTask+"_results.tab"
 		BLAST_FOLDER=sPID+"_Blast"+sTask
 		BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
-		BLAST_FILE=sPID+"_All.fa."+REPLACEME+"."+"_Blast"+sTask+"_2.tab"
-		TAXO_FILE=sPID+"_All.fa."+REPLACEME+"."++"_Blast"+sTask+"_2.tab.taxo"
-		SHORTSPADES=sPID+"_All.Megahit.contigs2sample.tsv"
-		SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
+		BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab"
+		TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab.taxo"
+		SHORTMEGAHIT=sPID+"_All.Megahit.contigs2sample.tsv"
+		# SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
 
 ########################################################################
 #Function 	
+def LoadData(sFile):
+	print("Loading file "+str(sFile))
+	dDict={}
+	bFirst=True
+	for sNewLine in open(sFile):
+		if sNewLine[0]==DIESE:
+			continue
+		if bFirst:
+			bFirst=False
+			continue
+		sLine=sNewLine.strip()
+		if sLine==EMPTY:
+			continue
+		tLine=sLine.split(EQUAL)
+		sPlateId=tLine[0]
+		sListOfData=tLine[1].replace(OPEN_PARENTHESIS,EMPTY).replace(CLOSE_PARENTHESIS,EMPTY)
+		tListOfData=sListOfData.split(SPACE)
+		sMeta=tListOfData[2]
+		dDict[sPlateId]=sMeta
+	return dDict
+	
 def LoadContigs(sFile,dRef,dDict={}):
 	print("Loading file "+str(sFile))
 	for sNewLine in open(sFile):
@@ -164,66 +190,70 @@ def LoadTaxo(sFile):
 def LoadBlast(sFile):
 	print("Loading file "+str(sFile))
 	dDict={}
-	for sNewLine in open(sFile):
-		sLine=sNewLine.strip()
-		tLine=sLine.split("\t")
-		sQueryId=tLine[BLAST_QUERYIDCOl]
-		try:
-			oCrash=dDict[sQueryId]
-		except KeyError:
-			dDict[sQueryId]={}
-		
-		sSubjectId=DEFAULT
-		if tLine[BLAST_SUBJECTIDCOl]!="":
+	try:
+		for sNewLine in open(sFile):
+			sLine=sNewLine.strip()
+			tLine=sLine.split("\t")
+			sQueryId=tLine[BLAST_QUERYIDCOl]
+			try:
+				oCrash=dDict[sQueryId]
+			except KeyError:
+				dDict[sQueryId]={}
+			
+			sSubjectId=DEFAULT
 			sSubjectId=tLine[BLAST_SUBJECTIDCOl]
-			tSubjectId=sSubjectId.split("|")
-			sSubjectId=tSubjectId[3]
+			if PIPE in sSubjectId:
+				if PIPE==sSubjectId[-1]:
+					sSubjectId=sSubjectId[:-1]
+				sSubjectId=sSubjectId.split(PIPE)[-1]
 			if sSubjectId==EMPTY:
 				continue
-		sIdentity=DEFAULT
-		if tLine[BLAST_IDENTITYCOl]!="":
-			sIdentity=tLine[BLAST_IDENTITYCOl]
-		sLength=DEFAULT
-		if tLine[BLAST_LENGTHCOl]!="":
-			sLength=tLine[BLAST_LENGTHCOl]
-		sMismatch=DEFAULT
-		if tLine[BLAST_MISMATCHCOl]!="":
-			sMismatch=tLine[BLAST_MISMATCHCOl]
-		sGapOpen=DEFAULT
-		if tLine[BLAST_GAPOPENCOl]!="":
-			sGapOpen=tLine[BLAST_GAPOPENCOl]
-		sQueryStart=DEFAULT
-		if tLine[BLAST_QUERYSTARTCOl]!="":
-			sQueryStart=tLine[BLAST_QUERYSTARTCOl]
-		sQueryEnd=DEFAULT
-		if tLine[BLAST_QUERYENDCOl]!="":
-			sQueryEnd=tLine[BLAST_QUERYENDCOl]
-		sSubjectStart=DEFAULT
-		if tLine[BLAST_SUBJECTSTARTCOl]!="":
-			sSubjectStart=tLine[BLAST_SUBJECTSTARTCOl]
-		sSubjectEnd=DEFAULT
-		if tLine[BLAST_SUBJECTENDCOl]!="":
-			sSubjectEnd=tLine[BLAST_SUBJECTENDCOl]
-		sEvalue=DEFAULT
-		if tLine[BLAST_EVALUECOl]!="":
-			sEvalue=tLine[BLAST_EVALUECOl]
-		sBitScore=DEFAULT
-		if tLine[BLAST_BITSCORECOl]!="":
-			sBitScore=tLine[BLAST_BITSCORECOl]
-					
-		dDict[sQueryId][len(dDict[sQueryId])+1]={
-			"SubjectId":sSubjectId,
-			"Identity":sIdentity,
-			"Length":sLength,
-			"Mismatch":sMismatch,
-			"GapOpen":sGapOpen,
-			"QueryStart":sQueryStart,
-			"QueryEnd":sQueryEnd,
-			"SubjectStart":sSubjectStart,
-			"SubjectEnd":sSubjectEnd,
-			"Evalue":sEvalue,
-			"BitScore":sBitScore
-			}
+			sIdentity=DEFAULT
+			if tLine[BLAST_IDENTITYCOl]!="":
+				sIdentity=tLine[BLAST_IDENTITYCOl]
+			sLength=DEFAULT
+			if tLine[BLAST_LENGTHCOl]!="":
+				sLength=tLine[BLAST_LENGTHCOl]
+			sMismatch=DEFAULT
+			if tLine[BLAST_MISMATCHCOl]!="":
+				sMismatch=tLine[BLAST_MISMATCHCOl]
+			sGapOpen=DEFAULT
+			if tLine[BLAST_GAPOPENCOl]!="":
+				sGapOpen=tLine[BLAST_GAPOPENCOl]
+			sQueryStart=DEFAULT
+			if tLine[BLAST_QUERYSTARTCOl]!="":
+				sQueryStart=tLine[BLAST_QUERYSTARTCOl]
+			sQueryEnd=DEFAULT
+			if tLine[BLAST_QUERYENDCOl]!="":
+				sQueryEnd=tLine[BLAST_QUERYENDCOl]
+			sSubjectStart=DEFAULT
+			if tLine[BLAST_SUBJECTSTARTCOl]!="":
+				sSubjectStart=tLine[BLAST_SUBJECTSTARTCOl]
+			sSubjectEnd=DEFAULT
+			if tLine[BLAST_SUBJECTENDCOl]!="":
+				sSubjectEnd=tLine[BLAST_SUBJECTENDCOl]
+			sEvalue=DEFAULT
+			if tLine[BLAST_EVALUECOl]!="":
+				sEvalue=tLine[BLAST_EVALUECOl]
+			sBitScore=DEFAULT
+			if tLine[BLAST_BITSCORECOl]!="":
+				sBitScore=tLine[BLAST_BITSCORECOl]
+						
+			dDict[sQueryId][len(dDict[sQueryId])+1]={
+				"SubjectId":sSubjectId,
+				"Identity":sIdentity,
+				"Length":sLength,
+				"Mismatch":sMismatch,
+				"GapOpen":sGapOpen,
+				"QueryStart":sQueryStart,
+				"QueryEnd":sQueryEnd,
+				"SubjectStart":sSubjectStart,
+				"SubjectEnd":sSubjectEnd,
+				"Evalue":sEvalue,
+				"BitScore":sBitScore
+				}
+	except FileNotFoundError:
+		pass
 	return dDict
 
 def LoadQuery(sFile):
@@ -246,7 +276,6 @@ def LoadQuery(sFile):
 def WriteData(FILE,dBlast,dTaxo,dContigs,dContent,dLength):
 	for sQuery in dBlast:
 		for iRank in dBlast[sQuery]:
-			
 			if iRank==1:
 				sRank=BEST_HIT
 			else:
@@ -262,18 +291,32 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dContent,dLength):
 				sReadQuantity="1"
 			sSubjectId=dBlast[sQuery][iRank]["SubjectId"]
 			
-			sTaxo=dTaxo[sSubjectId]["Lineage"]
-			tTaxo=sTaxo.replace("; ",";").split(";")
-			iMinSize=0
-			for oTaxo in tTaxo:
-				try:
-					iMinSize=dLength[oTaxo]
-				except KeyError:
-					continue
-			if iMinSize==0:
-				fFragment="N/A"
-			else:
-				fFragment=round(float(iQuerySize)/iMinSize*100,2)
+			try:
+				sTaxo=dTaxo[sSubjectId]["Lineage"]
+				tTaxo=sTaxo.replace("; ",";").split(";")
+				iMinSize=0
+				for oTaxo in tTaxo:
+					try:
+						iMinSize=dLength[oTaxo]
+					except KeyError:
+						continue
+				if iMinSize==0:
+					fFragment="N/A"
+				else:
+					fFragment=round(float(iQuerySize)/iMinSize*100,2)
+					
+				sOrganism=dTaxo[sSubjectId]["Organism"]
+				sSuperkingdom=dTaxo[sSubjectId]["Superkingdom"]
+				sLineage=dTaxo[sSubjectId]["Lineage"]
+				sDefinition=dTaxo[sSubjectId]["Definition"]
+
+			except KeyError:
+				sTaxo="unknown"
+				fFragment="unknown"
+				sOrganism="unknown"
+				sSuperkingdom="unknown"
+				sLineage="unknown"
+				sDefinition="unknown"
 				
 			tLine=[sRank,sQuery,sReadQuantity,str(iQuerySize),
 			sSubjectId,
@@ -288,8 +331,8 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dContent,dLength):
 			]
 			FILE.write("\t".join(tLine)+"\n")
 						
-# HEADER_LIST=["Hit rank","Query Seq-Id","Sample","Read quantity","Sequence length","Location","Date","Host",
-# "Individual","Weight(mg)","Subject Seq-Id","Organism","SuperKingdom","Taxonomy","Hit definition","% Fragment","Identity",
+# HEADER_LIST=["Hit rank","Query Seq-Id","Read quantity","Sequence length",
+# "Subject Seq-Id","Organism","SuperKingdom","Taxonomy","Hit definition","% Fragment","Identity",
 # "Query cover","Alignment length","Mismatches","Gap opening","Start alignment query","End alignment query",
 # "Start alignment subject","End alignment subject","E-value","Bit score","Query sequences"]
 
@@ -307,6 +350,7 @@ def LoadLength(sFile):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
+	dData=LoadData(sDataFile)
 	dLength=LoadLength(sLengthFile)
 	FILE=open(BLAST_OUTPUT,"w")
 	FILE.write(HEADER)
