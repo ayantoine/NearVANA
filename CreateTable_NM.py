@@ -70,7 +70,6 @@ if __name__ == "__main__":
 	parser.add_option("-j","--jobs", dest="jobs")
 	parser.add_option("-p","--pid", dest="pid")
 	parser.add_option("-l","--length", dest="length")
-	parser.add_option("-d","--datafile", dest="datafile")
 	parser.add_option("-t","--task", dest="task")
 
 	(options, args) = parser.parse_args()
@@ -90,10 +89,6 @@ if __name__ == "__main__":
 	sLengthFile=options.length
 	if not sLengthFile:
 		exit("Error : no length -l defined, process broken")
-	
-	sDataFile=options.datafile
-	if not sDataFile:
-		exit("Error : no datafile -d defined, process broken")
 		
 	sTask=options.task
 	if not sTask:
@@ -350,15 +345,14 @@ def LoadLength(sFile):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	dData=LoadData(sDataFile)
 	dLength=LoadLength(sLengthFile)
 	FILE=open(BLAST_OUTPUT,"w")
 	FILE.write(HEADER)
 	for iIndex in range(1,iJobs+1):
 		print("Working on index "+str(iIndex))
 		dQuery2Content=LoadQuery(BLAST_FOLDER+"/"+BLAST_INPUT.replace(REPLACEME,str(iIndex)))
-		dContigs2Sample=LoadContigs(SHORTSPADES,dQuery2Content)
-		dContigs2Sample=LoadContigs(SHORTFLASH,dQuery2Content,dContigs2Sample)
+		dContigs2Sample=LoadContigs(SHORTMEGAHIT,dQuery2Content)
+		# dContigs2Sample=LoadContigs(SHORTFLASH,dQuery2Content,dContigs2Sample)
 		dTaxo=LoadTaxo(BLAST_FOLDER+"/"+TAXO_FILE.replace(REPLACEME,str(iIndex)))
 		dBlast=LoadBlast(BLAST_FOLDER+"/"+BLAST_FILE.replace(REPLACEME,str(iIndex)))
 		WriteData(FILE,dBlast,dTaxo,dContigs2Sample,dQuery2Content,dLength)
