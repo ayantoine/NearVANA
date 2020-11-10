@@ -68,6 +68,7 @@ PIPE="|"
 if __name__ == "__main__":
 	parser = OptionParser()
 	parser.add_option("-j","--jobs", dest="jobs")
+	parser.add_option("-p","--pid", dest="pid")
 	parser.add_option("-l","--length", dest="length")
 	parser.add_option("-t","--task", dest="task")
 
@@ -80,6 +81,10 @@ if __name__ == "__main__":
 		iJobs=int(sJobs)
 	except KeyError:
 		exit("Error : jobs -j must be an integer, process broken")
+		
+	sPID=options.pid
+	if not sPID:
+		exit("Error : no pid -p defined, process broken")
 
 	sLengthFile=options.length
 	if not sLengthFile:
