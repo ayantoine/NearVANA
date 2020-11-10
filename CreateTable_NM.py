@@ -312,11 +312,11 @@ def WriteData(FILE,dBlast,dTaxo,dContent,dLength):
 				sSuperkingdom="unknown"
 				sLineage="unknown"
 				sDefinition="unknown"
-				
+			
 			tLine=[sRank,sQuery,sReadQuantity,str(iQuerySize),
 			sSubjectId,
-			dTaxo[sSubjectId]["Organism"],dTaxo[sSubjectId]["Superkingdom"],
-			dTaxo[sSubjectId]["Lineage"],dTaxo[sSubjectId]["Definition"],str(fFragment),
+			sOrganism,sSuperkingdom,
+			sLineage,sDefinition,str(fFragment),
 			dBlast[sQuery][iRank]["Identity"],
 			str(fCover),dBlast[sQuery][iRank]["Length"],dBlast[sQuery][iRank]["Mismatch"],
 			dBlast[sQuery][iRank]["GapOpen"],dBlast[sQuery][iRank]["QueryStart"],
@@ -324,6 +324,7 @@ def WriteData(FILE,dBlast,dTaxo,dContent,dLength):
 			dBlast[sQuery][iRank]["SubjectEnd"],dBlast[sQuery][iRank]["Evalue"],
 			dBlast[sQuery][iRank]["BitScore"],dContent[sQuery]
 			]
+		
 			FILE.write("\t".join(tLine)+"\n")
 						
 # HEADER_LIST=["Hit rank","Query Seq-Id","Read quantity","Sequence length",
