@@ -105,6 +105,7 @@ if [ ! -f ${PID}.creation${TASK}.ok ]; then
 		while [ ! -e ${PID}.creation${TASK}.ok ]; do sleep 60 ; done
 	fi
 	echo "------ Xlsx conversion ------"
+	echo "perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_Blast${TASK}_results.tab ${PID}_Blast${TASK}_results.xlsx $((${#PID}+7))"
 	perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_Blast${TASK}_results.tab ${PID}_Blast${TASK}_results.xlsx $((${#PID}+7))
 	echo "------ /Xlsx conversion ------"
 	datetime2=$(date +%s)
