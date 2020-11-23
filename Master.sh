@@ -210,15 +210,15 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 	fi
 	
 	if [ "$USE_SUBSTRACTION" = true ] ; then
-		if [ ! -f ${PID}.Cleaning.ok ]; then
+		if [ ! -f ${PID}.Substraction.ok ]; then
 			echo -e "\t- PhiX Substraction : Susbract "${SUBS}
 			echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG"
 			$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Substraction -e Substraction.e -o Substraction.o ${SDIR}/Substraction.sh $ARG
 			while [ ! -e ${PID}.Substraction.ok ]; do sleep 60 ; done
 			rm ${PID}_R1.Unsubstracted.fastq ${PID}_R2.Unsubstracted.fastq ${PID}_R0.Unsubstracted.fastq
-			touch ${PID}.Cleaning.ok
+			touch ${PID}.Substraction.ok
 		else
-			echo -e "\t- ${PID}.Cleaning.ok existing, pas"
+			echo -e "\t- ${PID}.Substraction.ok existing, pas"
 		fi	
 	else
 		mv ${PID}_R1.Unsubstracted.fastq ${PID}_R1.Substracted.fastq

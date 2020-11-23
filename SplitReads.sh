@@ -37,8 +37,10 @@ SAMPLE=${SAMPLE_LIST[${STASKID}-1]}
 
 echo "------ Split fastq by sample ------"
 if  [ "$USE_KEEPUNASSIGNED" = true ] ; then
+	echo "${SDIR}/SplitReads.py -u true -f ${FASTQ} -r ${PID}_${VARNAME}_Demultiplexing_Global.tsv -s ${SAMPLE} -i ${PAIR} -o ${SAMPLE}_${PID}_R${PAIR}.fastq.split"
 	python ${SDIR}/SplitReads.py -u true -f ${FASTQ} -r ${PID}_${VARNAME}_Demultiplexing_Global.tsv -s ${SAMPLE} -i ${PAIR} -o ${SAMPLE}_${PID}_R${PAIR}.fastq.split
 else
+	echo "${SDIR}/SplitReads.py -u true -f ${FASTQ} -r ${PID}_${VARNAME}_Demultiplexing_Global.tsv -s ${SAMPLE} -i ${PAIR} -o ${SAMPLE}_${PID}_R${PAIR}.fastq.split"
 	python ${SDIR}/SplitReads.py -f ${FASTQ} -r ${PID}_${VARNAME}_Hyper_Identified.tsv -s ${SAMPLE} -i ${PAIR} -o ${SAMPLE}_${PID}_R${PAIR}.fastq.split
 fi
 echo "------ /Split fastq by sample ------"
