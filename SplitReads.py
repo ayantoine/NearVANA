@@ -81,6 +81,7 @@ def LoadRef(sPath,sSample,sPair,bKeepUnassigned):
 	dResult={}
 	if bKeepUnassigned and sSample==UNASSIGNED:
 		sSample=NO_SAMPLE
+	print(sPath,sSample,sPair,bKeepUnassigned)
 	for sNewLine in open(sPath):
 		if sSample in sNewLine:
 			if sPair+ILLUMINA_PAIR_TAG in sNewLine:
@@ -90,6 +91,7 @@ def LoadRef(sPath,sSample,sPair,bKeepUnassigned):
 				sEndIndex=tLine[2]
 				if sEndIndex==NO_INDEX:
 					sEndIndex="0"
+				print(sSeqName,sEndIndex)
 				dResult[sSeqName]=int(sEndIndex)
 	return dResult
 
@@ -149,7 +151,7 @@ def WriteSplitFastq(sPath,dList,sSID,sOut):
 #MAIN
 if __name__ == "__main__":
 	dListOfSeq=LoadRef(sRef,sSampleId,sPairId,bUnassigned)
-	print(dListOfSeq)
+	print(len(dListOfSeq))
 	WriteSplitFastq(sFastq,dListOfSeq,sSampleId,sOutput)
 	
 	
