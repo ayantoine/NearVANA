@@ -134,7 +134,7 @@ def WriteContigFiles(dContig2Read,bMultiplex):
 						tSample=GetSampleList(dContig2Read[sShortId])
 					FILE_FASTA.write(">{}\n{}".format(sNewName,sContent))
 					for sReadId in dContig2Read[sShortId]:
-						FILE_ORIGIN.write(sReadId+"\t"+sNewName+"\t"+sShortId+"\t"+"-".join(sorted(tSample))+"\n")
+						FILE_ORIGIN.write(sReadId+"\t"+sNewName+"\t"+sShortId+"\t"+"-".join(sorted(list(set(tSample))))+"\n")
 			sId=sNewLine
 			sShortId=sNewLine[1:-1].split(" ")[0]
 			sContent=""
@@ -150,7 +150,7 @@ def WriteContigFiles(dContig2Read,bMultiplex):
 	FILE_REJECTED.close()
 
 def ParseSamfile(sPath):
-	print("Parsing "+sPath)
+	# print("Parsing "+sPath)
 	dContig2Read={}
 	
 	FILE_UNMAPPED=open(OUTPUT_UNMAPPED_READ,"w")
@@ -171,8 +171,8 @@ def ParseSamfile(sPath):
 		if iLineCounter%50000==0:
 			iTimeCurrent=time.time()
 			iDelta=iTimeCurrent-iTimeStart
-			print("Reading line "+str(iLineCounter)+"...\t"+str(iDelta))
-			print("\tiMappingLine:{}\tiUnmapped:{}\tiAmbigous:{}".format(iMappingLine,iUnmapped,iAmbigous))
+			# print("Reading line "+str(iLineCounter)+"...\t"+str(iDelta))
+			# print("\tiMappingLine:{}\tiUnmapped:{}\tiAmbigous:{}".format(iMappingLine,iUnmapped,iAmbigous))
 			iTimeStart=time.time()
 			bExampleNoMapping=True
 			bExampleAmbigous=True
