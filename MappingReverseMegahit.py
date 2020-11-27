@@ -39,6 +39,9 @@ FALSE=["FALSE","False","false"]
 
 UNDERSCORE="_"
 
+SAMPLE="Sample"
+READS="Reads"
+
 ########################################################################
 #Options
 parser = OptionParser()
@@ -105,12 +108,6 @@ print("dBASEtoTARGET:",dBASEtoTARGET)
 
 ########################################################################
 #Function 	
-def GetSampleList(tListName):
-	tSample=[]
-	for sName in tListName:
-		tSample.append(sName.split(UNDERSCORE)[-1])
-	return tSample
-
 def WriteContigFiles(dContig2Read,bMultiplex):
 	FILE_REJECTED=open(OUTPUT_REJECTED_CONTIG,"w")
 	FILE_ORIGIN=open(OUTPUT_REVERSEASSEMBLY,"w")
@@ -122,19 +119,30 @@ def WriteContigFiles(dContig2Read,bMultiplex):
 	tSample=[]
 	bRejected=False
 	iNameId=0
+	
+	iLineCounter=0
+	iTimeStart=time.time()
+	
 	for sNewLine in open(MEGAHIT_ASSEMBLY_OUTPUT):
+		iLineCounter+=1
+		if iLineCounter%1000==0:
+			iTimeCurrent=time.time()
+			iDelta=iTimeCurrent-iTimeStart
+			print("Reading line "+str(iLineCounter)+"...\t"+str(iDelta))
+			iTimeStart=time.time()
+		
 		if sNewLine[0]==">":
 			if sId!="" and sContent!="":
 				if bRejected:
 					FILE_REJECTED.write("{}{}".format(sId,sContent))
 				else:
 					iNameId+=1
-					sNewName=CONTIG_BASENAME+"_"+str(iNameId)+"_("+str(len(dContig2Read[sShortId]))+")"
+					sNewName=CONTIG_BASENAME+"_"+str(iNameId)+"_("+str(len(dContig2Read[sShortId][READS]))+")"
 					if bMultiplex:
-						tSample=GetSampleList(dContig2Read[sShortId])
+						tSample=dContig2Read[sShortId][SAMPLE]
 					FILE_FASTA.write(">{}\n{}".format(sNewName,sContent))
-					for sReadId in dContig2Read[sShortId]:
-						FILE_ORIGIN.write(sReadId+"\t"+sNewName+"\t"+sShortId+"\t"+"-".join(sorted(list(set(tSample))))+"\n")
+					for sReadId in dContig2Read[sShortId][READS]:
+						FILE_ORIGIN.write(sReadId+"\t"+sNewName+"\t"+sShortId+"\t"+"-".join(sorted(tSample))+"\n")
 			sId=sNewLine
 			sShortId=sNewLine[1:-1].split(" ")[0]
 			sContent=""
@@ -171,8 +179,8 @@ def ParseSamfile(sPath):
 		if iLineCounter%50000==0:
 			iTimeCurrent=time.time()
 			iDelta=iTimeCurrent-iTimeStart
-			# print("Reading line "+str(iLineCounter)+"...\t"+str(iDelta))
-			# print("\tiMappingLine:{}\tiUnmapped:{}\tiAmbigous:{}".format(iMappingLine,iUnmapped,iAmbigous))
+			print("Reading line "+str(iLineCounter)+"...\t"+str(iDelta))
+			print("\tiMappingLine:{}\tiUnmapped:{}\tiAmbigous:{}".format(iMappingLine,iUnmapped,iAmbigous))
 			iTimeStart=time.time()
 			bExampleNoMapping=True
 			bExampleAmbigous=True
@@ -211,10 +219,19 @@ def ParseSamfile(sPath):
 					FILE_AMBIGOUS.write("{}\t{}\n".format(sRead,",".join(dReads2Contigs[sRead])))
 			else:
 				for sRead in dReads2Contigs:
+					sSample=sRead.split(UNDERSCORE)[-1]
 					try:
-						dContig2Read[dReads2Contigs[sRead][0]].append(sRead)
+						oCrash=dContig2Read[dReads2Contigs[sRead][0]]
 					except KeyError:
-						dContig2Read[dReads2Contigs[sRead][0]]=[sRead]
+						dContig2Read[dReads2Contigs[sRead][0]]={}
+					try:
+						dContig2Read[dReads2Contigs[sRead][0]][READS].append(sRead)
+					except KeyError:
+						dContig2Read[dReads2Contigs[sRead][0]][READS]=[sRead]
+					try:
+						dContig2Read[dReads2Contigs[sRead][0]][SAMPLE][sSample]=True
+					except KeyError:
+						dContig2Read[dReads2Contigs[sRead][0]][SAMPLE]={sSample:True}
 			dReads2Contigs={}
 			dReads2Contigs[sId]=[sMap]
 		sPreviousPairId=sCurrentPairId
@@ -223,17 +240,12 @@ def ParseSamfile(sPath):
 	FILE_AMBIGOUS.close()
 	
 	return dContig2Read
-	
-def CheckAmbigous(dDict):
-	for sKey in dDict:
-		if len(dDict[sKey])!=len(set(dDict[sKey])):
-			print("{}\t{}".format(sKey,dDict[sKey]))
 
 ########################################################################
 #MAIN
 if __name__ == "__main__":
 	dContig2Read=ParseSamfile(sInput)
-	CheckAmbigous(dContig2Read)
+	# CheckAmbigous(dContig2Read)
 	WriteContigFiles(dContig2Read,bMultiplex)
 
 ########################################################################    

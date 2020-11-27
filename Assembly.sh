@@ -20,7 +20,7 @@ else
 	bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -S reads2contigs.sam
 fi
 rm *.bt2
-echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam"
+echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}"
 python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}
 echo "------ /Megahit reverse-mapping ------"
 
