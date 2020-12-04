@@ -169,7 +169,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 				cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
 				cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
 				cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
-				rm -r ${sampleId}
+				#rm -r ${sampleId}
 			done
 			touch ${PID}.Substraction-Deinterlacing.ok
 		else
