@@ -94,6 +94,22 @@ echo "${SAMPLE_LIST[@]}"
 echo "------ /Get Sample list ------"
 
 
+echo "------ DEBUG Sample list ------"
+hostname
+echo 'for VARNAME in "${PLATE[@]}"; do
+	VAR_SAMPLE_FILE="${VARNAME}[3]"
+	while read c1 leftovers; do
+		echo ${VARNAME}${c1}
+	done < ${!VAR_SAMPLE_FILE}
+done'
+for VARNAME in "${PLATE[@]}"; do
+	VAR_SAMPLE_FILE="${VARNAME}[3]"
+	while read c1 leftovers; do
+		echo ${VARNAME}${c1}
+	done < ${!VAR_SAMPLE_FILE}
+done
+echo "------ /DEBUG Sample list ------"
+
 echo "------ Extract .gz ------"
 if [ ! -f ${PID}.extraction.ok ]; then
 	echo "$SCALL $SPARAM $SRENAME ${PID}_Extraction -e Extraction.e -o Extraction.o ${SDIR}/Gz_extraction.sh $ARG"
