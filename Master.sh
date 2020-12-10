@@ -93,23 +93,6 @@ fi
 echo "${SAMPLE_LIST[@]}"
 echo "------ /Get Sample list ------"
 
-
-echo "------ DEBUG Sample list ------"
-hostname
-echo 'for VARNAME in "${PLATE[@]}"; do
-	VAR_SAMPLE_FILE="${VARNAME}[3]"
-	while read c1 leftovers; do
-		echo ${VARNAME}${c1}
-	done < ${!VAR_SAMPLE_FILE}
-done'
-for VARNAME in "${PLATE[@]}"; do
-	VAR_SAMPLE_FILE="${VARNAME}[3]"
-	while read c1 leftovers; do
-		echo ${VARNAME}${c1}
-	done < ${!VAR_SAMPLE_FILE}
-done
-echo "------ /DEBUG Sample list ------"
-
 echo "------ Extract .gz ------"
 if [ ! -f ${PID}.extraction.ok ]; then
 	echo "$SCALL $SPARAM $SRENAME ${PID}_Extraction -e Extraction.e -o Extraction.o ${SDIR}/Gz_extraction.sh $ARG"
@@ -185,7 +168,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 				cat ${sampleId}/${sampleId}_${PID}_R1.fastq.split.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
 				cat ${sampleId}/${sampleId}_${PID}_R2.fastq.split.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
 				cat ${sampleId}/${sampleId}_${PID}_R0.fastq.split.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
-				#rm -r ${sampleId}
+				rm -r ${sampleId}
 			done
 			touch ${PID}.Substraction-Deinterlacing.ok
 		else
