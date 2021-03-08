@@ -1,5 +1,5 @@
 # NearVANA
-Analyze Illumina pair-end sequencing data and identify virus sequence (blastN &amp; BlastX)
+Analyze Illumina sequencing data and identify virus sequence (using BlastN, BlastX or Diamond)
 
 # Installation
 - Clone git repository
@@ -7,11 +7,36 @@ Analyze Illumina pair-end sequencing data and identify virus sequence (blastN &a
 conda env create --name NearVANA-env --file NearVANA-env.spec-file.txt
 (<NearVANA-env> can be replaced by any name)
 
-# Prerequisite I - Cluster conf file
+# To do only once I - Taxonomy and definition file
+NearVANA need some files from NCBI to determine the taxonomy of a hit. This files are named :
+- fullnamelineage.dmp
+- nucl_gb.accession2taxid
+- prot.accession2taxid
+
+They are avalaible on the NCBI ftp. There is a git programm that automatize their download (https://github.com/ayantoine/NCBI-ViralTaxo)
+
+In addition, NearVANA need to acces two file that contains hit definitions.
+- NuclAccId2Def.tsv
+- ProtAccId2Def.tsv
+
+These file can be empty at begining, they will be completed progressively among analyses.
+
+
+# To do only once II - Cluster conf file
 Cluster conffile contains data to launch job on your cluster. The file must contains the following informations
+
+SDIR : NearVANA script directory
+NUCACC: Path to nucl_gb.accession2taxid
+NUCDEF: Path to to file with definition for nuc
+PROACC: Path to prot.accession2taxid
+PRODEF: Path to to file with definition for prot
+DBLINEAGE: Path to fullnamelineage.dmp
+VIRMINLEN: Path to ViralFamily2MinLen.tsv #cf Prerequisite III
 
 SCALL : keyword to launch a job
 SPARAM : list of param to add to a job
+MULTICPU : Number of CPU for parallelized task
+MULTIMEMORY : Quantity of memory for biggest task
 STASKARRAY : keyword to define a array of task
 SMAXTASK : keyword to define the maximum amount of parallele task during a task array
 SRENAME : keyword to rename a job
@@ -26,87 +51,91 @@ VIRNTDB : path to the blast viral database nucleotidic
 ALLNTDB : path to the blast database nucelotidic
 VIRPTDB : path to the blast viral database proteic
 ALLPTDB : path to the blast database proteic
+VIRPTDB_DIAMOND : path to the diamond viral database proteic
+ALLPTDB_DIAMOND : path to the diamond database proteic
 
-Below is an exemple of Cluster conf file for an SGE cluster. Beware of the space after value of STASKARRAY and SMAXTASK.
+Below is an exemple of Cluster keyword for an SGE cluster. Beware of the space after value of STASKARRAY and SMAXTASK.
 SCALL=qsub
 SPARAM=-q\ long.q\ -V
 STASKARRAY=-t\ 
 SMAXTASK=\ -tc\ 
 SRENAME=-N
 
-SMAXSIMJOB=75
-SMAXARRAYSIZE=0
-
 STASKID=$SGE_TASK_ID
 SPSEUDOTASKID=\$TASK_ID
 
-VIRNTDB=/work/BANK/biomaj/nt_vir/current/blast/nt_vir
-ALLNTDB=/work/BANK/biomaj/nt/current/flat/nt
-VIRPTDB=/work/BANK/biomaj/nr_vir/current/blast/nr_vir
-ALLPTDB=/work/BANK/biomaj/nr/current/flat/nr
+Below is an exemple of Cluster keyword for an SLURM cluster.
+SCALL=sbatch
+SPARAM="--cpus-per-task=1 --mem=25G"
+STASKARRAY="--array="
+SMAXTASK=%
+SRENAME=--job-name
 
-# Prerequisite II - Taxonomy and definition file
-NearVANA need some files from NCBI to determine the taxonomy of a hit. This files are named :
-- fullnamelineage.dmp
-- nucl_gb.accession2taxid
-- prot.accession2taxid
+STASKID=$SLURM_ARRAY_TASK_ID
+SPSEUDOTASKID=%a
 
-They are avalaible on the NCBI ftp. There is a git programm that automatize their download (https://github.com/ayantoine/NCBI-ViralTaxo)
 
-In addition, NearVANA need to acces two file that contains hit definitions.
-- NuclAccId2Def.tsv
-- ProtAccId2Def.tsv
-
-These file can be empty at begining, they will be completed progressively among analyses.
-
-# Prerequisite III - Reference size for family virus
+# To do only once III - Reference size for family virus
 NearVANA compare contigs size to reference genome to help users to determine interesting fragment. The file must lead the following organization:
 
 Famility MinSize
 
 Data are facultative but, even empty, the file must exist.
 
-# Prerequisite IV - TINAP conf file
+# To do for each analysis IV - Analysis arg file
 NearVANA conffile contains data that are specific for 1 analysis. The file must contains the following informations
 
 #Warning! Do not change variable name
 #Project id
 PID=
-#R1.fastq.gz
-R1=
-#R2.fastq.gz
-R2=
+#Data file
+DATA=
 #Adaptator file
 ADAP=
-#Dodeca file
-DODE=
-#Metadata file
-META=
+
+#Pair-end input (TRUE for pair-end, FALSE for mono fastq) [beware of uppercase!]
+PAIREND=
+#Metada (TRUE for multiplex, FALSE without multiplex (RNAseq)) [beware of uppercase!]
+METADATA=
+#Multiplex (TRUE for multiplex, FALSE without multiplex (RNAseq)) [beware of uppercase!]
+MULTIPLEX=
+#Use unassigned reads into assembly, (TRUE to use unassigned, FALSE to reject unassigned) [beware of uppercase!]
+UNASSIGNED=
+#Use substraction (TRUE to use unassigned, FALSE to reject unassigned) [beware of uppercase!]
+SUBSTRACTION=
 #Substractive library (PhiX)
 SUBS=
-#Script Dir
-SDIR=
-#Path to nucl_gb.accession2taxid
-NUCACC=
-#Path to to file with definition for nuc
-NUCDEF=
-#Path to prot.accession2taxid
-PROACC=
-#Path to to file with definition for prot
-PRODEF=
-#Path to fullnamelineage.dmp
-DBLINEAGE=
-#Path to ViralFamily2MinLen.tsv
-VIRMINLEN=
+
 #Cluster Conffile
 CONF=
 
+#Use BlastX (TRUE/FALSE, beware uppercase)
+BLASTX=
+#Use BlastN (TRUE/FALSE, beware uppercase)
+BLASTN=
+#Use Diamond (TRUE/FALSE, beware uppercase)
+DIAMOND=
+
+# To do for each analysis V - Data file
+NearVANA conffile contains data that are specific for 1 analysis. The file must contains the following informations
+
+#Liste of plateId, between "()", separed by " "
+#Ex: PLATE=(P1 P2 ...)
+PLATE=( P1 )
+#Details of each plateId, defined as plateId=(R1.fq R2.fq metadata.tsv dodeca.tsv)
+#Ex: P1=(R1-001.fq R2-001.fq dodeca-001.tsv metadata-001.tsv)
+#Ex: P2=(R1-002.fq R2-002.fq dodeca-002.tsv metadata-002.tsv)
+#If fastq aren't pair-end, use only one file and specify FALSE for PAIREND value in Arg file
+#If data aren't multiplexed, forget the file and specify FALSE for MULTIPLEX value in Arg file
+#If data haven't metada, forget the file and specify FALSE for METADATA value in Arg file
+#WARNING: very important: the line must begin with the same value as writed in PLATE content
+P1=()
 
 # Prerequisite V - Data files
 1) Sequences files
 Pair of read, in fastq format, in two separate ".gz" archive
 
-2) Metadata file
+2) Metadata file (facultative)
 A tsv file that contains metadata of samples, with columns as following :
 
 PLATE_ID HOST_NAME COORD LOCATION COUNTRY ECO DATE QUANTITY WEIGTH

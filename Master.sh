@@ -12,6 +12,8 @@ function boolean() {
    esac
 }
 
+USE_PAIREND="$(boolean "${PAIREND}")"
+USE_METADATA="$(boolean "${METADATA}")"
 USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
 USE_KEEPUNASSIGNED="$(boolean "${UNASSIGNED}")"
 USE_SUBSTRACTION="$(boolean "${SUBSTRACTION}")"
@@ -37,10 +39,19 @@ done
 echo "All referenced files in $ARG exists"
 echo "------ check data"
 source $DATA
+NB_ITEM=1
+ID_R1=0
+if [ "$USE_PAIREND" = true ] ; then
+	ID_R2=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
 if [ "$USE_MULTIPLEX" = true ] ; then
-	NB_ITEM=4
-else
-	NB_ITEM=2
+	ID_DODE=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+if [ "$USE_METADATA" = true ] ; then
+	ID_META=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
 fi
 
 for VARNAME in "${PLATE[@]}"; do
@@ -56,7 +67,7 @@ for VARNAME in "${PLATE[@]}"; do
 			fi
 		done
 	else
-		echo "With option MULTIPLEX set to $MULTIPLEX, $p must contains $NB_ITEM elements"
+		echo "With option MULTIPLEX set to $MULTIPLEX and PAIREND set to $PAIREND, $p must contains $NB_ITEM elements"
 		exit 1
 	fi
 done
@@ -65,7 +76,7 @@ echo "------ /Check Input existence ------"
 
 echo "------ Show variable value ------"
 echo "> Args details"
-List_NONFILE=(PID DATA MULTIPLEX UNASSIGNED SUBSTRACTION BLASTN BLASTX DIAMOND ADAP SUBS NUCACC NUCDEF PROACC PRODEF DBLINEAGE VIRMINLEN CONF)
+List_NONFILE=(PID DATA ADAP PAIREND METADATA MULTIPLEX UNASSIGNED SUBSTRACTION SUBS CONF BLASTX BLASTN DIAMOND)
 for i in "${List_NONFILE[@]}"; do
 	echo "$i: ${!i}"
 done
@@ -73,7 +84,7 @@ done
 echo
 echo '> Conf details (/!\ beware bash interpretation for STASKID)'
 source $CONF
-LIST_PARAM=(SCALL SPARAM MULTICPU MULTIMEMORY SPARAM_MULTICPU STASKARRAY SMAXTASK SRENAME SMAXSIMJOB SMAXARRAYSIZE STASKID SPSEUDOTASKID VIRPTDB ALLPTDB VIRNTDB ALLNTDB VIRPTDB_DIAMOND ALLPTDB_DIAMOND)
+LIST_PARAM=(SDIR NUCACC NUCDEF PROACC PRODEF DBLINEAGE VIRMINLEN SCALL SPARAM MULTICPU MULTIMEMORY SPARAM_MULTICPU STASKARRAY SMAXTASK SRENAME SMAXSIMJOB SMAXARRAYSIZE STASKID SPSEUDOTASKID VIRNTDB ALLNTDB  VIRPTDB ALLPTDB VIRPTDB_DIAMOND ALLPTDB_DIAMOND)
 for i in "${LIST_PARAM[@]}"; do
 	echo "$i: ${!i}"
 done
@@ -82,7 +93,7 @@ echo "------ /Show variable value ------"
 echo "------ Get Sample list ------"
 declare -a SAMPLE_LIST
 for VARNAME in "${PLATE[@]}"; do
-	VAR_SAMPLE_FILE="${VARNAME}[3]"
+	VAR_SAMPLE_FILE="${VARNAME}[$ID_DODE]"
 	while read c1 leftovers; do
 		SAMPLE_LIST+=(${VARNAME}${c1})
 	done < ${!VAR_SAMPLE_FILE}
@@ -129,10 +140,12 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 				$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_${VARNAME}_R1_SplitReads.e -o Run_${VARNAME}_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R1.fastq 1 ${VARNAME}
 				while [ ! -e ${PID}_${VARNAME}_R1.fastq.split.ok ]; do sleep 60 ; done
 				rm ${PID}_${VARNAME}_R1.fastq
-				echo "$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}"
-				$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}
-				while [ ! -e ${PID}_${VARNAME}_R2.fastq.split.ok ]; do sleep 60 ; done
-				rm ${PID}_${VARNAME}_R2.fastq
+				if [ "$USE_PAIREND" = true ] ; then
+					echo "$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}"
+					$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}
+					while [ ! -e ${PID}_${VARNAME}_R2.fastq.split.ok ]; do sleep 60 ; done
+					rm ${PID}_${VARNAME}_R2.fastq
+				fi
 			done
 			touch ${PID}.SplitReads.ok
 		else

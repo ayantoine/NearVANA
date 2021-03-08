@@ -15,12 +15,30 @@ source $ARG
 source $CONF
 source $DATA
 
+USE_PAIREND="$(boolean "${PAIREND}")"
+USE_METADATA="$(boolean "${METADATA}")"
+USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
 USE_KEEPUNASSIGNED="$(boolean "${UNASSIGNED}")"
+
+NB_ITEM=1
+ID_R1=0
+if [ "$USE_PAIREND" = true ] ; then
+	ID_R2=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+if [ "$USE_MULTIPLEX" = true ] ; then
+	ID_DODE=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+if [ "$USE_METADATA" = true ] ; then
+	ID_META=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
 
 echo "------ Get Subsample list ------"
 declare -a SAMPLE_LIST
 for VARNAME in "${PLATE[@]}"; do
-	VAR_SAMPLE_FILE="${VARNAME}[3]"
+	VAR_SAMPLE_FILE="${VARNAME}[$ID_DODE]"
 	#echo "${!VAR_SAMPLE_FILE}"
 	while read c1 leftovers; do
 		SAMPLE_LIST+=(${VARNAME}${c1})
@@ -44,9 +62,15 @@ echo "------ /Get adaptors ------"
 echo "------ Trim adaptors ------"
 if [ "$USE_KEEPUNASSIGNED" = true ] ; then
     cutadapt --core=${MULTICPU} -a $adapter1 -q 30 -O $((${#adapter1}*85/100)) -m 15 -j 0 -o ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split.trim ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split
-    cutadapt --core=${MULTICPU} -a $adapter2 -q 30 -O $((${#adapter1}*85/100)) -m 15 -j 0 -o ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split.trim ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split
+    if [ "$USE_PAIREND" = true ] ; then
+	cutadapt --core=${MULTICPU} -a $adapter2 -q 30 -O $((${#adapter1}*85/100)) -m 15 -j 0 -o ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split.trim ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split
+    fi
 else
-    cutadapt --core=${MULTICPU} -a $adapter1 -A $adapter2 -q 30 -O $((${#adapter1}*85/100)) -m 15 -j 0 -o ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split.trim -p ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split.trim ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split
+    if [ "$USE_PAIREND" = true ] ; then
+	cutadapt --core=${MULTICPU} -a $adapter1 -A $adapter2 -q 30 -O $((${#adapter1}*85/100)) -m 15 -j 0 -o ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split.trim -p ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split.trim ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split
+    else
+	cutadapt --core=${MULTICPU} -a $adapter1 -q 30 -O $((${#adapter1}*85/100)) -m 15 -j 0 -o ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split.trim ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split
+    fi
 fi
 echo "------ /Trim adaptors ------"
 

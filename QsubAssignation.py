@@ -6,7 +6,7 @@ import time
 from optparse import OptionParser
 import os
 
-sCurrentVersionScript="v3"
+sCurrentVersionScript="v4"
 iTime1=time.time()
 ########################################################################
 '''
@@ -30,7 +30,7 @@ OUTPUT: Script ready to use
 #CONSTANT
 BASHSCRIPT="LaunchAssignation.sh"
 
-DEFAULT_SEQ_BY_TASK=1000000 #Must be similar in MakeAssignation.py
+DEFAULT_SEQ_BY_TASK=1000000
 
 CONF_COMMENT="#"
 CONF_STEP="="
@@ -88,10 +88,6 @@ if not sQuantity:
 	exit("Error : no quantity -q defined, process broken")
 try:
 	iQuantity=int(sQuantity)
-	# if iQuantity%SEQ_BY_TASK==0:
-		# iQuantity=iQuantity/SEQ_BY_TASK
-	# else:
-		# iQuantity=int(round(iQuantity/SEQ_BY_TASK,0))+1
 except ValueError:
 	exit("Error : quantity -q must be an integer, process broken")
 

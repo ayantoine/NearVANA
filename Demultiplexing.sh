@@ -15,12 +15,34 @@ source $ARG
 source $CONF
 source $DATA
 
+USE_PAIREND="$(boolean "${PAIREND}")"
+USE_METADATA="$(boolean "${METADATA}")"
+USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
 USE_KEEPUNASSIGNED="$(boolean "${UNASSIGNED}")"
 
+NB_ITEM=1
+ID_R1=0
+if [ "$USE_PAIREND" = true ] ; then
+	ID_R2=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+if [ "$USE_MULTIPLEX" = true ] ; then
+	ID_DODE=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+if [ "$USE_METADATA" = true ] ; then
+	ID_META=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+
 for VARNAME in "${PLATE[@]}"; do
-	VAR_R1_FILE="${VARNAME}[0]"
-	VAR_R2_FILE="${VARNAME}[1]"
-	VAR_DODE="${VARNAME}[3]"
+	VAR_R1_FILE="${VARNAME}[$ID_R1]"
+	TARGET_FILES=${!VAR_R1_FILE}
+	if [ "$USE_PAIREND" = true ] ; then
+		VAR_R2_FILE="${VARNAME}[$ID_R2]"
+		TARGET_FILES+=" and "+${!VAR_R2_FILE}
+	fi
+	VAR_DODE="${VARNAME}[$ID_DODE]"
 	
 	echo "------ Create Kmer library ------"
 	echo "python ${SDIR}/CreateKmerList.py -m ${!VAR_DODE} -o ${!VAR_DODE}.kmer.tsv -v ${VARNAME}"
@@ -68,7 +90,7 @@ for VARNAME in "${PLATE[@]}"; do
 	
 	echo "------ Bilan ------"
 	wc -l ${PID}_${VARNAME}_Hyper_Identified.tsv ${PID}_${VARNAME}_Hypo_2_Identified.tsv ${PID}_${VARNAME}_Ambiguous_2.tsv ${PID}_${VARNAME}_Unidentified.tsv ${PID}_${VARNAME}_Demultiplexing_Hyper.tsv | head -n -1
-	echo $(expr $(cat ${PID}_${VARNAME}_R1.fastq ${PID}_${VARNAME}_R1.fastq | wc -l | cut -d " " -f1) / 4 )" sequences in "${!VAR_R1_FILE}" and "${!VAR_R2_FILE}
+	echo $(expr $(cat ${PID}_${VARNAME}_R1.fastq ${PID}_${VARNAME}_R1.fastq | wc -l | cut -d " " -f1) / 4 )" sequences in "${TARGET_FILES}
 	echo "------ /Bilan ------"
 
 	echo "------ Store supplementary data ------"

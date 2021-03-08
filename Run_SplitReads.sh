@@ -15,11 +15,30 @@ source $ARG
 source $CONF
 source $DATA
 
+USE_PAIREND="$(boolean "${PAIREND}")"
+USE_METADATA="$(boolean "${METADATA}")"
+USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
+USE_KEEPUNASSIGNED="$(boolean "${UNASSIGNED}")"
+
+NB_ITEM=1
+ID_R1=0
+if [ "$USE_PAIREND" = true ] ; then
+	ID_R2=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+if [ "$USE_MULTIPLEX" = true ] ; then
+	ID_DODE=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+if [ "$USE_METADATA" = true ] ; then
+	ID_META=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+
 FASTQ=$2
 PAIR=$3
 VARNAME=$4
-VAR_DODE="${VARNAME}[3]"
-USE_KEEPUNASSIGNED="$(boolean "${UNASSIGNED}")"
+VAR_DODE="${VARNAME}[$ID_DODE]"
 
 echo "------ Launch SplitReads array ------"
 nb_jobs=$(cut -f1 ${!VAR_DODE} | wc -l)

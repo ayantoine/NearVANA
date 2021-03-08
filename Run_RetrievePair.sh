@@ -15,12 +15,30 @@ source $ARG
 source $CONF
 source $DATA
 
+USE_PAIREND="$(boolean "${PAIREND}")"
+USE_METADATA="$(boolean "${METADATA}")"
+USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
 USE_KEEPUNASSIGNED="$(boolean "${UNASSIGNED}")"
+
+NB_ITEM=1
+ID_R1=0
+if [ "$USE_PAIREND" = true ] ; then
+	ID_R2=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+if [ "$USE_MULTIPLEX" = true ] ; then
+	ID_DODE=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+if [ "$USE_METADATA" = true ] ; then
+	ID_META=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
 
 echo "------ Get Subsample list ------"
 declare -a SAMPLE_LIST
 for VARNAME in "${PLATE[@]}"; do
-	VAR_SAMPLE_FILE="${VARNAME}[3]"
+	VAR_SAMPLE_FILE="${VARNAME}[$ID_DODE]"
 	#echo "${!VAR_SAMPLE_FILE}"
 	while read c1 leftovers; do
 		SAMPLE_LIST+=(${VARNAME}${c1})

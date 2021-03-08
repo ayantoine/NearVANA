@@ -6,7 +6,7 @@ import time
 from optparse import OptionParser
 import codecs
 
-sCurrentVersionScript="v3"
+sCurrentVersionScript="v4"
 iTime1=time.time()
 ########################################################################
 '''
@@ -67,16 +67,27 @@ parser.add_option("-i","--index", dest="index")
 parser.add_option("-q","--quantity", dest="quantity")
 parser.add_option("-c","--conffile", dest="conffile")
 parser.add_option("-v","--varname", dest="varname")
+parser.add_option("-p","--pairend", dest="pairend")
 
 (options, args) = parser.parse_args()
+
+sPairEnd=options.pairend
+if not sPairEnd:
+	exit("Error : no pairend -p defined, process broken")
+try:
+	iPairEnd=int(sPairEnd)
+except ValueError:
+	exit("Error : pairend -p must be an integer, process broken")
+bPairEnd=bool(sPairEnd)
 
 sFastq1=options.fastq1
 if not sFastq1:
 	exit("Error : no fastq1 -1 defined, process broken")
 
-sFastq2=options.fastq2
-if not sFastq2:
-	exit("Error : no fastq2 -2 defined, process broken")
+if bPairEnd:
+	sFastq2=options.fastq2
+	if not sFastq2:
+		exit("Error : no fastq2 -2 defined, process broken")
 
 sKmerList=options.kmerlist
 if not sKmerList:
@@ -114,6 +125,7 @@ if not sConf:
 sVarName=options.varname
 if not sVarName:
 	exit("Error : no varname -v defined, process broken")
+
 
 sHyperName=sWorkDir+"/"+str(iIndex)+"_"+HYPER_SUFFIX
 sHypo1Name=sWorkDir+"/"+str(iIndex)+"_"+HYPO1_SUFFIX
@@ -271,6 +283,27 @@ def ProcessFastq2(dKmer,dEndIndex,sFastq,dSeq1,iIndex,iJobByTask):
 	AMBIGUOUS2PATH.close()
 	UNIDENTIFIEDPATH.close()
 
+def FinishFastq1(dSeq1):
+	HYPERPATH=open(sHyperName,"w")
+	HYP01PATH=open(sHypo1Name,"w")
+	HYP02PATH=open(sHypo2Name,"w")
+	AMBIGUOUS1PATH=open(sAmbiguous1Name,"w")
+	AMBIGUOUS2PATH=open(sAmbiguous2Name,"w")
+	UNIDENTIFIEDPATH=open(sUnidentifiedName,"w")
+	
+	for sKey in dSeq1:
+		if dSeq1[sKey]["SAMPLE"]==SAMPLENONE:
+			UNIDENTIFIEDPATH.write(sKey+" "+dSeq1[sKey]["SUFFIX"]+"\t"+dSeq1[sKey]["SAMPLE"]+"\t"+dSeq1[sKey]["END"]+"\n")
+		else:
+			HYPERPATH.write(sKey+" "+dSeq1[sKey]["SUFFIX"]+"\t"+dSeq1[sKey]["SAMPLE"]+"\t"+dSeq1[sKey]["END"]+"\n")
+	
+	HYPERPATH.close()
+	HYP01PATH.close()
+	HYP02PATH.close()
+	AMBIGUOUS1PATH.close()
+	AMBIGUOUS2PATH.close()
+	UNIDENTIFIEDPATH.close()
+
 def CreateTag(sName):
 	FILE=open(sName,"w")
 	FILE.close()
@@ -289,24 +322,16 @@ def LoadConfFile(sPath):
 		tLine=sLine.split(CONF_STEP)
 		dDict[tLine[0]]=CONF_STEP.join(tLine[1:])
 	return dDict	
-
-# def GetJobByTask(iSeq,iTask):
-	# if iTask==0:
-		# return DEFAULT_SEQ_BY_TASK
-	# if iSeq%iTask==0:
-		# iResult=iSeq/iTask
-	# else:
-		# iResult=int(round(iSeq/iTask,0))+1
-	# return iResult
 		
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	# dConf=LoadConfFile(sConf)
-	# iJobByTask=GetJobByTask(iQuantity,int(dConf[KEYCONF_SMAXARRAYSIZE]))
 	dKmerRef, dKmerEndIndex=LoadKmerFile(sKmerList)
 	dSeqId2Sample=ProcessFastq1(dKmerRef,dKmerEndIndex,sFastq1,iIndex,iQuantity)
-	ProcessFastq2(dKmerRef,dKmerEndIndex,sFastq2,dSeqId2Sample,iIndex,iQuantity)
+	if bPairEnd:
+		ProcessFastq2(dKmerRef,dKmerEndIndex,sFastq2,dSeqId2Sample,iIndex,iQuantity)
+	else:
+		FinishFastq1(dSeqId2Sample)
 	CreateTag(sTagFile)
 
 ########################################################################    
