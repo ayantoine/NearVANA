@@ -55,6 +55,9 @@ KEYCONF_SMAXSIMJOB="SMAXSIMJOB"
 KEYCONF_SMAXARRAYSIZE="SMAXARRAYSIZE"
 KEYCONF_STASKID="STASKID"
 KEYCONF_SPSEUDOTASKID="SPSEUDOTASKID"
+
+TRUE="True"
+FALSE="False"
 ########################################################################
 #Options
 parser = OptionParser()
@@ -74,11 +77,12 @@ parser.add_option("-p","--pairend", dest="pairend")
 sPairEnd=options.pairend
 if not sPairEnd:
 	exit("Error : no pairend -p defined, process broken")
-try:
-	iPairEnd=int(sPairEnd)
-except ValueError:
-	exit("Error : pairend -p must be an integer, process broken")
-bPairEnd=bool(sPairEnd)
+if sPairEnd==TRUE:
+	bPairEnd=True
+elif sPairEnd==FALSE:
+	bPairEnd=False
+else:
+	exit("Error : pairend -p must be True or False (case sensitive), process broken")
 
 sFastq1=options.fastq1
 if not sFastq1:
