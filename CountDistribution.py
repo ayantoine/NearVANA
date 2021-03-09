@@ -53,11 +53,17 @@ def CountQuantity(sPath):
 
 def WriteDistribution(dDict,sPath):
 	FILE=open(sPath,'w')
-	FILE.write(DEFAULT+"\t"+str(dDict[DEFAULT])+"\n")
+	try:
+		FILE.write(DEFAULT+"\t"+str(dDict[DEFAULT])+"\n")
+	except KeyError:
+		FILE.write(DEFAULT+"\t0\n")
 	for sKey in sorted(dDict):
 		if sKey==DEFAULT:
 			continue
-		FILE.write(sKey+"\t"+str(dDict[sKey])+"\n")
+		try:
+			FILE.write(sKey+"\t"+str(dDict[sKey])+"\n")
+		except KeyError:
+			FILE.write(sKey+"\t0\n")
 	FILE.close()
 
 ########################################################################
