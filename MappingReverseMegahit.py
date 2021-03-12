@@ -10,9 +10,11 @@ sCurrentVersionScript="v3"
 iTime1=time.time()
 ########################################################################
 '''
+V5-2021/03/12
+Too much data stored for non-paired data. Try another way.
+
 V4-2020/11/02
 Previous version too much long. Try another way, ligther AND faster
-
 V3-2020/10/28
 RNAseq data use too much memory. Need a lighter version
 V2-2020/10/09
@@ -182,8 +184,6 @@ def ParseSamfile(sPath):
 			print("Reading line "+str(iLineCounter)+"...\t"+str(iDelta))
 			print("\tiMappingLine:{}\tiUnmapped:{}\tiAmbigous:{}".format(iMappingLine,iUnmapped,iAmbigous))
 			iTimeStart=time.time()
-			bExampleNoMapping=True
-			bExampleAmbigous=True
 
 		if sNewLine[0]==REJECT_TAG:
 			continue	
