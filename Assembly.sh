@@ -20,24 +20,25 @@ else
 	bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -S reads2contigs.sam
 fi
 rm *.bt2
+
 echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}"
-python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}
-echo "------ /Megahit reverse-mapping ------"
+#python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}
+#echo "------ /Megahit reverse-mapping ------"
 
-rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
+#rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
 
-echo "------ Compress Corrected.fastq ------"
-gzip -f ${PID}_R0.Substracted.fastq > ${PID}_R0.Substracted.fastq.gz
-gzip -f ${PID}_R1.Substracted.fastq > ${PID}_R1.Substracted.fastq.gz
-gzip -f ${PID}_R2.Substracted.fastq > ${PID}_R2.Substracted.fastq.gz
-echo "------ /Compress Corrected.fastq ------"
+#echo "------ Compress Corrected.fastq ------"
+#gzip -f ${PID}_R0.Substracted.fastq > ${PID}_R0.Substracted.fastq.gz
+#gzip -f ${PID}_R1.Substracted.fastq > ${PID}_R1.Substracted.fastq.gz
+#gzip -f ${PID}_R2.Substracted.fastq > ${PID}_R2.Substracted.fastq.gz
+#echo "------ /Compress Corrected.fastq ------"
 
-echo "------ Merge Assembly ------"
-mv ${PID}_All.Megahit_contigs.fa ${PID}_All.fa
-echo "------ /Merge Assembly ------"
+#echo "------ Merge Assembly ------"
+#mv ${PID}_All.Megahit_contigs.fa ${PID}_All.fa
+#echo "------ /Merge Assembly ------"
 
-touch ${PID}.Assembly.ok
+#touch ${PID}.Assembly.ok
 
-datetime2=$(date +%s)
-delta=$((datetime2 - datetime1))
-echo "Time Assembly: "$delta > Time07.txt
+#datetime2=$(date +%s)
+#delta=$((datetime2 - datetime1))
+#echo "Time Assembly: "$delta > Time07.txt
