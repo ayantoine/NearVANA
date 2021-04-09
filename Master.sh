@@ -20,6 +20,7 @@ USE_SUBSTRACTION="$(boolean "${SUBSTRACTION}")"
 BLASTN="$(boolean "${BLASTN}")"
 BLASTX="$(boolean "${BLASTX}")"
 DIAMOND="$(boolean "${DIAMOND}")"
+PREFILTER="$(boolean "${PREFILTER}")"
 
 echo "------ Check Input existence ------"
 if [ ! -d $SDIR ] ; then
@@ -76,7 +77,7 @@ echo "------ /Check Input existence ------"
 
 echo "------ Show variable value ------"
 echo "> Args details"
-List_NONFILE=(PID DATA ADAP PAIREND METADATA MULTIPLEX UNASSIGNED SUBSTRACTION SUBS CONF BLASTX BLASTN DIAMOND)
+List_NONFILE=(PID DATA ADAP PAIREND METADATA MULTIPLEX UNASSIGNED SUBSTRACTION SUBS CONF BLASTX BLASTN DIAMOND PREFILTER)
 for i in "${List_NONFILE[@]}"; do
 	echo "$i: ${!i}"
 done
