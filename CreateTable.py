@@ -147,7 +147,7 @@ def LoadData(sFile):
 		sPlateId=tLine[0]
 		sListOfData=tLine[1].replace(OPEN_PARENTHESIS,EMPTY).replace(CLOSE_PARENTHESIS,EMPTY)
 		tListOfData=sListOfData.split(SPACE)
-		sMeta=tListOfData[2]
+		sMeta=tListOfData[-1]
 		dDict[sPlateId]=sMeta
 	return dDict
 
@@ -162,7 +162,7 @@ def LoadMetadata(dData):
 			if len(sLine)==0:
 				continue
 			tLine=sLine.split("\t")
-			
+						
 			sHost=DEFAULT
 			if tLine[META_HOSTCOL]!="":
 				sHost=tLine[META_HOSTCOL]
