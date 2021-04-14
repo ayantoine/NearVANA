@@ -30,6 +30,7 @@ if [ ! -f Diamond_Ok/${STASKID}_Diamond.ok ]; then
         echo "------ /Complete database blast ------"
     else
         echo "------ Complete database diamond ------"
+        touch ${PID}"_Blast${TASK}"/${PID}_All.fa.${STASKID}.Blast${TASK}_1.tab
         echo "diamond blastx --frameshift 15 -d ${ALLPTDB_DIAMOND} -q ${PID}"_ToBlast"/${PID}_All.fa.${STASKID} -o ${PID}"_BlastD"/${PID}_All.fa.${STASKID}.Diamond_2.tab -p ${MULTICPU} --max-target-seqs 5 --max-hsps 1 --evalue 0.001 --block-size $((${MULTIMEMORY}/6))"
         diamond blastx --frameshift 15 -d ${ALLPTDB_DIAMOND} -q ${PID}"_ToBlast"/${PID}_All.fa.${STASKID} -o ${PID}"_BlastD"/${PID}_All.fa.${STASKID}.Diamond_2.tab -p ${MULTICPU} --max-target-seqs 5 --max-hsps 1 --evalue 0.001 --block-size $((${MULTIMEMORY}/6))
         echo "------ /Complete database blast ------"

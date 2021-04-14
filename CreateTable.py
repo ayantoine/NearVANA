@@ -9,9 +9,11 @@ sCurrentVersionScript="v1"
 iTime1=time.time()
 ########################################################################
 '''
+V3-2021/04/12
+Fix: No more able to catch metadata file
+
 V2-2020/02/14
 Adapt to Diamond and Demultiplexing
-
 V1-2019/11/06
 Create tsv bilan from Blast data
 
