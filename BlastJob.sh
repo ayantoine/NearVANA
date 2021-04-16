@@ -48,7 +48,8 @@ if [ ! -f Blast${TASK}_Ok/${STASKID}_Blast${TASK}.ok ]; then
     else
         echo "------ Complete database blast ------"
         touch ${PID}"_Blast${TASK}"/${PID}_All.fa.${STASKID}.Blast${TASK}_1.tab
-        echo "${BLAST} ${BLAST_OPT} -strand both -query ${PID}"_Blast${TASK}"/${PID}_All.fa.${STASKID}.keeped -db ${ALLDB} -evalue 0.001 -max_target_seqs 5 -max_hsps 1 -outfmt 6 -out ${PID}"_Blast${TASK}"/${PID}_All.fa.${STASKID}.Blast${TASK}_2.tab"
+        scp ${PID}"_ToBlast"/${PID}_All.fa.${STASKID} ${PID}"_Blast${TASK}"/${PID}_All.fa.${STASKID}.keeped
+        echo "${BLAST} ${BLAST_OPT} -strand both -query ${PID}"_ToBlast"/${PID}_All.fa.${STASKID} -db ${ALLDB} -evalue 0.001 -max_target_seqs 5 -max_hsps 1 -outfmt 6 -out ${PID}"_Blast${TASK}"/${PID}_All.fa.${STASKID}.Blast${TASK}_2.tab"
         ${BLAST} ${BLAST_OPT} -strand both -query ${PID}"_ToBlast"/${PID}_All.fa.${STASKID} -db ${ALLDB} -evalue 0.001 -max_target_seqs 5 -max_hsps 1 -outfmt 6 -out ${PID}"_Blast${TASK}"/${PID}_All.fa.${STASKID}.Blast${TASK}_2.tab
         echo "------ /Complete database blast ------"
     fi
