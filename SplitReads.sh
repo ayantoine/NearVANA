@@ -41,13 +41,10 @@ fi
 
 echo "------ Get Subsample list ------"
 declare -a SAMPLE_LIST
-for VARNAME in "${PLATE[@]}"; do
-	VAR_SAMPLE_FILE="${VARNAME}[$ID_DODE]"
-	#echo "${!VAR_SAMPLE_FILE}"
-	while read c1 leftovers; do
-		SAMPLE_LIST+=(${VARNAME}${c1})
-	done < ${!VAR_SAMPLE_FILE}
-done
+VAR_SAMPLE_FILE="${VARNAME}[$ID_DODE]"
+while read c1 leftovers; do
+	SAMPLE_LIST+=(${VARNAME}${c1})
+done < ${!VAR_SAMPLE_FILE}
 if [ "$USE_KEEPUNASSIGNED" = true ] ; then
 	SAMPLE_LIST+=("UnassignedReads")
 fi
