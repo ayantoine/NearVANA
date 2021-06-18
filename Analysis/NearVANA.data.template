@@ -1,0 +1,8 @@
+#Liste of plateId, between "()", separed by ","
+#Ex: PLATE=(P1 P2 ...) #all item are separated by " "
+PLATE=
+#Details of each plateId, defined as plateId=(R1.fq R2.fq metadata.tsv dodeca.tsv)
+#Ex: P1=(R1-001.fq R2-001.fq metadata-001.tsv dodeca-001.tsv)
+#Ex: P2=(R1-002.fq R2-002.fq metadata-002.tsv dodeca-002.tsv)
+#WARNING: very important: the line must begin with the same value as writed in PLATE content
+
