@@ -22,14 +22,6 @@ BLASTX="$(boolean "${BLASTX}")"
 DIAMOND="$(boolean "${DIAMOND}")"
 PREFILTER="$(boolean "${PREFILTER}")"
 
-#SELF_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-SDIR=${GITDIR}/Analysis
-
-echo "------ Check Input existence ------"
-if [ ! -d $SDIR ] ; then
-	echo "Directory SDIR ${SDIR} does not exists"
-	exit 1
-fi
 LIST_FILE=($DATA $ADAP $NUCACC $NUCDEF $PROACC $PRODEF $DBLINEAGE $VIRMINLEN $CONF)
 if [ "$USE_SUBSTRACTION" = true ] ; then
 	LIST_FILE+=($SUBS)
@@ -88,6 +80,15 @@ done
 echo
 echo '> Conf details (/!\ beware bash interpretation for STASKID)'
 source $CONF
+
+SDIR=${GITDIR}/Analysis
+
+echo "------ Check Input existence ------"
+if [ ! -d $SDIR ] ; then
+	echo "Directory SDIR ${SDIR} does not exists"
+	exit 1
+fi
+
 LIST_PARAM=(NUCACC NUCDEF PROACC PRODEF DBLINEAGE VIRMINLEN SCALL SPARAM MULTICPU MULTIMEMORY SPARAM_MULTICPU STASKARRAY SMAXTASK SRENAME SMAXSIMJOB SMAXARRAYSIZE STASKID SPSEUDOTASKID VIRNTDB ALLNTDB  VIRPTDB ALLPTDB VIRPTDB_DIAMOND ALLPTDB_DIAMOND)
 for i in "${LIST_PARAM[@]}"; do
 	echo "$i: ${!i}"
