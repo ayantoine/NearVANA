@@ -23,7 +23,7 @@ DIAMOND="$(boolean "${DIAMOND}")"
 PREFILTER="$(boolean "${PREFILTER}")"
 
 SELF_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-SDIR=SELF_SCRIPT_DIR/Analysis
+SDIR=${SELF_SCRIPT_DIR}/Analysis
 
 echo "------ Check Input existence ------"
 if [ ! -d $SDIR ] ; then
