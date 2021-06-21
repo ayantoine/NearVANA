@@ -22,8 +22,8 @@ BLASTX="$(boolean "${BLASTX}")"
 DIAMOND="$(boolean "${DIAMOND}")"
 PREFILTER="$(boolean "${PREFILTER}")"
 
-SELF_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-SDIR=${SELF_SCRIPT_DIR}/Analysis
+#SELF_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SDIR=${GITDIR}/Analysis
 
 echo "------ Check Input existence ------"
 if [ ! -d $SDIR ] ; then
