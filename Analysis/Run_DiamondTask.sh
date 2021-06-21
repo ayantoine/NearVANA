@@ -3,9 +3,9 @@
 datetime1=$(date +%s)
 
 ARG=$1
-SDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $ARG
 source $CONF
+SDIR=${GITDIR}/Analysis
 
 nb_jobs=$(ls ${PID}_ToBlast | wc -l)
 

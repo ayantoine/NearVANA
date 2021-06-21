@@ -3,10 +3,10 @@
 datetime1=$(date +%s)
 
 ARG=$1
-SDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $ARG
 source $CONF
 source $DATA
+SDIR=${GITDIR}/Analysis
 
 task=$2
 nb_jobs=$3

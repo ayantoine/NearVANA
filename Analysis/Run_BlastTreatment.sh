@@ -1,9 +1,9 @@
 #! /bin/bash
 
 ARG=$1
-SDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $ARG
 source $CONF
+SDIR=${GITDIR}/Analysis
 
 function boolean() {
   case $1 in

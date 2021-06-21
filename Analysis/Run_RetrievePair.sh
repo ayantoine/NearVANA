@@ -11,10 +11,10 @@ function boolean() {
 }
 
 ARG=$1
-SDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $ARG
 source $CONF
 source $DATA
+SDIR=${GITDIR}/Analysis
 
 USE_PAIREND="$(boolean "${PAIREND}")"
 USE_METADATA="$(boolean "${METADATA}")"
