@@ -19,8 +19,8 @@ echo "------ Mapping extraction ------"
 python ${SDIR}/MappingExclusion.py -p ${PID} -i ${PID}"_"${SUBS}"_"${PID}_R1.Unsubstracted.fastq"_"${PID}_R2.Unsubstracted.fastq"_bwt_ete.sam"
 echo "------ /Mapping extraction ------"
 
-rm ${PID}"_"${SUBS}"_"${PID}_R1.Unsubstracted.fastq"_"${PID}_R2.Unsubstracted.fastq"_bwt_ete.sam"
-rm *.bt2
+#rm ${PID}"_"${SUBS}"_"${PID}_R1.Unsubstracted.fastq"_"${PID}_R2.Unsubstracted.fastq"_bwt_ete.sam"
+#rm *.bt2
 
 echo "------ Store data ------"
 gzip -f ${PID}_R0.PhiX.fastq > ${PID}_R0.PhiX.fastq.gz
