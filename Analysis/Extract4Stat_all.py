@@ -1260,15 +1260,17 @@ def GetSampleList(sPath):
         if sLine[0]==DATA_COMMENT_TAG:
             continue
         if DATA_PLATE_TAG in sLine:
-            sContent=re.split(DATA_PARENTHESIS_REGEX,sLine)
+            sPart2=sLine.split(EQUAL)[-1]
+            sContent=EMPTY.join(re.split(DATA_PARENTHESIS_REGEX,sLine))
             tTag=sContent.split(SPACE)
             continue
         for sTag in tTag:
             if sTag in sLine:
-                sContent=re.split(DATA_PARENTHESIS_REGEX,sLine)
+                sPart2=sLine.split(EQUAL)[-1]
+                sContent=EMPTY.join(re.split(DATA_PARENTHESIS_REGEX,sLine))
                 tContent=sContent.split(SPACE)
                 sFile=tContent[-1]
-                dTag2File[sTag,sFile]
+                dTag2File[sTag]=sFile
     tResult=[]
     for sTag in sorted(dTag2File):
         for sNewLine in open(dTag2File[sTag]):
