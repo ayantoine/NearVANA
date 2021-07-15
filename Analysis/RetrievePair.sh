@@ -61,7 +61,7 @@ else
 fi
 echo "python ${SDIR}/RetrievePair.py -i ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split.trim -p ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split.trim"
 python ${SDIR}/RetrievePair.py -i ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split.trim -p ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split.trim
-#rm ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split.trim ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split.trim
+rm ${SAMPLE}/${SAMPLE}_${PID}_R1.fastq.split.trim ${SAMPLE}/${SAMPLE}_${PID}_R2.fastq.split.trim
 echo "------ /Retrieve Pair in sample ------"
 
 touch RetrievePair_Ok/${STASKID}.RetrievePair.ok
