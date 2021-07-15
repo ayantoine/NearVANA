@@ -305,9 +305,11 @@ if [ "$DIAMOND" = true ] ; then
 	while [ ! -e ${PID}.BlastTreatmentD.ok ]; do sleep 60 ; done
 fi
 
-echo "------ Remove ToBlast data------"
-#rm -r ${PID}_ToBlast
-echo "------ /Remove ToBlast data------"
+if [ -d ${PID}_ToBlast ]; then
+	echo "------ Remove ToBlast data------"
+	rm -r ${PID}_ToBlast
+	echo "------ /Remove ToBlast data------"
+fi
 
 echo "------ Produce basic stat------"
 if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
@@ -319,24 +321,27 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 	if [ "$PREFILTER" = true ] ; then
 		if [ "$BLASTD" = true ] ; then
 			if [ ! -f ${PID}.StatBlastD.ok ]; then
-				echo "python ${SDIR}/Extract4Stat.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA}"
-				python ${SDIR}/Extract4Stat.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA}
+				echo "python ${SDIR}/Extract4Stat.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > ${PID}_Stat_BlastD.o"
+				python ${SDIR}/Extract4Stat.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > ${PID}_Stat_BlastD.o
+				touch ${PID}.StatBlastD.ok
 			else
 				echo "${PID}.StatBlastD.ok already existing, pass"
 			fi
 		fi
 		if [ "$BLASTX" = true ] ; then
 			if [ ! -f ${PID}.StatBlastX.ok ]; then
-				echo "python ${SDIR}/Extract4Stat.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA}"
-				python ${SDIR}/Extract4Stat.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA}
+				echo "python ${SDIR}/Extract4Stat.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > ${PID}_Stat_BlastX.o"
+				python ${SDIR}/Extract4Stat.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > ${PID}_Stat_BlastX.o
+				touch ${PID}.StatBlastX.ok
 			else
 				echo "${PID}.StatBlastX.ok already existing, pass"
 			fi
 		fi
 		if [ "$BLASTN" = true ] ; then
 			if [ ! -f ${PID}.StatBlastN.ok ]; then
-				echo "python ${SDIR}/Extract4Stat.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA}"
-				python ${SDIR}/Extract4Stat.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA}
+				echo "python ${SDIR}/Extract4Stat.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > ${PID}_Stat_BlastN.o"
+				python ${SDIR}/Extract4Stat.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > ${PID}_Stat_BlastN.o
+				touch ${PID}.StatBlastN.ok
 			else
 				echo "${PID}.StatBlastN.ok already existing, pass"
 			fi
@@ -344,24 +349,27 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 	else
 		if [ "$BLASTD" = true ] ; then
 			if [ ! -f ${PID}.StatBlastD.ok ]; then
-				echo "python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv"
-				python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv
+				echo "python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > ${PID}_Stat_BlastD.o"
+				python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > ${PID}_Stat_BlastD.o
+				touch ${PID}.StatBlastD.ok
 			else
 				echo "${PID}.StatBlastD.ok already existing, pass"
 			fi
 		fi
 		if [ "$BLASTX" = true ] ; then
 			if [ ! -f ${PID}.StatBlastX.ok ]; then
-				echo "python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv"
-				python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv
+				echo "python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > ${PID}_Stat_BlastX.o"
+				python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > ${PID}_Stat_BlastX.o
+				touch ${PID}.StatBlastX.ok
 			else
 				echo "${PID}.StatBlastX.ok already existing, pass"
 			fi
 		fi
 		if [ "$BLASTN" = true ] ; then
 			if [ ! -f ${PID}.StatBlastN.ok ]; then
-				echo "python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv"
-				python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv
+				echo "python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > ${PID}_Stat_BlastN.o"
+				python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > ${PID}_Stat_BlastN.o
+				touch ${PID}.StatBlastN.ok
 			else
 				echo "${PID}.StatBlastN.ok already existing, pass"
 			fi
@@ -370,29 +378,36 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 else
 	if [ "$BLASTD" = true ] ; then
 		if [ ! -f ${PID}.StatBlastD.ok ]; then
-			echo "python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv"
-			python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv
+			echo "python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > ${PID}_Stat_BlastD.o"
+			python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > ${PID}_Stat_BlastD.o
+			touch ${PID}.StatBlastD.ok
 		else
 			echo "${PID}.StatBlastD.ok already existing, pass"
 		fi
 	fi
 	if [ "$BLASTX" = true ] ; then
 		if [ ! -f ${PID}.StatBlastX.ok ]; then
-			echo "python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv"
-			python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv
+			echo "python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > ${PID}_Stat_BlastX.o"
+			python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > ${PID}_Stat_BlastX.o
+			touch ${PID}.StatBlastX.ok
 		else
 			echo "${PID}.StatBlastX.ok already existing, pass"
 		fi
 	fi
 	if [ "$BLASTN" = true ] ; then
 		if [ ! -f ${PID}.StatBlastN.ok ]; then
-			echo "python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv"
-			python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv
+			echo "python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > ${PID}_Stat_BlastN.o"
+			python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > ${PID}_Stat_BlastN.o
+			touch ${PID}.StatBlastN.ok
 		else
 			echo "${PID}.StatBlastN.ok already existing, pass"
 		fi
 	fi
 fi
 
-#rm ${PID}_All.Megahit_reverseAssembly.tsv
+if [ -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
+	echo "\t- remove reverseAssembly file"
+	rm ${PID}_All.Megahit_reverseAssembly.tsv
+fi
+
 echo "------ /Produce basic stat------"
