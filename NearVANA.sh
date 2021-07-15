@@ -286,11 +286,11 @@ if [ "$BLASTX" = true ] ; then
 	fi
 fi
 if [ "$DIAMOND" = true ] ; then
-	if [ ! -f ${PID}.BlastTreatmentDiamond.ok ]; then
+	if [ ! -f ${PID}.BlastTreatmentD.ok ]; then
 		echo "$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D"
 		$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D
 	else
-		echo "${PID}.BlastTreatmentDiamond.ok already existing, pass"
+		echo "${PID}.BlastTreatmentD.ok already existing, pass"
 	fi
 fi
 echo "------ /Launch Blast/Diamond treatment------"
@@ -308,6 +308,7 @@ fi
 if [ -d ${PID}_ToBlast ]; then
 	echo "------ Remove ToBlast data------"
 	rm -r ${PID}_ToBlast
+	echo "ToBlast folder is deleted"
 	echo "------ /Remove ToBlast data------"
 fi
 
@@ -319,7 +320,7 @@ fi
 
 if [ "$USE_MULTIPLEX" = true ] ; then
 	if [ "$PREFILTER" = true ] ; then
-		if [ "$BLASTD" = true ] ; then
+		if [ "$DIAMOND" = true ] ; then
 			if [ ! -f ${PID}.StatBlastD.ok ]; then
 				echo "python ${SDIR}/Extract4Stat.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > ${PID}_Stat_BlastD.o"
 				python ${SDIR}/Extract4Stat.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > ${PID}_Stat_BlastD.o
@@ -347,7 +348,7 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 			fi
 		fi
 	else
-		if [ "$BLASTD" = true ] ; then
+		if [ "$DIAMOND" = true ] ; then
 			if [ ! -f ${PID}.StatBlastD.ok ]; then
 				echo "python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > ${PID}_Stat_BlastD.o"
 				python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} 1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > ${PID}_Stat_BlastD.o
@@ -376,7 +377,7 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 		fi
 	fi
 else
-	if [ "$BLASTD" = true ] ; then
+	if [ "$DIAMOND" = true ] ; then
 		if [ ! -f ${PID}.StatBlastD.ok ]; then
 			echo "python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > ${PID}_Stat_BlastD.o"
 			python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > ${PID}_Stat_BlastD.o
