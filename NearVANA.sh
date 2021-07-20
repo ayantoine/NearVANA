@@ -1,5 +1,7 @@
 #! /bin/bash
 
+datetime1=$(date +%s)
+
 ARG=$1
 #WARNING!! Source file is executed (Security, etc.)
 source $ARG
@@ -453,3 +455,7 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 fi
 
 echo "------ /Remove various auxiliary temporary files ------"
+
+datetime2=$(date +%s)
+delta=$((datetime2 - datetime1))
+echo "Time NearVANA: "$delta > Time-Final.txt
