@@ -432,3 +432,24 @@ if [ -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
 fi
 
 echo "------ /Produce basic stat------"
+
+echo "------ Remove various auxiliary temporary files ------"
+if [ -f ACCESSION.txt ]; then
+	echo "\t- remove ACCESSION.txt"
+	rm ACCESSION.txt
+fi
+if [ -f DEFINITION.txt ]; then
+	echo "\t- remove DEFINITION.txt"
+	rm DEFINITION.txt
+fi
+if [ "$USE_MULTIPLEX" = true ] ; then
+	for VARNAME in "${PLATE[@]}"; do
+		VAR_DODE="${VARNAME}[$ID_DODE]"
+		if [ -f ${!VAR_DODE}.kmer.tsv ]; then
+			echo "\t- remove ${!VAR_DODE}.kmer.tsv"
+			rm ${!VAR_DODE}.kmer.tsv
+		fi
+	done
+fi
+
+echo "------ /Remove various auxiliary temporary files ------"
