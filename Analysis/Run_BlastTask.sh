@@ -42,4 +42,4 @@ touch ${PID}.Blast${TASK}.ok
 
 datetime2=$(date +%s)
 delta=$((datetime2 - datetime1))
-echo "Time Blast${TASK}: "$delta > Time08-${TASK}.txt
+echo "Time Blast${TASK}: "$delta > Time09-${TASK}.txt

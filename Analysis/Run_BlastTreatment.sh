@@ -78,7 +78,7 @@ if [ ! -f ${PID}.Taxonomy${TASK}.ok ]; then
 	
 	datetime2=$(date +%s)
 	delta=$((datetime2 - datetime1))
-	echo "Time Taxo: "$delta > Time09-${TASK}.txt
+	echo "Time Taxo: "$delta > Time10-${TASK}.txt
 	
 	touch ${PID}.Taxonomy${TASK}.ok
 else
@@ -111,7 +111,7 @@ if [ ! -f ${PID}.creation${TASK}.ok ]; then
 	echo "------ /Xlsx conversion ------"
 	datetime2=$(date +%s)
 	delta=$((datetime2 - datetime1))
-	echo "Time Table: "$delta > Time10-${TASK}.txt
+	echo "Time Table: "$delta > Time11-${TASK}.txt
 else
 	echo "${PID}.creation${TASK}.ok already existing, pass"
 fi
