@@ -269,6 +269,15 @@ fi
 echo "------ /Split fasta for Blast ------"
 
 echo "------ Launch Blast/Diamond treatment------"
+if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
+	echo "\t- Decompressing reverseAssembly archive"
+	zcat ${PID}_All.Megahit_reverseAssembly.tsv.gz > ${PID}_All.Megahit_reverseAssembly.tsv
+fi
+if [ ! -f ${PID}_All.Megahit.contigs2sample.tsv ]; then
+	echo "\t- Decompressing contigs2sample archive"
+	zcat ${PID}_All.Megahit.contigs2sample.tsv.gz > ${PID}_All.Megahit.contigs2sample.tsv
+fi
+
 if [ "$BLASTN" = true ] ; then
 	if [ ! -f ${PID}.BlastTreatmentN.ok ]; then
 		echo "$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N"
@@ -293,6 +302,17 @@ if [ "$DIAMOND" = true ] ; then
 		echo "${PID}.BlastTreatmentD.ok already existing, pass"
 	fi
 fi
+
+if [ -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
+	echo "\t- remove reverseAssembly file"
+	rm ${PID}_All.Megahit_reverseAssembly.tsv
+fi
+if [ -f $${PID}_All.Megahit.contigs2sample.tsv ]; then
+	echo "\t- remove contigs2sample file"
+	rm ${PID}_All.Megahit.contigs2sample.tsv
+fi
+
+
 echo "------ /Launch Blast/Diamond treatment------"
 
 if [ "$BLASTN" = true ] ; then
