@@ -309,7 +309,7 @@ if [ -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
 	echo "\t- remove reverseAssembly file"
 	rm ${PID}_All.Megahit_reverseAssembly.tsv
 fi
-if [ -f $${PID}_All.Megahit.contigs2sample.tsv ]; then
+if [ -f ${PID}_All.Megahit.contigs2sample.tsv ]; then
 	echo "\t- remove contigs2sample file"
 	rm ${PID}_All.Megahit.contigs2sample.tsv
 fi
