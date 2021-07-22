@@ -275,10 +275,6 @@ if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
 	echo -e "\t- Decompressing reverseAssembly archive"
 	zcat ${PID}_All.Megahit_reverseAssembly.tsv.gz > ${PID}_All.Megahit_reverseAssembly.tsv
 fi
-if [ ! -f ${PID}_All.Megahit.contigs2sample.tsv ]; then
-	echo -e "\t- Decompressing contigs2sample archive"
-	zcat ${PID}_All.Megahit.contigs2sample.tsv.gz > ${PID}_All.Megahit.contigs2sample.tsv
-fi
 
 if [ "$BLASTN" = true ] ; then
 	if [ ! -f ${PID}.BlastTreatmentN.ok ]; then
@@ -310,7 +306,8 @@ if [ -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
 	rm ${PID}_All.Megahit_reverseAssembly.tsv
 fi
 if [ -f ${PID}_All.Megahit.contigs2sample.tsv ]; then
-	echo -e "\t- remove contigs2sample file"
+	echo -e "\t- zip and remove contigs2sample file"
+	gzip -f ${PID}_All.Megahit.contigs2sample.tsv > ${PID}_All.Megahit.contigs2sample.tsv.gz
 	rm ${PID}_All.Megahit.contigs2sample.tsv
 fi
 

@@ -40,7 +40,6 @@ echo "------ /Merge Assembly ------"
 echo "------ Compress Megahit output ------"
 gzip -f ${PID}_All.Megahit_reverseAssembly.tsv > ${PID}_All.Megahit_reverseAssembly.tsv.gz
 gzip -f ${PID}_All.Megahit_ambigousReads.tsv > ${PID}_All.Megahit_ambigousReads.tsv.gz
-gzip -f ${PID}_All.Megahit.contigs2sample.tsv > ${PID}_All.Megahit.contigs2sample.tsv.gz
 gzip -f ${PID}_All.Megahit_rejectedContigs.fa > ${PID}_All.Megahit_rejectedContigs.fa.gz
 gzip -f ${PID}_All.Megahit_unmappedReads.tsv > ${PID}_All.Megahit_unmappedReads.tsv.gz
 echo "------ /Compress Megahit output ------"
