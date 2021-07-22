@@ -272,11 +272,11 @@ echo "------ /Split fasta for Blast ------"
 
 echo "------ Launch Blast/Diamond treatment------"
 if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
-	echo "\t- Decompressing reverseAssembly archive"
+	echo -e "\t- Decompressing reverseAssembly archive"
 	zcat ${PID}_All.Megahit_reverseAssembly.tsv.gz > ${PID}_All.Megahit_reverseAssembly.tsv
 fi
 if [ ! -f ${PID}_All.Megahit.contigs2sample.tsv ]; then
-	echo "\t- Decompressing contigs2sample archive"
+	echo -e "\t- Decompressing contigs2sample archive"
 	zcat ${PID}_All.Megahit.contigs2sample.tsv.gz > ${PID}_All.Megahit.contigs2sample.tsv
 fi
 
@@ -306,11 +306,11 @@ if [ "$DIAMOND" = true ] ; then
 fi
 
 if [ -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
-	echo "\t- remove reverseAssembly file"
+	echo -e "\t- remove reverseAssembly file"
 	rm ${PID}_All.Megahit_reverseAssembly.tsv
 fi
 if [ -f ${PID}_All.Megahit.contigs2sample.tsv ]; then
-	echo "\t- remove contigs2sample file"
+	echo -e "\t- remove contigs2sample file"
 	rm ${PID}_All.Megahit.contigs2sample.tsv
 fi
 
@@ -336,7 +336,7 @@ fi
 
 echo "------ Produce basic stat------"
 if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
-	echo "\t- Decompressing reverseAssembly archive"
+	echo -e "\t- Decompressing reverseAssembly archive"
 	zcat ${PID}_All.Megahit_reverseAssembly.tsv.gz > ${PID}_All.Megahit_reverseAssembly.tsv
 fi
 
@@ -429,7 +429,7 @@ else
 fi
 
 if [ -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
-	echo "\t- remove reverseAssembly file"
+	echo -e "\t- remove reverseAssembly file"
 	rm ${PID}_All.Megahit_reverseAssembly.tsv
 fi
 
@@ -437,18 +437,18 @@ echo "------ /Produce basic stat------"
 
 echo "------ Remove various auxiliary temporary files ------"
 if [ -f ACCESSION.txt ]; then
-	echo "\t- remove ACCESSION.txt"
+	echo -e "\t- remove ACCESSION.txt"
 	rm ACCESSION.txt
 fi
 if [ -f DEFINITION.txt ]; then
-	echo "\t- remove DEFINITION.txt"
+	echo -e "\t- remove DEFINITION.txt"
 	rm DEFINITION.txt
 fi
 if [ "$USE_MULTIPLEX" = true ] ; then
 	for VARNAME in "${PLATE[@]}"; do
 		VAR_DODE="${VARNAME}[$ID_DODE]"
 		if [ -f ${!VAR_DODE}.kmer.tsv ]; then
-			echo "\t- remove ${!VAR_DODE}.kmer.tsv"
+			echo -e "\t- remove ${!VAR_DODE}.kmer.tsv"
 			rm ${!VAR_DODE}.kmer.tsv
 		fi
 	done
