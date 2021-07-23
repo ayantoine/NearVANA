@@ -305,17 +305,6 @@ if [ "$DIAMOND" = true ] ; then
 	fi
 fi
 
-if [ -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
-	echo -e "\t- remove reverseAssembly file"
-	rm ${PID}_All.Megahit_reverseAssembly.tsv
-fi
-if [ -f ${PID}_All.Megahit.contigs2sample.tsv ]; then
-	echo -e "\t- zip and remove contigs2sample file"
-	gzip -f ${PID}_All.Megahit.contigs2sample.tsv > ${PID}_All.Megahit.contigs2sample.tsv.gz
-	rm ${PID}_All.Megahit.contigs2sample.tsv
-fi
-
-
 echo "------ /Launch Blast/Diamond treatment------"
 
 if [ "$BLASTN" = true ] ; then
@@ -333,6 +322,16 @@ if [ -d ${PID}_ToBlast ]; then
 	rm -r ${PID}_ToBlast
 	echo "ToBlast folder is deleted"
 	echo "------ /Remove ToBlast data------"
+fi
+
+if [ -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
+	echo -e "\t- remove reverseAssembly file"
+	rm ${PID}_All.Megahit_reverseAssembly.tsv
+fi
+if [ -f ${PID}_All.Megahit.contigs2sample.tsv ]; then
+	echo -e "\t- zip and remove contigs2sample file"
+	gzip -f ${PID}_All.Megahit.contigs2sample.tsv > ${PID}_All.Megahit.contigs2sample.tsv.gz
+	rm ${PID}_All.Megahit.contigs2sample.tsv
 fi
 
 echo "------ Produce basic stat------"
