@@ -273,7 +273,11 @@ echo "------ /Split fasta for Blast ------"
 echo "------ Launch Blast/Diamond treatment------"
 if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
 	echo -e "\t- Decompressing reverseAssembly archive"
+	echo "zcat ${PID}_All.Megahit_reverseAssembly.tsv.gz > ${PID}_All.Megahit_reverseAssembly.tsv"
 	zcat ${PID}_All.Megahit_reverseAssembly.tsv.gz > ${PID}_All.Megahit_reverseAssembly.tsv
+	if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
+		echo "Seems weird, the previous command didn't gen"
+	fi
 fi
 
 if [ "$BLASTN" = true ] ; then
