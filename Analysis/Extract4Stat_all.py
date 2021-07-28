@@ -1251,6 +1251,7 @@ def ProcessSample2Contigs(sOutput,dSeq2Sample2Quantity,dContig2Taxo,tSampleList,
         FILE_SAMPLE.close()
  
 def GetSampleList(sPath):
+    print(sPath)
     dTag2File={}
     tTag=[]
     for sNewLine in open(sPath):
@@ -1261,7 +1262,7 @@ def GetSampleList(sPath):
             continue
         if DATA_PLATE_TAG in sLine:
             sPart2=sLine.split(EQUAL)[-1]
-            sContent=EMPTY.join(re.split(DATA_PARENTHESIS_REGEX,sLine))
+            sContent=EMPTY.join(re.split(DATA_PARENTHESIS_REGEX,sPart2))
             tTag=sContent.split(SPACE)
             continue
         for sTag in tTag:
