@@ -1,0 +1,53 @@
+#SLURM Scheduler
+
+### Git ###
+#Git Dir
+GITDIR=
+
+### Personnal database ###
+#Local database Dir
+LOCALDB=
+#Path to nucl_gb.accession2taxid
+NUCACC=${LOCALDB}/
+#Path to to file with definition for nuc
+NUCDEF=${LOCALDB}/
+#Path to prot.accession2taxid
+PROACC=${LOCALDB}/
+#Path to to file with definition for prot
+PRODEF=${LOCALDB}/
+#Path to fullnamelineage.dmp
+DBLINEAGE=${LOCALDB}/
+#Path to ViralFamily2MinLen.tsv
+VIRMINLEN=${LOCALDB}/
+#Path to VMR
+VMR=${LOCALDB}/
+
+### Scheduler keyword ###
+SCALL="sbatch"
+SPARAM="--cpus-per-task=1 --mem=25G"
+MULTICPU=20
+MULTIMEMORY=100
+SPARAM_MULTICPU="--cpus-per-task=${MULTICPU} --mem=${MULTIMEMORY}G"
+STASKARRAY="--array="
+SMAXTASK=%
+SRENAME=--job-name
+
+SMAXSIMJOB=30
+SMAXARRAYSIZE=100
+
+STASKID=$SLURM_ARRAY_TASK_ID
+SPSEUDOTASKID=%a
+
+### Identification database path ###
+#BLASTN
+VIRNTDB=
+ALLNTDB=
+
+#BLASTX
+VIRPTDB=
+ALLPTDB=
+
+#DIAMOND
+VIRPTDB_DIAMOND=
+ALLPTDB_DIAMOND=
+

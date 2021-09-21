@@ -1,0 +1,34 @@
+#Warning! Do not change variable name
+#Project id
+PID=
+#Data file
+DATA=
+#Adaptator file
+ADAP=
+
+#Pair-end input (TRUE for pair-end, FALSE for mono fastq) [beware of uppercase!]
+PAIREND=
+#Metada (TRUE for multiplex, FALSE without multiplex (RNAseq)) [beware of uppercase!]
+METADATA=
+#Multiplex (TRUE for multiplex, FALSE without multiplex (RNAseq)) [beware of uppercase!]
+MULTIPLEX=
+#Use unassigned reads into assembly, (TRUE to use unassigned, FALSE to reject unassigned) [beware of uppercase!]
+UNASSIGNED=
+#Use substraction (TRUE to use unassigned, FALSE to reject unassigned) [beware of uppercase!]
+SUBSTRACTION=
+#Substractive library (PhiX)
+SUBS=
+
+#Cluster Conffile
+CONF=
+
+#Use BlastX (TRUE/FALSE, beware uppercase)
+BLASTX=
+#Use BlastN (TRUE/FALSE, beware uppercase)
+BLASTN=
+#Use Diamond (TRUE/FALSE, beware uppercase)
+DIAMOND=
+
+#Use prefiltering database (TRUE/FALSE, beware uppercase)
+PREFILTER=
+
