@@ -1,184 +1,120 @@
-# NearVANA
-Analyze Illumina sequencing data and identify virus sequence (using BlastN, BlastX or Diamond)
+#Installation
 
-# Installation
-- Clone git repository
-- Create a dedicated environment conda
-conda env create --name NearVANA-env --file NearVANA-env.spec-file.txt
-(<NearVANA-env> can be replaced by any name)
+1. Copy all script in your git folder (assuming ~/Git)
+```
+git clone https://github.com/ayantoine/NearVANA.git
+```
 
-# To do only once I - Taxonomy and definition file
-NearVANA need some files from NCBI to determine the taxonomy of a hit. This files are named :
-- fullnamelineage.dmp
-- nucl_gb.accession2taxid
-- prot.accession2taxid
+2. Create NearVANA conda environment
+```
+conda env create --name NearVANA-env --file ~/Git/NearVANA/Env/NearVANA-env.spec-file.txt
+```
 
-They are avalaible on the NCBI ftp. There is a git programm that automatize their download (https://github.com/ayantoine/NCBI-ViralTaxo)
+3. Download and store database in your database folder (assuming ~/Database)
+```
+bash ~/Git/NearVANA/BuildLocalDB.sh ~/Database
+```
 
-In addition, NearVANA need to acces two file that contains hit definitions.
-- NuclAccId2Def.tsv
-- ProtAccId2Def.tsv
+Nb: ~/Database/NuclAccId2Def.tsv and ~/Database/ProtAccId2Def.tsv empty at the beginning. They will be completed as the various analyzes of the workflow progress according to the needs of your data. 
 
-These file can be empty at begining, they will be completed progressively among analyses.
+#Configuration
+##Cluster configuration file
+The cluster conffile contains all the cluster information neeeded for the workflow. It must be defined only once time by cluster and will be the same for all analysis on this.
 
-
-# To do only once II - Cluster conf file
-Cluster conffile contains data to launch job on your cluster. The file must contains the following informations
-
-SDIR : NearVANA script directory
-NUCACC: Path to nucl_gb.accession2taxid
-NUCDEF: Path to to file with definition for nuc
-PROACC: Path to prot.accession2taxid
-PRODEF: Path to to file with definition for prot
-DBLINEAGE: Path to fullnamelineage.dmp
-VIRMINLEN: Path to ViralFamily2MinLen.tsv #cf Prerequisite III
-
-SCALL : keyword to launch a job
-SPARAM : list of param to add to a job
-MULTICPU : Number of CPU for parallelized task
-MULTIMEMORY : Quantity of memory for biggest task
-STASKARRAY : keyword to define a array of task
-SMAXTASK : keyword to define the maximum amount of parallele task during a task array
-SRENAME : keyword to rename a job
-
-SMAXSIMJOB : integer that define the maximum amount of parallele task during a task array
-SMAXARRAYSIZE : integer that define the maximum size of array. Use 0 if array haven't limited size on your cluster
-
-STASKID : keyword to ask a task Id during in array
-SPSEUDOTASKID : keyword to ask a task Id during the call of an array
-
-VIRNTDB : path to the blast viral database nucleotidic
-ALLNTDB : path to the blast database nucelotidic
-VIRPTDB : path to the blast viral database proteic
-ALLPTDB : path to the blast database proteic
-VIRPTDB_DIAMOND : path to the diamond viral database proteic
-ALLPTDB_DIAMOND : path to the diamond database proteic
-
-Below is an exemple of Cluster keyword for an SGE cluster. Beware of the space after value of STASKARRAY and SMAXTASK.
-SCALL=qsub
-SPARAM=-q\ long.q\ -V
-STASKARRAY=-t\ 
-SMAXTASK=\ -tc\ 
-SRENAME=-N
-
-STASKID=$SGE_TASK_ID
-SPSEUDOTASKID=\$TASK_ID
-
-Below is an exemple of Cluster keyword for an SLURM cluster.
-SCALL=sbatch
-SPARAM="--cpus-per-task=1 --mem=25G"
-STASKARRAY="--array="
-SMAXTASK=%
-SRENAME=--job-name
-
-STASKID=$SLURM_ARRAY_TASK_ID
-SPSEUDOTASKID=%a
-
-
-# To do only once III - Reference size for family virus
-NearVANA compare contigs size to reference genome to help users to determine interesting fragment. The file must lead the following organization:
-
-Famility MinSize
-
-Data are facultative but, even empty, the file must exist.
-
-# To do for each analysis IV - Analysis arg file
-NearVANA conffile contains data that are specific for 1 analysis. The file must contains the following informations
-
-#Warning! Do not change variable name
-#Project id
-PID=
-#Data file
-DATA=
-#Adaptator file
-ADAP=
-
-#Pair-end input (TRUE for pair-end, FALSE for mono fastq) [beware of uppercase!]
-PAIREND=
-#Metada (TRUE for multiplex, FALSE without multiplex (RNAseq)) [beware of uppercase!]
-METADATA=
-#Multiplex (TRUE for multiplex, FALSE without multiplex (RNAseq)) [beware of uppercase!]
-MULTIPLEX=
-#Use unassigned reads into assembly, (TRUE to use unassigned, FALSE to reject unassigned) [beware of uppercase!]
-UNASSIGNED=
-#Use substraction (TRUE to use unassigned, FALSE to reject unassigned) [beware of uppercase!]
-SUBSTRACTION=
-#Substractive library (PhiX)
-SUBS=
-
-#Cluster Conffile
-CONF=
-
-#Use BlastX (TRUE/FALSE, beware uppercase)
-BLASTX=
-#Use BlastN (TRUE/FALSE, beware uppercase)
-BLASTN=
-#Use Diamond (TRUE/FALSE, beware uppercase)
-DIAMOND=
-
-# To do for each analysis V - Data file
-NearVANA conffile contains data that are specific for 1 analysis. The file must contains the following informations
-
-#Liste of plateId, between "()", separed by " "
-#Ex: PLATE=(P1 P2 ...)
-PLATE=( P1 )
-#Details of each plateId, defined as plateId=(R1.fq R2.fq metadata.tsv dodeca.tsv)
-#Ex: P1=(R1-001.fq R2-001.fq dodeca-001.tsv metadata-001.tsv)
-#Ex: P2=(R1-002.fq R2-002.fq dodeca-002.tsv metadata-002.tsv)
-#If fastq aren't pair-end, use only one file and specify FALSE for PAIREND value in Arg file
-#If data aren't multiplexed, forget the file and specify FALSE for MULTIPLEX value in Arg file
-#If data haven't metada, forget the file and specify FALSE for METADATA value in Arg file
-#WARNING: very important: the line must begin with the same value as writed in PLATE content
-P1=()
-
-# Prerequisite V - Data files
-1) Sequences files
-Pair of read, in fastq format, in two separate ".gz" archive
-
-2) Metadata file (facultative)
-A tsv file that contains metadata of samples, with columns as following :
-
-PLATE_ID HOST_NAME COORD LOCATION COUNTRY ECO DATE QUANTITY WEIGTH
+The file template is avalaible at `~/Git/NearVANA/Template/NearVANA.conf.template`
 
 With:
-PLATE_ID: Unique identifier for the sample (ex: S01). No space, no special characters
-HOST_NAME: Name of the species sampled
-COORD: GPS coordinate (facultative)
-LOCATION: City (facultative)
-COUNTRY: Country (facultative)
-ECO: Ecosystem specification (facultative)
-DATE: Date of sampling (facultative)
-QUANTITY: Quantity of host (facultative)
-WEIGTH: Weight of the sample, in mg (facultative)
+GITDIR= path to the NearVANA git folder
+LOCALDB= path to the NearVANA Database folder
 
-Example:
-Helicoverpa_1	Helicoverpa armigera	43.705225,3.859843	Les Matelles	France	serre	03/09/2018	17 59
+NUCACC= path to Viral_nucl_gb.accession2taxid.short.tsv (in ~/Database/[date]/ folder)
+NUCDEF= path to NuclAccId2Def.tsv (in ~/Database/ folder)
+PROACC= path to Viral_prot.accession2taxid.short.tsv (in ~/Database/[date]/ folder)
+PRODEF= path to ProtAccId2Def.tsv (in ~/Database/ folder)
+DBLINEAGE= path to fullnamelineage.dmp (in ~/Database/[date]/ folder)
+VIRMINLEN= path to ViralFamily2MinLen.tsv (in ~/Database/ folder)
+VMR= path to VMR_160919_MSL34.tsv (in ~/Database/ folder)
 
-3) Adaptators file
-A tsv file that contains the adaptators used during the sequencing
+SCALL= Keyword to submit job on the cluster (for slurm: "sbatch" or "sbatch --partition=dgimi-didi")
+SPARAM= Keyword to define ressource for unitary job (for slurm: "--cpus-per-task=1 --mem=25G")
+MULTICPU= Number of CPU for parallelized jobs (ex: 20)
+MULTIMEMORY= Number of memory for multicpu jobs, in G (ex: 100)
+SPARAM_MULTICPU= Keyword to define a parallelized jobs (for slurm: "--cpus-per-task=${MULTICPU} --mem=${MULTIMEMORY}G")
+STASKARRAY= Keyword to define array of jobs (for slurm: "--array=")
+SMAXTASK= Keyword to define the maximum size of an array of jobs (for slurm: %)
+SRENAME= Keyword to rename job Id (for slurm: "--job-name")
 
-ADAPTATOR1 ADAPTATOR2
+SMAXSIMJOB= Number of simultaneous running jobs allowed on the cluster (ex: 30)
+SMAXARRAYSIZE= Number of maximum size for job array in the cluster (ex: 100)
 
-Example:
+STASKID= Keyword to refering to job taskId (for slurm: $SLURM_ARRAY_TASK_ID)
+SPSEUDOTASKID= Keyword to refering to internal job taskId (for slurm: %a)
+
+VIRNTDB= Path to the Blast genomic viral refseq database on the cluster
+ALLNTDB= Path to the Blast nt database on the cluster
+VIRPTDB= Path to the Blast protein viral refseq database on the cluster
+ALLPTDB= Path to the Blast nr database on the cluster
+VIRPTDB_DIAMOND= Path to the Diamond protein viral refseq database on the cluster
+ALLPTDB_DIAMOND= Path to the Diamond nr database on the cluster
+
+##Analysis configuration file
+The analysis argfile contains all the information for the workflorw about the files path and things to do. It must be specifically defined for each analysis.
+
+The file template is avalaible at `~/Git/NearVANA/Template/NearVANA.arg.template`
+
+With:
+PID= Short ID to identify your analysis. All file generated will be prefixed by this PID
+DATA= Path to the data file
+ADAP= Path to the adaptors file
+
+PAIREND= if TRUE, starting data are pair-end
+METADATA= if TRUE, a metadata file will be used
+MULTIPLEX= if TRUE, data are multiplexed
+UNASSIGNED= if TRUE, in case of multiplex, reads not assigned to a sample will be assigned to a theorical sample (unassigned) and be used with all the reads. If FALSE, unassigned reads will be discarded from the analysis.
+SUBSTRACTION= if TRUE, reads matching a substractive library will be discarded (typically PhiX library)
+SUBS= path to the substractive library if needed
+
+CONF= Path to the cluster configuration file
+
+BLASTX= if TRUE, contigs will be identified with BlastX
+BLASTN= if TRUE, contigs will be identified with BlastN
+DIAMOND= if TRUE, contigs will be identified with Diamond
+
+PREFILTER= if TRUE, contigs will be prefiltered against viral refseq, then positive results will be identified with complete refseq. If FALSE, contigs will be directly tested against the compete refseq.
+
+The adaptors file must contains the adaptors used for the sequencing. The file contains only one line, with the the both adaptors separated by a space. Like:
 AGATCGGAAGAGCAC	AGATCGGAAGAGCGT
 
-4) Dodeca file
-A tsv file that contains data to link SampleId to their DODECA (the nucelotidic tag for the specified SampleId). 
-The file is organized as following:
+##Base data file
+The file contains the path to the raw data as sequences, metadata and multiplex key.
 
-SAMPLE_ID DODECA
+The file template is avalaible at `~/Git/NearVANA/Template/NearVANA.data.template`
 
-Example:
-D01	AACAAGACGT	AACAACCTCGGCGG
-D02	AACACACTCA	AACCGAGTCGCGAG
+With:
+PLATE= Id for fastq file (or paire of plate for pair-end).
+ID1= for each id, a path to R1.fastq.gz, R2.fastq.gz (if needed), associated metadata file (if needed), associated demultiplex file (if needed)
 
-5) PhiX.fa (or whatever sequence that must be substracted from the sequencing data)
-The fasta file of the element that need to be substracted from the sequencing data. The fasta can contains multiple sequences.
+######Metadata file
+The metada file is a tabulated file, without header, containing following columns:
+Sample: An arbitrary short sample Id
+Species: The sequenced species
+GPS: The GPS coordinates of the sample
+Location: The location of the sample
+Country: The country of the sample
+Biome: A word describing a caracteristic of the sample
+Date: The date of sampling
+Quantity: The quantity of host sequenced
+Weight: The weight of host sequenced (mg)
 
-# Output
-All files are prefixed with the Prefix of the analysis.
-Demultiplexing_Hyper_Distribution.tab : distribution of assigned reads among sample
-Demultiplexing_Hyper.tab : tsv file with each read identifier linked to a sample
-BlastN_result.xlsx : tsv file with all blastN identification results
-BlastX_result.xlsx : tsv file with all blastX identification results
-BlastAll_result.xlsx : tsv file with all blastX and BlastN identification results
+Missing information can be let empty. Only the Sample shot Id is necessary
+
+######Demultiplex file
+The demultiplex file is a tabulated file, without header, containing following columns:
+Sample: An arbitrary short sample Id, the same as indicated in metadata
+Tag: The nucleotidic sequence associated to the sample.
+
+WARNING: The short sample Id must be exactly the same as the id indicated in the metadata file.
+
+
+
+
