@@ -1,3 +1,38 @@
+# Purpose
+
+Initially, NearVANA was a workflow dedicated to the detection of viruses sequences in multiplexed metagenomics data, specifically enriched by the VANA method. However, the workflow has been updated to work with pair-end/single-end fastq, multiplexed or not, and can produce generic analysis or focused on virus field.
+Contigs identification can be make with BlastN, BlastX or Diamond (faster BlastX).
+
+If data are multiplexed, NearVANA make assembly with the whole data instead than sample by sample, to get better and longer contigs. By default, unassigned reads are groupe into an "unassigned sample" and used for the assembly, to get the maximum of data. This option can be deactivate.
+
+If data are focused on virus, the contigs identification is made in two step : first, contigs are tested against the viral refseq and keep only contigs that have similarity with them. Second, these contigs are tested against all the complete refseq to rule out the false-positive.
+
+NearVANA provide two kind of results:
+- An tsv/xlsx table that compile all contigs associated to each sample, with their identification
+- A group of statistic table that present these results based on different focus (Stat by virus family, stat by sample, stat by contigs, etc.)
+
+# How to use
+
+1. Prepare your data in a folder on your favorite cluster
+```
+Arg_SM-1_Adaptators.tsv		NearVANA.arg.SM-1		PhiX.fa
+Arg_SM-1_Dodeca.tsv 		NearVANA.data.SM-1		Virus_Insect_MIDD_ACAGTG_R1.fastq.gz
+Arg_SM-1_Metadata.tsv		NearVANA.meso.conf		Virus_Insect_MIDD_ACAGTG_R2.fastq.gz
+```
+
+2. Launch the workflow (assuming cluster using slurm)
+```
+sbatch -o NearVANA.o%j -e NearVANA.e%j ~/Git/NearVANA/NearVANA.sh NearVANA.arg.SM-1
+```
+
+3. Wait until it end
+
+4. Get the data
+```
+SM-1_BlastD_results.xlsx		SM-1_Stat_BlastD
+SM-1_BlastN_results.xlsx		SM-1_Stat_BlastN
+```
+
 # Installation
 
 1. Copy all script in your git folder (assuming ~/Git)
@@ -114,7 +149,3 @@ Sample: An arbitrary short sample Id, the same as indicated in metadata\
 Tag: The nucleotidic sequence associated to the sample.
 
 WARNING: The short sample Id must be exactly the same as the id indicated in the metadata file.
-
-
-
-
