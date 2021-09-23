@@ -34,7 +34,7 @@ echo "CheckSum ${FOLDER}/${TarLineage}.current.md5 $CheckSum"
 echo "------/CheckSum verification------"
 
 if test "$CheckRef" != "$CheckSum" ; then
-	rm ${FOLDER}/${TarLineage}.tar.gz
+	#rm ${FOLDER}/${TarLineage}.tar.gz
 	echo "Unable to dowload accurate file for "${FOLDER}/${TarLineage}
 	exit 1
 fi
@@ -62,7 +62,7 @@ rm ${FOLDER}/${SubFileNodes}
 rm ${FOLDER}/${SubFileNames}
 rm ${FOLDER}/${TarLineage}.tar.gz
 rm ${FOLDER}/${TarLineage}.md5
-${FOLDER}/${TarLineage}.current.md5
+rm ${FOLDER}/${TarLineage}.current.md5
 
 
 for Target in "${TargetArray[@]}"; do
@@ -82,7 +82,7 @@ for Target in "${TargetArray[@]}"; do
 	echo "------/CheckSum verification------"
 	
 	if test "$CheckRef" != "$CheckSum" ; then
-		rm ${FOLDER}/${Target}.gz
+		#rm ${FOLDER}/${Target}.gz
 		echo "Unable to dowload accurate file for "${FOLDER}/${Target}
 		exit 1
 	fi

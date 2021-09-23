@@ -1,1 +1,1 @@
-conda create -n NearVANA5-env bowtie2=2.3.5.1 Cutadapt=2.9 python=3.7.6 perl-excel-writer-xlsx megahit=1.2.9 blast=2.9.0 diamond=0.9.30 tbb=2020.2
+conda create -n NearVANA6-env bowtie2=2.3.5.1 Cutadapt=2.9 python=3.7.6 perl-excel-writer-xlsx megahit=1.2.9 blast=2.9.0 diamond=0.9.30 tbb=2020.2 pandas requests openpyxl

@@ -54,8 +54,8 @@ parser.add_option("-f","--folder", dest="folder")
 (options, args) = parser.parse_args()
 
 sFolder=options.folder
-# if not sFolder:
-    # exit("Error : no folder -f defined, process broken")
+if not sFolder:
+    exit("Error : no folder -f defined, process broken")
 
 ########################################################################
 #Function
