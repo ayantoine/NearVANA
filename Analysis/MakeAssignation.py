@@ -36,7 +36,7 @@ AMBIGUOUS1_SUFFIX="Ambiguous_1.tsv"
 AMBIGUOUS2_SUFFIX="Ambiguous_2.tsv"
 UNIDENTIFIED_SUFFIX="Unidentified.tsv"
 
-SAMPLENONE="..."
+SAMPLENONE="UnassignedReads"
 INDEXNONE="."
 
 # DEFAULT_SEQ_BY_TASK=1000000 #Must be similar in QsubAssignation.py

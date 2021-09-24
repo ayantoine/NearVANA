@@ -37,6 +37,11 @@ echo "------ Merge Assembly ------"
 mv ${PID}_All.Megahit_contigs.fa ${PID}_All.fa
 echo "------ /Merge Assembly ------"
 
+echo "------ Write stat ------"
+echo "python ${SDIR}/CountAssemblyStat.py -0 ${PID}_R0.Substracted.fastq -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -u ${PID}_All.Megahit_unmappedReads.tsv -o ${PID}_Stat_Assembly.tsv"
+python ${SDIR}/CountAssemblyStat.py -0 ${PID}_R0.Substracted.fastq -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -u ${PID}_All.Megahit_unmappedReads.tsv -o ${PID}_Stat_Assembly.tsv
+echo "------ /Write stat ------"
+
 echo "------ Compress Megahit output ------"
 gzip -f ${PID}_All.Megahit_reverseAssembly.tsv > ${PID}_All.Megahit_reverseAssembly.tsv.gz
 gzip -f ${PID}_All.Megahit_ambigousReads.tsv > ${PID}_All.Megahit_ambigousReads.tsv.gz

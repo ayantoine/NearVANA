@@ -33,7 +33,7 @@ ILLUMINA_PAIR_TAG=":N:0:"
 SPLIT_TAG="split"
 
 UNASSIGNED="UnassignedReads"
-NO_SAMPLE="..."
+NO_SAMPLE="UnassignedReads"
 NO_INDEX="."
 
 DEBUG=True
