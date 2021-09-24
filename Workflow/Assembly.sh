@@ -7,6 +7,16 @@ source $ARG
 source $CONF
 SDIR=${GITDIR}/Workflow
 
+function boolean() {
+  case $1 in
+    TRUE) echo true ;;
+    FALSE) echo false ;;
+    *) echo "Err: Unknown boolean value \"$1\"" 1>&2; exit 1 ;;
+   esac
+}
+
+USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
+
 echo "------ Megahit ------"
 time megahit --k-list 21,33,55,77,99 -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -r ${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${PID}"_log_Assembly-Megahit"
 echo "------ /Megahit ------"
@@ -37,10 +47,13 @@ echo "------ Merge Assembly ------"
 mv ${PID}_All.Megahit_contigs.fa ${PID}_All.fa
 echo "------ /Merge Assembly ------"
 
-echo "------ Write stat ------"
-echo "python ${SDIR}/CountAssemblyStat.py -0 ${PID}_R0.Substracted.fastq -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -u ${PID}_All.Megahit_unmappedReads.tsv -o ${PID}_Stat_Assembly.tsv"
-python ${SDIR}/CountAssemblyStat.py -0 ${PID}_R0.Substracted.fastq -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -u ${PID}_All.Megahit_unmappedReads.tsv -o ${PID}_Stat_Assembly.tsv
-echo "------ /Write stat ------"
+
+if [ "$USE_MULTIPLEX" = true ] ; then
+	echo "------ Write stat ------"
+	echo "python ${SDIR}/CountAssemblyStat.py -0 ${PID}_R0.Substracted.fastq -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -u ${PID}_All.Megahit_unmappedReads.tsv -o ${PID}_Stat_Assembly.tsv"
+	python ${SDIR}/CountAssemblyStat.py -0 ${PID}_R0.Substracted.fastq -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -u ${PID}_All.Megahit_unmappedReads.tsv -o ${PID}_Stat_Assembly.tsv
+	echo "------ /Write stat ------"
+fi
 
 echo "------ Compress Megahit output ------"
 gzip -f ${PID}_All.Megahit_reverseAssembly.tsv > ${PID}_All.Megahit_reverseAssembly.tsv.gz

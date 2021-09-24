@@ -13,7 +13,6 @@ function boolean() {
    esac
 }
 
-
 USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
 
 #N or X or D
@@ -116,6 +115,13 @@ else
 	echo "${PID}.creation${TASK}.ok already existing, pass"
 fi
 echo "------ /Create table ------"
+
+if [ "$USE_MULTIPLEX" = true ] ; then
+	echo "------ Write stat ------"
+	echo "python ${SDIR}/CountAssemblyStat.py -0 ${PID}_R0.Substracted.fastq -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -u ${PID}_All.Megahit_unmappedReads.tsv -o ${PID}_Stat_Assembly.tsv"
+	python ${SDIR}/CountIdentificationStat.py -t ${PID}_Blast${TASK}_results.tab -s ${PID}_Stat_Assembly.tsv -o ${PID}_Stat_identification-${TASK}.tsv
+	echo "------ /Write stat ------"
+fi
 
 echo "------ Create ok tagfile ------"
 touch ${PID}.BlastTreatment${TASK}.ok

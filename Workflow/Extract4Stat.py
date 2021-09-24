@@ -6,13 +6,15 @@ from optparse import OptionParser
 import os
 import re
 
-sCurrentVersionScript="v20"
+sCurrentVersionScript="v21"
 iTime1=time.time()
 ########################################################################
 '''
+V21-2021/09/24
+Adapt to new table results that fraction contigs reads among sample
+
 V20-2021/06/18
 Branching to main workflow. Master.o no more available, switch on DATA
-
 V19-2021/02/04
 Retrieve Sample from Master.o to catch multiplate data.
 V18-2021/02/02
@@ -416,65 +418,65 @@ def ReverseTableDict(dDict):
 def FolderNameFormat(dbString):
     return "_".join(dbString).replace("/",".").replace(":","").replace(" ","_")
 
-def LoadReverseAssembly(dData,sFile):
-    dResult={}
-    for sKey in dData:
-        sContigName="_".join(sKey.split("_")[:-1])
-        sSample=sKey.split("_")[-1]        
-        try:
-            oCrash=dResult[sContigName]
-        except KeyError:
-            dResult[sContigName]={}
-        dResult[sContigName][sSample]=0
+# def LoadReverseAssembly(dData,sFile):
+    # dResult={}
+    # for sKey in dData:
+        # sContigName="_".join(sKey.split("_")[:-1])
+        # sSample=sKey.split("_")[-1]        
+        # try:
+            # oCrash=dResult[sContigName]
+        # except KeyError:
+            # dResult[sContigName]={}
+        # dResult[sContigName][sSample]=0
    
-    for sNewLine in open(sFile):
-        tLine=sNewLine.split("\t")
-        sContigName=tLine[1]
-        try:
-            oCrash=dResult[sContigName]
-        except KeyError:
-            continue
-        sRead=tLine[0]
-        sSample=sRead.split("_")[-1]
-        dResult[sContigName][sSample]+=1
+    # for sNewLine in open(sFile):
+        # tLine=sNewLine.split("\t")
+        # sContigName=tLine[1]
+        # try:
+            # oCrash=dResult[sContigName]
+        # except KeyError:
+            # continue
+        # sRead=tLine[0]
+        # sSample=sRead.split("_")[-1]
+        # dResult[sContigName][sSample]+=1
 
-    if FILTER_NOISE!=0:
-        tRemoveContig=[]
-        for sContigName in dResult:
-            tRemoveSample=[]
-            #Remove reads quantity below T- sample
-            for sSample in dResult[sContigName]:
-                if dResult[sContigName][sSample]<=FILTER_NOISE:
-                    tRemoveSample.append(sSample)
-            for sSample in tRemoveSample:
-                del dResult[sContigName][sSample]
-            if len(dResult[sContigName])==0:
-                tRemoveContig.append(sContigName)
-        for sContigName in tRemoveContig:
-            del dResult[sContigName]
+    # if FILTER_NOISE!=0:
+        # tRemoveContig=[]
+        # for sContigName in dResult:
+            # tRemoveSample=[]
+            # #Remove reads quantity below T- sample
+            # for sSample in dResult[sContigName]:
+                # if dResult[sContigName][sSample]<=FILTER_NOISE:
+                    # tRemoveSample.append(sSample)
+            # for sSample in tRemoveSample:
+                # del dResult[sContigName][sSample]
+            # if len(dResult[sContigName])==0:
+                # tRemoveContig.append(sContigName)
+        # for sContigName in tRemoveContig:
+            # del dResult[sContigName]
             
-    if FILTER_READ_REPRESENTATIVITE!=0:
-        tRemoveContig=[]
-        for sContigName in dResult:
-            #Get sum of reads
-            iSum=0
-            for sSample in dResult[sContigName]:
-                iSum+=dResult[sContigName][sSample]
+    # if FILTER_READ_REPRESENTATIVITE!=0:
+        # tRemoveContig=[]
+        # for sContigName in dResult:
+            # #Get sum of reads
+            # iSum=0
+            # for sSample in dResult[sContigName]:
+                # iSum+=dResult[sContigName][sSample]
                 
-            tRemoveSample=[]
-            #Remove sample that have less reads that minimal value
-            for sSample in dResult[sContigName]:
-                fValue=float(dResult[sContigName][sSample])/iSum*100
-                if fValue<FILTER_READ_REPRESENTATIVITE and dResult[sContigName][sSample]<FILTER_READ_HARDLIMIT:
-                    tRemoveSample.append(sSample)
-            for sSample in tRemoveSample:
-                del dResult[sContigName][sSample]
-            if len(dResult[sContigName])==0:
-                tRemoveContig.append(sContigName)
-        for sContigName in tRemoveContig:
-            del dResult[sContigName]
+            # tRemoveSample=[]
+            # #Remove sample that have less reads that minimal value
+            # for sSample in dResult[sContigName]:
+                # fValue=float(dResult[sContigName][sSample])/iSum*100
+                # if fValue<FILTER_READ_REPRESENTATIVITE and dResult[sContigName][sSample]<FILTER_READ_HARDLIMIT:
+                    # tRemoveSample.append(sSample)
+            # for sSample in tRemoveSample:
+                # del dResult[sContigName][sSample]
+            # if len(dResult[sContigName])==0:
+                # tRemoveContig.append(sContigName)
+        # for sContigName in tRemoveContig:
+            # del dResult[sContigName]
             
-    return dResult
+    # return dResult
 
 def GetTaxo(dData):
     dResult={}
@@ -1062,7 +1064,62 @@ def GetSampleList(sPath):
             tResult.append(sSampleId)
     return tResult
         
+
+def RetrieveReverseAssembly(dData):
+    dResult={}
+    #Retrieve basic data
+    for sKey in dData:
+        sContigName=dData[sKey][COL_QUERYID]
+        try:
+            oCrash=dResult[sContigName]
+        except KeyError:
+            dResult[sContigName]={}
+        sSample=dData[sContigName][COL_SAMPLEID]
+        iReads=int(dData[sContigName][COL_READNUMBER])
+        try:
+            dResult[sContigName][sSample]+=iReads
+        except KeyError:
+            dResult[sContigName][sSample]=iReads
     
+    #Filter data below Noise value
+    if FILTER_NOISE!=0:
+        tRemoveContig=[]
+        for sContigName in dResult:
+            tRemoveSample=[]
+            #Remove reads quantity below T- sample
+            for sSample in dResult[sContigName]:
+                if dResult[sContigName][sSample]<=FILTER_NOISE:
+                    tRemoveSample.append(sSample)
+            for sSample in tRemoveSample:
+                del dResult[sContigName][sSample]
+            if len(dResult[sContigName])==0:
+                tRemoveContig.append(sContigName)
+        for sContigName in tRemoveContig:
+            del dResult[sContigName]
+    
+    #Filter sample association if reads below minimum representativite
+    if FILTER_READ_REPRESENTATIVITE!=0:
+        tRemoveContig=[]
+        for sContigName in dResult:
+            #Get sum of reads
+            iSum=0
+            for sSample in dResult[sContigName]:
+                iSum+=dResult[sContigName][sSample]
+                
+            tRemoveSample=[]
+            #Remove sample that have less reads that minimal value
+            for sSample in dResult[sContigName]:
+                fValue=float(dResult[sContigName][sSample])/iSum*100
+                if fValue<FILTER_READ_REPRESENTATIVITE and dResult[sContigName][sSample]<FILTER_READ_HARDLIMIT:
+                    tRemoveSample.append(sSample)
+            for sSample in tRemoveSample:
+                del dResult[sContigName][sSample]
+            if len(dResult[sContigName])==0:
+                tRemoveContig.append(sContigName)
+        for sContigName in tRemoveContig:
+            del dResult[sContigName]
+            
+    return dResult
 
 ########################################################################
 #MAIN
@@ -1077,10 +1134,11 @@ if __name__ == "__main__":
     dICTV=LoadICTV(sTaxo)
     print("Load Input...")
     dBasicData=LoadData(sInput)
+    dSeq2Sample2Quantity=RetrieveReverseAssembly(dBasicData)
     print("Extract Taxo...")
     dContig2Taxo=GetTaxo(dBasicData)
-    print("Load ReverseAssembly...")
-    dSeq2Sample2Quantity=LoadReverseAssembly(dBasicData,sReverseAssembly)   
+    # print("Load ReverseAssembly...")
+    # dSeq2Sample2Quantity=LoadReverseAssembly(dBasicData,sReverseAssembly)   
     print("Write Filtered Contigs data...")
     WriteFilteredContigsData(sOutput,dSeq2Sample2Quantity)
     print("Write Reads by Contigs...")
