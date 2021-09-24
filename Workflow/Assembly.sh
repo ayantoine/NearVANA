@@ -5,7 +5,7 @@ datetime1=$(date +%s)
 ARG=$1
 source $ARG
 source $CONF
-SDIR=${GITDIR}/Analysis
+SDIR=${GITDIR}/Workflow
 
 echo "------ Megahit ------"
 time megahit --k-list 21,33,55,77,99 -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -r ${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${PID}"_log_Assembly-Megahit"

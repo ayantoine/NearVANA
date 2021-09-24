@@ -5,7 +5,7 @@ datetime1=$(date +%s)
 ARG=$1
 source $ARG
 source $CONF
-SDIR=${GITDIR}/Analysis
+SDIR=${GITDIR}/Workflow
 
 #N or X
 TASK=$2

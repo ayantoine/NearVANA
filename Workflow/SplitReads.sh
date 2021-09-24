@@ -14,7 +14,7 @@ ARG=$1
 source $ARG
 source $CONF
 source $DATA
-SDIR=${GITDIR}/Analysis
+SDIR=${GITDIR}/Workflow
 
 FASTQ=$2
 PAIR=$3

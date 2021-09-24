@@ -83,7 +83,7 @@ echo
 echo '> Conf details (/!\ beware bash interpretation for STASKID)'
 source $CONF
 
-SDIR=${GITDIR}/Analysis
+SDIR=${GITDIR}/Workflow
 
 echo "------ Check Input existence ------"
 if [ ! -d $SDIR ] ; then
@@ -276,7 +276,7 @@ if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
 	echo "zcat ${PID}_All.Megahit_reverseAssembly.tsv.gz > ${PID}_All.Megahit_reverseAssembly.tsv"
 	zcat ${PID}_All.Megahit_reverseAssembly.tsv.gz > ${PID}_All.Megahit_reverseAssembly.tsv
 	if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
-		echo "Seems weird, the previous command didn't gen"
+		echo "Seems weird, the previous command didn't generate the missing files ~~'"
 	fi
 fi
 

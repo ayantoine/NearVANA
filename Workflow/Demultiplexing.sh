@@ -14,7 +14,7 @@ ARG=$1
 source $ARG
 source $CONF
 source $DATA
-SDIR=${GITDIR}/Analysis
+SDIR=${GITDIR}/Workflow
 
 USE_PAIREND="$(boolean "${PAIREND}")"
 USE_METADATA="$(boolean "${METADATA}")"
