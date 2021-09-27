@@ -56,31 +56,31 @@ def GetSampleFromStat(sPath):
     dDict={}
     bHeader=True
     for sNewLine in open(sPath):
-	if bHeader:
-	    bHeader=False
-	    continue
+    if bHeader:
+        bHeader=False
+        continue
         sLine=sNewLine.strip()
         if len(sLine)==0:
             continue
         tLine=sNewLine.split(TABULATION)
         sSampleId=tLine[0]
-	iValue=int(tLine[2])
+    iValue=int(tLine[2])
         dDict[sSampleId]={IDENTIFICATION_BEFORE:iValue,IDENTIFICATION_IDENTIFIED:0,IDENTIFICATION_UNIDENTIFIED:0}
     return dDict
         
 def CountQuantityIdentified(sPath,dDict):
     bHeader=True
     for sNewLine in open(sPath):
-	if bHeader:
-	    bHeader=False
-	    continue
-	sLine=sNewLine.strip()
+    if bHeader:
+        bHeader=False
+        continue
+    sLine=sNewLine.strip()
         if len(sLine)==0:
             continue
         tLine=sNewLine.split(TABULATION)
-	sSampleId=tLine[2]
-	iValue=int(tLine[3])
-	dDict[sSampleId][IDENTIFICATION_IDENTIFIED]+=iValue
+    sSampleId=tLine[2]
+    iValue=int(tLine[3])
+    dDict[sSampleId][IDENTIFICATION_IDENTIFIED]+=iValue
     return dDict
 
 def DeductQuantityRejected(dDict):

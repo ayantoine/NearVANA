@@ -85,7 +85,7 @@ if not sOutput:
 def Convert2SampleDict(tList):
     dDict={}
     for sKey in tList:
-	dDict[sKey]={ASSEMBLY_BEFORE:0,ASSEMBLY_ASSEMBLED:0,ASSEMBLY_UNASSEMBLED:0}
+    dDict[sKey]={ASSEMBLY_BEFORE:0,ASSEMBLY_ASSEMBLED:0,ASSEMBLY_UNASSEMBLED:0}
     return dDict
 
 def GetSampleList(sPath):
@@ -121,38 +121,38 @@ def GetSampleList(sPath):
     return tResult
     
 def CountQuantityBefore(sR0,sR1,sR2,dDict):
-	for sFastq in [sR0,sR1,sR2]:
-		iLineCounter=0
-		for sNewLine in open(sFastq):
-			iLineCounter+=1
-			if iLineCounter%4==1:
-				sLine=sNewLine.strip()
-				sSampleId=sLine.split(UNDERSCORE)[-1]
-				dDict[sSampleId][ASSEMBLY_BEFORE]+=1
-	return dDict
+    for sFastq in [sR0,sR1,sR2]:
+        iLineCounter=0
+        for sNewLine in open(sFastq):
+            iLineCounter+=1
+            if iLineCounter%4==1:
+                sLine=sNewLine.strip()
+                sSampleId=sLine.split(UNDERSCORE)[-1]
+                dDict[sSampleId][ASSEMBLY_BEFORE]+=1
+    return dDict
 
 def CountQuantityRejected(sUnmapped,dDict):
-	for sNewLine in open(sUnmapped):
-		sLine=sNewLine.strip()
-		sSampleId=sLine.split(UNDERSCORE)[-1]
-		dDict[sSampleId][ASSEMBLY_UNASSEMBLED]+=1
-	return dDict
+    for sNewLine in open(sUnmapped):
+        sLine=sNewLine.strip()
+        sSampleId=sLine.split(UNDERSCORE)[-1]
+        dDict[sSampleId][ASSEMBLY_UNASSEMBLED]+=1
+    return dDict
 
 def DeductQuantityAssembled(dDict):
-	for sKey in dDict:
-		dDict[sKey][ASSEMBLY_ASSEMBLED]=dDict[sKey][ASSEMBLY_BEFORE]-dDict[sKey][ASSEMBLY_UNASSEMBLED]
-	return dDict
+    for sKey in dDict:
+        dDict[sKey][ASSEMBLY_ASSEMBLED]=dDict[sKey][ASSEMBLY_BEFORE]-dDict[sKey][ASSEMBLY_UNASSEMBLED]
+    return dDict
 
 def WriteOutput(dDict,sOutput):
-	FILE=open(sOutput,"w")
-	sHeader="{}\t{}\t{}\t{}\n".format("SampleId","Reads before","Reads assembled","Reads unassembled")
-	FILE.write(sHeader)
-	for sKey in sorted(dDict):
-		sLine="{}\t{}\t{}\t{}\n".format(sKey,dDict[sKey][ASSEMBLY_BEFORE],
-										dDict[sKey][ASSEMBLY_ASSEMBLED],
-										dDict[sKey][ASSEMBLY_UNASSEMBLED])
-		FILE.write(sLine)
-	FILE.close()
+    FILE=open(sOutput,"w")
+    sHeader="{}\t{}\t{}\t{}\n".format("SampleId","Reads before","Reads assembled","Reads unassembled")
+    FILE.write(sHeader)
+    for sKey in sorted(dDict):
+        sLine="{}\t{}\t{}\t{}\n".format(sKey,dDict[sKey][ASSEMBLY_BEFORE],
+                                        dDict[sKey][ASSEMBLY_ASSEMBLED],
+                                        dDict[sKey][ASSEMBLY_UNASSEMBLED])
+        FILE.write(sLine)
+    FILE.close()
 
 ########################################################################
 #MAIN
