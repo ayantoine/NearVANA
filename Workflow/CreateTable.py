@@ -191,7 +191,7 @@ def LoadMetadata(dData):
 				
 	return dDict
 
-def LoadContigsAndQuantity(sFileShort,sFileReverse,dRef,dDict={}):
+def LoadContigsAndQuantity(sFileReverse,dRef,dDict={}):
 	print("Loading targeting reverse query from "+str(sFileReverse))
 	for sNewLine in open(sFileReverse):
 		sLine=sNewLine.strip()
