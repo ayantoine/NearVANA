@@ -4,11 +4,15 @@
 
 import time
 from optparse import OptionParser
+import re
 
-sCurrentVersionScript="v1"
+sCurrentVersionScript="v2"
 iTime1=time.time()
 ########################################################################
 '''
+V2-2021/09/27
+Switch on data to get back Sample Id. Distribution can't work for multiplate analysis.
+
 V1-2021/09/24
 Count reads repartition by sample before asembly, after assembly and unassembled
 
@@ -25,11 +29,19 @@ OUTPUT: Final file
 DEFAULT="UnassignedReads"
 
 TABULATION="\t"
+SPACE=" "
 UNDERSCORE="_"
+EQUAL="="
+EMPTY=""
 
 ASSEMBLY_BEFORE="Before"
 ASSEMBLY_ASSEMBLED="Assembled"
 ASSEMBLY_UNASSEMBLED="Unassembled"
+
+DATA_COMMENT_TAG="#"
+DATA_PLATE_TAG="PLATE"
+DATA_PARENTHESIS_REGEX="\(|\)"
+DATA_TABULATION="\t"
 
 ########################################################################
 #Options
@@ -37,7 +49,7 @@ parser = OptionParser()
 parser.add_option("-0","--r0", dest="r0")
 parser.add_option("-1","--r1", dest="r1")
 parser.add_option("-2","--r2", dest="r2")
-parser.add_option("-d","--distribution", dest="distribution")
+parser.add_option("-d","--datafile", dest="datafile")
 parser.add_option("-u","--unmapped", dest="unmapped")
 parser.add_option("-o","--output", dest="output")
 
@@ -55,9 +67,9 @@ sR2=options.r2
 if not sR2:
     exit("Error : no r2 -2 defined, process broken")
 
-sDistribution=options.distribution
-if not sDistribution:
-    exit("Error : no distribution -d defined, process broken")
+sDatafile=options.datafile
+if not sDatafile:
+    exit("Error : no datafile -d defined, process broken")
 
 sUnmapped=options.unmapped
 if not sUnmapped:
@@ -70,17 +82,44 @@ if not sOutput:
 
 ########################################################################
 #Function     
-def GetSample(sPath):
+def Convert2SampleDict(tList):
     dDict={}
+    for sKey in tList:
+	dDict[sKey]={ASSEMBLY_BEFORE:0,ASSEMBLY_ASSEMBLED:0,ASSEMBLY_UNASSEMBLED:0}
+    return dDict
+
+def GetSampleList(sPath):
+    dTag2File={}
+    tTag=[]
     for sNewLine in open(sPath):
         sLine=sNewLine.strip()
         if len(sLine)==0:
             continue
-        tLine=sNewLine.split(TABULATION)
-        sSampleId=tLine[0]
-        dDict[sSampleId]={ASSEMBLY_BEFORE:0,ASSEMBLY_ASSEMBLED:0,ASSEMBLY_UNASSEMBLED:0}
-    return dDict
-        
+        if sLine[0]==DATA_COMMENT_TAG:
+            continue
+        if DATA_PLATE_TAG in sLine:
+            sPart2=sLine.split(EQUAL)[-1]
+            sContent=EMPTY.join(re.split(DATA_PARENTHESIS_REGEX,sPart2))
+            tTag=sContent.split(SPACE)
+            continue
+        for sTag in tTag:
+            if sTag in sLine:
+                sPart2=sLine.split(EQUAL)[-1]
+                sContent=EMPTY.join(re.split(DATA_PARENTHESIS_REGEX,sLine))
+                tContent=sContent.split(SPACE)
+                sFile=tContent[-1]
+                dTag2File[sTag]=sFile
+    tResult=[]
+    for sTag in sorted(dTag2File):
+        for sNewLine in open(dTag2File[sTag]):
+            sLine=sNewLine.strip()
+            if len(sLine)==0:
+                continue
+            tLine=sLine.split(DATA_TABULATION)
+            sSampleId=sTag+tLine[0]
+            tResult.append(sSampleId)
+    return tResult
+    
 def CountQuantityBefore(sR0,sR1,sR2,dDict):
 	for sFastq in [sR0,sR1,sR2]:
 		iLineCounter=0
@@ -118,7 +157,9 @@ def WriteOutput(dDict,sOutput):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-    dSample2Quantity=GetSample(sDistribution)
+    print("Retrieve all sample Id...")
+    tSampleList=GetSampleList(sDatafile)
+    dSample2Quantity=Convert2SampleDict(tSampleList)
     dSample2Quantity=CountQuantityBefore(sR0,sR1,sR2,dSample2Quantity)
     dSample2Quantity=CountQuantityRejected(sUnmapped,dSample2Quantity)
     dSample2Quantity=DeductQuantityAssembled(dSample2Quantity)
