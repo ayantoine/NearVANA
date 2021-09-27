@@ -85,7 +85,7 @@ if not sOutput:
 def Convert2SampleDict(tList):
     dDict={}
     for sKey in tList:
-    dDict[sKey]={ASSEMBLY_BEFORE:0,ASSEMBLY_ASSEMBLED:0,ASSEMBLY_UNASSEMBLED:0}
+        dDict[sKey]={ASSEMBLY_BEFORE:0,ASSEMBLY_ASSEMBLED:0,ASSEMBLY_UNASSEMBLED:0}
     return dDict
 
 def GetSampleList(sPath):
