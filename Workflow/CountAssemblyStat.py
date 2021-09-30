@@ -109,7 +109,7 @@ def GetSampleList(sPath):
                 tContent=sContent.split(SPACE)
                 sFile=tContent[-1]
                 dTag2File[sTag]=sFile
-    tResult=[]
+    tResult=[DEFAULT]
     for sTag in sorted(dTag2File):
         for sNewLine in open(dTag2File[sTag]):
             sLine=sNewLine.strip()
