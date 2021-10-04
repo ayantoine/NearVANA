@@ -1,7 +1,6 @@
 # coding: utf-8
 """Python3.6"""
 # compatibility: python2.7, python2.6
-# Warning indentation
 
 import time
 from optparse import OptionParser
