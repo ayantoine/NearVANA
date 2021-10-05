@@ -129,7 +129,7 @@ def WriteBash(sArg,iSize,sScriptDir,sKmerPath,sOutputPath,sDir,dCall,sConf,sPID,
 	sLogDir=sPID+"_"+sPlateId+"_log_LaunchAssignation"
 	FILE=open(sOutputPath,"w")
 	FILE.write("#! /bin/bash\n\n")
-	FILE.write(SETUP)
+	FILE.write(SETUP+"\n")
 	FILE.write("mkdir "+sLogDir+"\n")
 	FILE.write(dCall[KEYCONF_SCALL]+" "+dCall[KEYCONF_SPARAM_HEAVY]+" "+dCall[KEYCONF_STASKARRAY]+"1-"+str(iSize)+dCall[KEYCONF_SMAXTASK]+dCall[KEYCONF_SMAXSIMJOB]+" -e "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".e"+dCall[KEYCONF_SPSEUDOTASKID]+" -o "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".o"+dCall[KEYCONF_SPSEUDOTASKID]+" "+sScriptDir+"/"+BASHSCRIPT+" "+str(iNumberSeq)+" "+sKmerPath+" "+sDir+" "+sScriptDir+" Demultiplexing"+sPlateId+"_Ok "+sConf+" "+sArg+" "+sPlateId+"\n")
 	FILE.write("""
