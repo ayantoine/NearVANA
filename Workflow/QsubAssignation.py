@@ -6,13 +6,15 @@ import time
 from optparse import OptionParser
 import os
 
-sCurrentVersionScript="v4"
+sCurrentVersionScript="v5"
 iTime1=time.time()
 ########################################################################
 '''
+V5-2021/10/05
+Adapt to cluster usage
+
 V4-2020/02/11
 Adapt to multiplate analysis
-
 V3-2020/01/21
 Adapt to array wioth limited value
 V2-2019/10/30
@@ -35,7 +37,7 @@ DEFAULT_SEQ_BY_TASK=1000000
 CONF_COMMENT="#"
 CONF_STEP="="
 KEYCONF_SCALL="SCALL"
-KEYCONF_SPARAM="SPARAM"
+KEYCONF_SPARAM_HEAVY="SPARAM_HEAVY"
 KEYCONF_STASKARRAY="STASKARRAY"
 KEYCONF_SMAXTASK="SMAXTASK"
 KEYCONF_SMAXSIMJOB="SMAXSIMJOB"
@@ -121,7 +123,7 @@ def WriteBash(sArg,iSize,sScriptDir,sKmerPath,sOutputPath,sDir,dCall,sConf,sPID,
 	FILE=open(sOutputPath,"w")
 	FILE.write("#! /bin/bash\n\n")
 	FILE.write("mkdir "+sLogDir+"\n")
-	FILE.write(dCall[KEYCONF_SCALL]+" "+dCall[KEYCONF_SPARAM]+" "+dCall[KEYCONF_STASKARRAY]+"1-"+str(iSize)+dCall[KEYCONF_SMAXTASK]+dCall[KEYCONF_SMAXSIMJOB]+" -e "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".e"+dCall[KEYCONF_SPSEUDOTASKID]+" -o "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".o"+dCall[KEYCONF_SPSEUDOTASKID]+" "+sScriptDir+"/"+BASHSCRIPT+" "+str(iNumberSeq)+" "+sKmerPath+" "+sDir+" "+sScriptDir+" Demultiplexing"+sPlateId+"_Ok "+sConf+" "+sArg+" "+sPlateId+"\n")
+	FILE.write(dCall[KEYCONF_SCALL]+" "+dCall[KEYCONF_SPARAM_HEAVY]+" "+dCall[KEYCONF_STASKARRAY]+"1-"+str(iSize)+dCall[KEYCONF_SMAXTASK]+dCall[KEYCONF_SMAXSIMJOB]+" -e "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".e"+dCall[KEYCONF_SPSEUDOTASKID]+" -o "+sLogDir+"/"+BASHSCRIPT.replace(".sh","")+".o"+dCall[KEYCONF_SPSEUDOTASKID]+" "+sScriptDir+"/"+BASHSCRIPT+" "+str(iNumberSeq)+" "+sKmerPath+" "+sDir+" "+sScriptDir+" Demultiplexing"+sPlateId+"_Ok "+sConf+" "+sArg+" "+sPlateId+"\n")
 	FILE.write("""
 if [ ! -d "Demultiplexing"""+sPlateId+"""_Ok" ] ; then mkdir "Demultiplexing"""+sPlateId+"""_Ok" ; fi
 while true ; do

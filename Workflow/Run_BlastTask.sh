@@ -17,8 +17,8 @@ if [ ! -d ${PID}"_Blast${TASK}" ] ; then mkdir ${PID}"_Blast${TASK}" ; fi
 if [ ! -d ${PID}"_log_Blast${TASK}" ] ; then mkdir ${PID}"_log_Blast${TASK}" ; fi
 
 if [ ! -f ${PID}.Blast${TASK}.ok ] ; then
-    echo "$SCALL $SPARAM $SRENAME ${PID}_${TASK}-Blast${TASK} ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Blast${TASK}"/${PID}_Blast${TASK}.e${SPSEUDOTASKID} -o ${PID}"_log_Blast${TASK}"/${PID}_Blast${TASK}.o${SPSEUDOTASKID} ${SDIR}/BlastJob.sh $ARG ${TASK}"
-    $SCALL $SPARAM $SRENAME ${PID}_${TASK}-Blast${TASK} ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Blast${TASK}"/${PID}_Blast${TASK}.e${SPSEUDOTASKID} -o ${PID}"_log_Blast${TASK}"/${PID}_Blast${TASK}.o${SPSEUDOTASKID} ${SDIR}/BlastJob.sh $ARG ${TASK} # Input: ${PID}_All_sequences.fa ${BK} ${PID} ${SDIR} ${PROTAXO}
+    echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}-Blast${TASK} ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Blast${TASK}"/${PID}_Blast${TASK}.e${SPSEUDOTASKID} -o ${PID}"_log_Blast${TASK}"/${PID}_Blast${TASK}.o${SPSEUDOTASKID} ${SDIR}/BlastJob.sh $ARG ${TASK}"
+    $SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}-Blast${TASK} ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Blast${TASK}"/${PID}_Blast${TASK}.e${SPSEUDOTASKID} -o ${PID}"_log_Blast${TASK}"/${PID}_Blast${TASK}.o${SPSEUDOTASKID} ${SDIR}/BlastJob.sh $ARG ${TASK} # Input: ${PID}_All_sequences.fa ${BK} ${PID} ${SDIR} ${PROTAXO}
     while true ; do
 	    if [ $(ls Blast${TASK}_Ok/ | wc -l) -eq 0 ]
 		    then

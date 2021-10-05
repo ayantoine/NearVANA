@@ -24,8 +24,8 @@ echo "${TASK}"
 if [ "${TASK}" == "D" ]; then
 	echo "------ Launch Diamond by task ------"
 	if [ ! -f ${PID}.Blast${TASK}.ok ]; then
-		echo "$SCALL $SPARAM $SRENAME ${PID}_DiamondTask -e Run_DiamondTask.e -o Run_DiamondTask.o ${SDIR}/Run_DiamondTask.sh $ARG"
-		$SCALL $SPARAM $SRENAME ${PID}_DiamondTask -e Run_DiamondTask.e -o Run_DiamondTask.o ${SDIR}/Run_DiamondTask.sh $ARG
+		echo "$SCALL $SPARAM_EASY $SRENAME ${PID}_DiamondTask -e Run_DiamondTask.e -o Run_DiamondTask.o ${SDIR}/Run_DiamondTask.sh $ARG"
+		$SCALL $SPARAM_EASY $SRENAME ${PID}_DiamondTask -e Run_DiamondTask.e -o Run_DiamondTask.o ${SDIR}/Run_DiamondTask.sh $ARG
 		while [ ! -e ${PID}.Blast${TASK}.ok ]; do sleep 60 ; done
 	else
 		echo "{PID}.Blast${TASK}.ok already existing, pass"
@@ -34,8 +34,8 @@ if [ "${TASK}" == "D" ]; then
 else
 	echo "------ Launch Blast by task ------"
 	if [ ! -f ${PID}.Blast${TASK}.ok ]; then
-		echo "$SCALL $SPARAM $SRENAME ${PID}_${TASK}_Blast -e Run_Blast${TASK}.e -o Run_Blast${TASK}.o ${SDIR}/Run_BlastTask.sh $ARG ${TASK}"
-		$SCALL $SPARAM $SRENAME ${PID}_${TASK}_Blast -e Run_Blast${TASK}.e -o Run_Blast${TASK}.o ${SDIR}/Run_BlastTask.sh $ARG ${TASK}
+		echo "$SCALL $SPARAM_EASY $SRENAME ${PID}_${TASK}_Blast -e Run_Blast${TASK}.e -o Run_Blast${TASK}.o ${SDIR}/Run_BlastTask.sh $ARG ${TASK}"
+		$SCALL $SPARAM_EASY $SRENAME ${PID}_${TASK}_Blast -e Run_Blast${TASK}.e -o Run_Blast${TASK}.o ${SDIR}/Run_BlastTask.sh $ARG ${TASK}
 		while [ ! -e ${PID}.Blast${TASK}.ok ]; do sleep 60 ; done
 	else
 		echo "{PID}.Blast${TASK}.ok already existing, pass"
@@ -55,8 +55,8 @@ if [ ! -f ${PID}.Taxonomy${TASK}.ok ]; then
 	if [ ! -d ${PID}"_log_Taxo${TASK}" ] ; then mkdir ${PID}"_log_Taxo${TASK}" ; fi
 	if [ ! -d "Taxo${TASK}_Ok" ] ; then mkdir "Taxo${TASK}_Ok" ; fi
 	touch ${PID}_${TASK}_TempDefDb.txt
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Taxo${TASK} ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Taxo${TASK}"/${PID}_Taxo${TASK}.e${SPSEUDOTASKID} -o ${PID}"_log_Taxo${TASK}"/${PID}_Taxo${TASK}.o${SPSEUDOTASKID} ${SDIR}/GetTaxonomy.sh $ARG ${TASK}"
-	$SCALL $SPARAM $SRENAME ${PID}_Taxo${TASK} ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Taxo${TASK}"/${PID}_Taxo${TASK}.e${SPSEUDOTASKID} -o ${PID}"_log_Taxo${TASK}"/${PID}_Taxo${TASK}.o${SPSEUDOTASKID} ${SDIR}/GetTaxonomy.sh $ARG ${TASK}
+	echo "$SCALL $SPARAM_EASY $SRENAME ${PID}_Taxo${TASK} ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Taxo${TASK}"/${PID}_Taxo${TASK}.e${SPSEUDOTASKID} -o ${PID}"_log_Taxo${TASK}"/${PID}_Taxo${TASK}.o${SPSEUDOTASKID} ${SDIR}/GetTaxonomy.sh $ARG ${TASK}"
+	$SCALL $SPARAM_EASY $SRENAME ${PID}_Taxo${TASK} ${STASKARRAY}1-${nb_jobs}${SMAXTASK}${SMAXSIMJOB} -e ${PID}"_log_Taxo${TASK}"/${PID}_Taxo${TASK}.e${SPSEUDOTASKID} -o ${PID}"_log_Taxo${TASK}"/${PID}_Taxo${TASK}.o${SPSEUDOTASKID} ${SDIR}/GetTaxonomy.sh $ARG ${TASK}
 	while true ; do
 		if [ $(ls Taxo${TASK}_Ok/ | wc -l) -eq 0 ]
 			then
@@ -96,17 +96,18 @@ if [ ! -f ${PID}.creation${TASK}.ok ]; then
 	fi
 	datetime1=$(date +%s)
 	if [ "$USE_MULTIPLEX" = true ] ; then
-		echo "$SCALL $SPARAM $SRENAME ${PID}_${TASK}Table -e Creation_Table${TASK}.e -o Creation_Table${TASK}.o ${SDIR}/CreateTable.sh $ARG ${TASK} ${nb_jobs}"
-		$SCALL $SPARAM $SRENAME ${PID}_${TASK}Table -e Creation_Table${TASK}.e -o Creation_Table${TASK}.o ${SDIR}/CreateTable.sh $ARG ${TASK} ${nb_jobs}
+		echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Table -e Creation_Table${TASK}.e -o Creation_Table${TASK}.o ${SDIR}/CreateTable.sh $ARG ${TASK} ${nb_jobs}"
+		$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Table -e Creation_Table${TASK}.e -o Creation_Table${TASK}.o ${SDIR}/CreateTable.sh $ARG ${TASK} ${nb_jobs}
 		while [ ! -e ${PID}.creation${TASK}.ok ]; do sleep 60 ; done
 	else
-		echo "$SCALL $SPARAM $SRENAME ${PID}_${TASK}Table -e Creation_Table${TASK}.e -o Creation_Table${TASK}.o ${SDIR}/CreateTable_NM.sh $ARG ${TASK} ${nb_jobs}"
-		$SCALL $SPARAM $SRENAME ${PID}_${TASK}Table -e Creation_Table${TASK}.e -o Creation_Table${TASK}.o ${SDIR}/CreateTable_NM.sh $ARG ${TASK} ${nb_jobs}
+		echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Table -e Creation_Table${TASK}.e -o Creation_Table${TASK}.o ${SDIR}/CreateTable_NM.sh $ARG ${TASK} ${nb_jobs}"
+		$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Table -e Creation_Table${TASK}.e -o Creation_Table${TASK}.o ${SDIR}/CreateTable_NM.sh $ARG ${TASK} ${nb_jobs}
 		while [ ! -e ${PID}.creation${TASK}.ok ]; do sleep 60 ; done
 	fi
 	echo "------ Xlsx conversion ------"
-	echo "perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_Blast${TASK}_results.tab ${PID}_Blast${TASK}_results.xlsx $((${#PID}+7))"
-	perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_Blast${TASK}_results.tab ${PID}_Blast${TASK}_results.xlsx $((${#PID}+7))
+	echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Convertor -e Convert_Table${TASK}.e -o Convert_Table${TASK}.o ${SDIR}/RunPerlConvertor.sh $ARG ${TASK}"
+	$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Convertor -e Convert_Table${TASK}.e -o Convert_Table${TASK}.o ${SDIR}/RunPerlConvertor.sh $ARG ${TASK}
+	while [ ! -e ${PID}.Tab2Xls${TASK}.ok ]; do sleep 60 ; done
 	echo "------ /Xlsx conversion ------"
 	datetime2=$(date +%s)
 	delta=$((datetime2 - datetime1))
@@ -118,8 +119,9 @@ echo "------ /Create table ------"
 
 if [ "$USE_MULTIPLEX" = true ] ; then
 	echo "------ Write stat ------"
-	echo "python ${SDIR}/CountAssemblyStat.py -0 ${PID}_R0.Substracted.fastq -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -u ${PID}_All.Megahit_unmappedReads.tsv -o ${PID}_Stat_Assembly.tsv"
-	python ${SDIR}/CountIdentificationStat.py -t ${PID}_Blast${TASK}_results.tab -s ${PID}_Stat_Assembly.tsv -o ${PID}_Stat_identification-${TASK}.tsv
+	echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Stat -e Stat-${TASK}.e -o Stat-${TASK}.o ${SDIR}/CountAssemblyStat.sh $ARG ${TASK}"
+	$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Stat -e Stat-${TASK}.e -o Stat-${TASK}.o ${SDIR}/CountAssemblyStat.sh $ARG ${TASK}
+	while [ ! -e ${PID}.Stat-${TASK}.ok ]; do sleep 60 ; done
 	echo "------ /Write stat ------"
 fi
 
