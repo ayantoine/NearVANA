@@ -4,13 +4,13 @@ set -e #if a command crash, the script interrupt immediatly
 
 FOLDER=$1
 
-FTPlineage="ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/"
+FTPlineage="https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/"
 TarLineage="new_taxdump"
 SubFileLineage="fullnamelineage.dmp"
 SubFileNodes="nodes.dmp"
 SubFileNames="names.dmp"
 
-FTPaccId="ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/accession2taxid"
+FTPaccId="https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/accession2taxid"
 NTarget="nucl_gb.accession2taxid"
 PTarget="prot.accession2taxid"
 TargetArray=(${NTarget} ${PTarget})
