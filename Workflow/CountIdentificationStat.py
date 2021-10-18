@@ -59,13 +59,13 @@ def GetSampleFromStat(sPath):
 	if bHeader:
 	    bHeader=False
 	    continue
-        sLine=sNewLine.strip()
-        if len(sLine)==0:
-            continue
-        tLine=sNewLine.split(TABULATION)
-        sSampleId=tLine[0]
+	sLine=sNewLine.strip()
+	if len(sLine)==0:
+	    continue
+	tLine=sNewLine.split(TABULATION)
+	sSampleId=tLine[0]
 	iValue=int(tLine[2])
-        dDict[sSampleId]={IDENTIFICATION_BEFORE:iValue,IDENTIFICATION_IDENTIFIED:0,IDENTIFICATION_UNIDENTIFIED:0}
+	dDict[sSampleId]={IDENTIFICATION_BEFORE:iValue,IDENTIFICATION_IDENTIFIED:0,IDENTIFICATION_UNIDENTIFIED:0}
     return dDict
         
 def CountQuantityIdentified(sPath,dDict):

@@ -5,12 +5,12 @@
 import time
 from optparse import OptionParser
 
-sCurrentVersionScript="v1"
+sCurrentVersionScript="v4"
 iTime1=time.time()
 ########################################################################
 '''
-V4-2021/09/24
-
+V4-2021/10/18
+Change: Reads columns now show reads related to sample and no reads related to contigs
 
 V3-2021/04/12
 Fix: No more able to catch metadata file
@@ -201,7 +201,7 @@ def LoadContigsAndQuantity(sFileReverse,dRef,dDict={}):
 		sContigId=tLine[1]
 		try:
 			oCrash=dRef[sContigId]
-			sSampleId=sReadId.split(TABULATION)[-1]
+			sSampleId=sReadId.split(UNDERSCORE)[-1]
 			if sContigId not in dDict:
 				dDict[sContigId]={}
 			try:
@@ -333,10 +333,11 @@ def LoadQuery(sFile):
 	return dDict
 
 def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
+	# print("dMetadata",dMetadata)
 	for sQuery in dBlast:
-		print("sQuery",sQuery)
+		# print("sQuery",sQuery)
 		for iRank in dBlast[sQuery]:
-			print("iRank",iRank)
+			# print("iRank",iRank)
 			if iRank==1:
 				sRank=BEST_HIT
 			else:
@@ -347,15 +348,9 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 			fCover=round(float(iCoverSize)/iQuerySize*100,2)
 			
 			tGlobalSample=sorted(list(dContigs[sQuery].keys()))
-
-						
-			# if CONTIG in sQuery:
-				# sReadQuantity=sQuery.split("(")[-1].split(")")[0]
-			# else:
-				# sReadQuantity="1"
 			sSubjectId=dBlast[sQuery][iRank]["SubjectId"]
 			
-			print("sSubjectId",sSubjectId)
+			# print("sSubjectId",sSubjectId)
 			
 			try:
 				sTaxo=dTaxo[sSubjectId]["Lineage"]
@@ -385,16 +380,16 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 				sDefinition="unknown"
 				
 			for sGlobalSample in tGlobalSample:
-				print("sGlobalSample",sGlobalSample)
+				# print("sGlobalSample",sGlobalSample)
 				if sGlobalSample!=UNASSIGNED_READS:
 					for sPlateId in dMetadata:
-						print("sPlateId",sPlateId)
+						# print("sPlateId",sPlateId)
 						if sPlateId in sGlobalSample:
 							break
 					
-					sReadQuantity=dContigs[sQuery][sGlobalSample]
-					#sSampleId=sGlobalSample.replace(sPlateId,EMPTY)
+					sReadQuantity=str(dContigs[sQuery][sGlobalSample])
 					sSampleId=sGlobalSample.split(UNDERSCORE)[-1]
+					sSampleId=sSampleId.replace(sPlateId,EMPTY)
 					tLine=[sRank,sQuery,sGlobalSample,sReadQuantity,str(iQuerySize),
 					dMetadata[sPlateId][sSampleId]["Location"],dMetadata[sPlateId][sSampleId]["Date"],
 					dMetadata[sPlateId][sSampleId]["Host"],dMetadata[sPlateId][sSampleId]["Individuals"],
@@ -409,7 +404,7 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 					dBlast[sQuery][iRank]["BitScore"],dContent[sQuery]
 					]
 				else:
-					sReadQuantity=dContigs[sQuery][UNASSIGNED_READS]
+					sReadQuantity=str(dContigs[sQuery][UNASSIGNED_READS])
 					tLine=[sRank,sQuery,sGlobalSample,sReadQuantity,str(iQuerySize),
 					DEFAULT,DEFAULT,
 					DEFAULT,DEFAULT,
