@@ -391,7 +391,7 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 						if sPlateId in sGlobalSample:
 							break
 					
-					sReadQuantity=dContigs[sGlobalSample]
+					sReadQuantity=dContigs[sQuery][sGlobalSample]
 					sSampleId=sGlobalSample.replace(sPlateId,EMPTY)
 					tLine=[sRank,sQuery,sGlobalSample,sReadQuantity,str(iQuerySize),
 					dMetadata[sPlateId][sSampleId]["Location"],dMetadata[sPlateId][sSampleId]["Date"],
@@ -407,7 +407,7 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 					dBlast[sQuery][iRank]["BitScore"],dContent[sQuery]
 					]
 				else:
-					sReadQuantity=dContigs[UNASSIGNED_READS]
+					sReadQuantity=dContigs[sQuery][UNASSIGNED_READS]
 					tLine=[sRank,sQuery,sGlobalSample,sReadQuantity,str(iQuerySize),
 					DEFAULT,DEFAULT,
 					DEFAULT,DEFAULT,
