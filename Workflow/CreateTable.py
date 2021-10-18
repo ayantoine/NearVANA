@@ -354,7 +354,6 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 				# sReadQuantity="1"
 			sSubjectId=dBlast[sQuery][iRank]["SubjectId"]
 			
-			print("sReadQuantity",sReadQuantity)
 			print("sSubjectId",sSubjectId)
 			
 			try:
