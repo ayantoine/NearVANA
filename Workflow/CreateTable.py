@@ -333,9 +333,9 @@ def LoadQuery(sFile):
 
 def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 	for sQuery in dBlast:
-		# print("sQuery",sQuery)
+		print("sQuery",sQuery)
 		for iRank in dBlast[sQuery]:
-			# print("iRank",iRank)
+			print("iRank",iRank)
 			if iRank==1:
 				sRank=BEST_HIT
 			else:
@@ -354,8 +354,8 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 				# sReadQuantity="1"
 			sSubjectId=dBlast[sQuery][iRank]["SubjectId"]
 			
-			# print("sReadQuantity",sReadQuantity)
-			# print("sSubjectId",sSubjectId)
+			print("sReadQuantity",sReadQuantity)
+			print("sSubjectId",sSubjectId)
 			
 			try:
 				sTaxo=dTaxo[sSubjectId]["Lineage"]
@@ -385,10 +385,10 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 				sDefinition="unknown"
 				
 			for sGlobalSample in tGlobalSample:
-				# print("sGlobalSample",sGlobalSample)
+				print("sGlobalSample",sGlobalSample)
 				if sGlobalSample!=UNASSIGNED_READS:
 					for sPlateId in dMetadata:
-						# print("sPlateId",sPlateId)
+						print("sPlateId",sPlateId)
 						if sPlateId in sGlobalSample:
 							break
 					
