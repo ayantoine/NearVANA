@@ -39,6 +39,7 @@ REPLACEME="REPLACE-ME"
 SAMPLE_SEPARATOR="-"
 CONTIG="Contig"
 TABULATION="\t"
+UNDERSCORE="_"
 
 UNASSIGNED_READS="UnassignedReads"
 
@@ -392,7 +393,8 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 							break
 					
 					sReadQuantity=dContigs[sQuery][sGlobalSample]
-					sSampleId=sGlobalSample.replace(sPlateId,EMPTY)
+					#sSampleId=sGlobalSample.replace(sPlateId,EMPTY)
+					sSampleId=sGlobalSample.split(UNDERSCORE)[-1]
 					tLine=[sRank,sQuery,sGlobalSample,sReadQuantity,str(iQuerySize),
 					dMetadata[sPlateId][sSampleId]["Location"],dMetadata[sPlateId][sSampleId]["Date"],
 					dMetadata[sPlateId][sSampleId]["Host"],dMetadata[sPlateId][sSampleId]["Individuals"],
