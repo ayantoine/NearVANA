@@ -10,7 +10,7 @@ iTime1=time.time()
 ########################################################################
 '''
 V1-2021/09/24
-Count reads repartition by sample before asembly, after assembly and unassembled
+Count reads repartition by sample before identifcation, after identification and unidentified
 
 python CountIdentificationStat.py -t TABLE -s ASSEMBLY_STAT -o OUTPUT
 TABLE: NearVANA results tab
