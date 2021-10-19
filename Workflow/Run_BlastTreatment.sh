@@ -118,11 +118,13 @@ fi
 echo "------ /Create table ------"
 
 if [ "$USE_MULTIPLEX" = true ] ; then
-	echo "------ Write stat ------"
-	echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Stat -e Stat-${TASK}.e -o Stat-${TASK}.o ${SDIR}/CountAssemblyStat.sh $ARG ${TASK}"
-	$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Stat -e Stat-${TASK}.e -o Stat-${TASK}.o ${SDIR}/CountAssemblyStat.sh $ARG ${TASK}
-	while [ ! -e ${PID}.Stat-${TASK}.ok ]; do sleep 60 ; done
-	echo "------ /Write stat ------"
+	if [ ! -f ${PID}.Stat-${TASK}.ok ]; then
+		echo "------ Write stat ------"
+		echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Stat -e Stat-${TASK}.e -o Stat-${TASK}.o ${SDIR}/CountAssemblyStat.sh $ARG ${TASK}"
+		$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Stat -e Stat-${TASK}.e -o Stat-${TASK}.o ${SDIR}/CountAssemblyStat.sh $ARG ${TASK}
+		while [ ! -e ${PID}.Stat-${TASK}.ok ]; do sleep 60 ; done
+		echo "------ /Write stat ------"
+	fi
 fi
 
 echo "------ Create ok tagfile ------"
