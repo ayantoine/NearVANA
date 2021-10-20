@@ -55,7 +55,7 @@ fi
 for VARNAME in "${PLATE[@]}"; do
 	VAR=$VARNAME[@]
 	#echo ${!VAR}
-	eval "LEN=\${#$VAR[@]}"
+	eval "LEN=\${#$VAR}"
 	#echo "$len"
 	if [ "$LEN" -eq "${NB_ITEM}" ]; then
 		for i in "${p[@]}"; do
