@@ -331,7 +331,7 @@ fi
 if [ -f ${PID}_All.Megahit.contigs2sample.tsv ]; then
 	echo -e "\t- zip and remove contigs2sample file"
 	gzip -f ${PID}_All.Megahit.contigs2sample.tsv > ${PID}_All.Megahit.contigs2sample.tsv.gz
-	rm ${PID}_All.Megahit.contigs2sample.tsv
+	#rm ${PID}_All.Megahit.contigs2sample.tsv
 fi
 
 echo "------ Produce basic stat------"
