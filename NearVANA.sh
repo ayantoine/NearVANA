@@ -362,7 +362,6 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 		fi
 	done
 fi
-
 echo "------ /Remove various auxiliary temporary files ------"
 
 datetime2=$(date +%s)
