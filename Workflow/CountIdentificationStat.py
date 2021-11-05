@@ -28,6 +28,8 @@ IDENTIFICATION_BEFORE="Before"
 IDENTIFICATION_IDENTIFIED="Identified"
 IDENTIFICATION_UNIDENTIFIED="NotIdentified"
 
+BEST_HIT="Best hit"
+
 ########################################################################
 #Options
 parser = OptionParser()
@@ -78,6 +80,9 @@ def CountQuantityIdentified(sPath,dDict):
         if len(sLine)==0:
             continue
         tLine=sNewLine.split(TABULATION)
+        sBestHit=tLine[0]
+        if sBestHit!=BEST_HIT:
+            continue
         sSampleId=tLine[2]
         iValue=int(tLine[3])
         dDict[sSampleId][IDENTIFICATION_IDENTIFIED]+=iValue
