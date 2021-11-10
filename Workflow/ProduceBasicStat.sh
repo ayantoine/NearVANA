@@ -25,11 +25,6 @@ USE_DIAMOND="$(boolean "${DIAMOND}")"
 USE_BLASTN="$(boolean "${BLASTN}")"
 USE_BLASTX="$(boolean "${BLASTX}")"
 
-if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
-	echo -e "\t- Decompressing reverseAssembly archive"
-	zcat ${PID}_All.Megahit_reverseAssembly.tsv.gz > ${PID}_All.Megahit_reverseAssembly.tsv
-fi
-
 if [ "$USE_MULTIPLEX" = true ] ; then
 	echo "Using Multiplex"
 	if [ "$USE_PREFILTER" = true ] ; then
@@ -97,6 +92,10 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 		fi
 	fi
 else
+	if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
+		echo -e "\t- Decompressing reverseAssembly archive"
+		zcat ${PID}_All.Megahit_reverseAssembly.tsv.gz > ${PID}_All.Megahit_reverseAssembly.tsv
+	fi
 	if [ "$USE_DIAMOND" = true ] ; then
 		echo "Using Diamond"
 		if [ ! -f ${PID}.StatBlastD.ok ]; then
@@ -132,6 +131,29 @@ fi
 if [ -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
 	echo -e "\t- remove reverseAssembly file"
 	rm ${PID}_All.Megahit_reverseAssembly.tsv
+fi
+
+
+if [ "$USE_MULTIPLEX" = true ] ; then
+	if [ "$USE_PREFILTER" = true ] ; then
+		echo "--Density graph--"
+		if [ "$USE_DIAMOND" = true ] ; then
+			TASK="D"
+			echo "python ${SDIR}/DrawGaphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}"
+			python ${SDIR}/DrawGaphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}
+		fi
+		if [ "$USE_BLASTX" = true ] ; then
+			TASK="X"
+			echo "python ${SDIR}/DrawGaphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}"
+			python ${SDIR}/DrawGaphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}
+		fi
+		if [ "$USE_BLASTN" = true ] ; then
+			TASK="N"
+			echo "python ${SDIR}/DrawGaphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}"
+			python ${SDIR}/DrawGaphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}
+		fi
+		echo "--Density graph--"
+	fi
 fi
 
 
