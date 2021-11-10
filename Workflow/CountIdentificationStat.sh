@@ -8,8 +8,8 @@ SDIR=${GITDIR}/Workflow
 
 
 echo "------ Write stat ------"
-echo "python ${SDIR}/CountIdentificationStat.py -t ${PID}_Blast${TASK}_results.tab -s ${PID}_Stat_Assembly.tsv -o ${PID}_Stat_Identificaion-${TASK}.tsv"
-python ${SDIR}/CountIdentificationStat.py -t ${PID}_Blast${TASK}_results.tab -s ${PID}_Stat_Assembly.tsv -o ${PID}_Stat_Identificaion-${TASK}.tsv
+echo "python ${SDIR}/CountIdentificationStat.py -t ${PID}_Blast${TASK}_results.tab -s ${PID}_Stat_Assembly.tsv -o ${PID}_Stat_Identification-${TASK}.tsv"
+python ${SDIR}/CountIdentificationStat.py -t ${PID}_Blast${TASK}_results.tab -s ${PID}_Stat_Assembly.tsv -o ${PID}_Stat_Identification-${TASK}.tsv
 echo "------ /Write stat ------"
 
 echo "------ Create ok tagfile ------"
