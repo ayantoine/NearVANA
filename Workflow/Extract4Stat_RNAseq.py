@@ -509,76 +509,6 @@ def ProcessStatGroupedByVirus(sOutput,dSeq2Quantity,dContig2Taxo,dContig2Attribu
                                         dContig2Attribut[sContig][REF]
                                         ))
         FILE_SAMPLE.close()
- 
-def ProcessStatByGroup(sOutput,dSeq2Sample2Quantity,dContig2Taxo,dGroup2Sample):
-    dSample2Group=ReverseTableDict(dGroup2Sample)
-    dTaxo2Group2Data={FAMILY:{},GENUS:{},SPECIES:{}}
-    dGroup2SumContigs={}
-    dGroup2SumReads={}
-    for sSeq in dSeq2Sample2Quantity:
-        dGroup2Bool={}
-        sFamily=dContig2Taxo[sSeq][FAMILY]
-        sGenus=dContig2Taxo[sSeq][GENUS]
-        sSpecies=dContig2Taxo[sSeq][SPECIES]
-        for sSample in dSeq2Sample2Quantity[sSeq]:
-            dbGroup=dSample2Group[sSample]
-            try:
-                oCrash=dGroup2SumContigs[dbGroup]
-            except KeyError:
-                dGroup2SumContigs[dbGroup]=0
-            try:
-                oCrash=dGroup2SumReads[dbGroup]
-            except KeyError:
-                dGroup2SumReads[dbGroup]=0
-            dGroup2SumContigs[dbGroup]+=1
-            dGroup2SumReads[dbGroup]+=dSeq2Sample2Quantity[sSeq][sSample]
-            try:
-                oCrash=dTaxo2Group2Data[FAMILY][dbGroup]
-            except KeyError:
-                dTaxo2Group2Data[FAMILY][dbGroup]={}
-            try:
-                oCrash=dTaxo2Group2Data[FAMILY][dbGroup][sFamily]
-            except KeyError:
-                dTaxo2Group2Data[FAMILY][dbGroup][sFamily]={READS:0,CONTIGS:0}
-            try:
-                oCrash=dTaxo2Group2Data[GENUS][dbGroup]
-            except KeyError:
-                dTaxo2Group2Data[GENUS][dbGroup]={}
-            try:
-                oCrash=dTaxo2Group2Data[GENUS][dbGroup][sGenus]
-            except KeyError:
-                dTaxo2Group2Data[GENUS][dbGroup][sGenus]={READS:0,CONTIGS:0}
-            try:
-                oCrash=dTaxo2Group2Data[SPECIES][dbGroup]
-            except KeyError:
-                dTaxo2Group2Data[SPECIES][dbGroup]={}
-            try:
-                oCrash=dTaxo2Group2Data[SPECIES][dbGroup][sSpecies]
-            except KeyError:
-                dTaxo2Group2Data[SPECIES][dbGroup][sSpecies]={READS:0,CONTIGS:0}
-            dGroup2Bool[dbGroup]=True
-            dTaxo2Group2Data[FAMILY][dbGroup][sFamily][READS]+=dSeq2Sample2Quantity[sSeq][sSample]
-            dTaxo2Group2Data[GENUS][dbGroup][sGenus][READS]+=dSeq2Sample2Quantity[sSeq][sSample]
-            dTaxo2Group2Data[SPECIES][dbGroup][sSpecies][READS]+=dSeq2Sample2Quantity[sSeq][sSample]
-        for dbGroup in dGroup2Bool:
-            dTaxo2Group2Data[FAMILY][dbGroup][sFamily][CONTIGS]+=1
-            dTaxo2Group2Data[GENUS][dbGroup][sGenus][CONTIGS]+=1
-            dTaxo2Group2Data[SPECIES][dbGroup][sSpecies][CONTIGS]+=1
-    
-    for dbGroup in dGroup2SumContigs:
-        dTarget={FAMILY:FOLDER_FAMILY,GENUS:FOLDER_GENUS,SPECIES:FOLDER_SPECIES}
-        iSumContigs=dGroup2SumContigs[dbGroup]
-        iSumReads=dGroup2SumReads[dbGroup]
-        for sTaxo in dTarget:
-            FILE_GROUP=open(sOutput+"/"+FOLDER_GROUP+"/"+dTarget[sTaxo]+"/"+FolderNameFormat(dbGroup)+".tsv","w")
-            FILE_GROUP.write(sTaxo+"\tReads\tContigs\t%Reads(/Group)\t%Contigs(/Group)\n")
-            for sItem in sorted(dTaxo2Group2Data[sTaxo][dbGroup]):
-                iGroupContigs=dTaxo2Group2Data[sTaxo][dbGroup][sItem][CONTIGS]
-                iGroupReads=dTaxo2Group2Data[sTaxo][dbGroup][sItem][READS]
-                fContigs=round(float(iGroupContigs)/iSumContigs*100,2)
-                fReads=round(float(iGroupReads)/iSumReads*100,2)
-                FILE_GROUP.write("{}\t{}\t{}\t{}\t{}\n".format(sItem,iGroupReads,iGroupContigs,fReads,fContigs))
-            FILE_GROUP.close()
 
 def ProcessStatBySample(sOutput,dSeq2Sample2Quantity,dContig2Taxo,tSampleList):
     dTaxo2Sample2Data={FAMILY:{},GENUS:{},SPECIES:{}}
@@ -721,7 +651,6 @@ def WriteReadsByFilteredContigs(dDict,dTaxo,dSeq2Quantity):
     FILE=open(sOutput+"/"+LOG,"a")
     FILE.write("Data contains {} Reads in {} Contigs\n".format(iSumReads,len(dDict)))
     FILE.close()
-
 
 ########################################################################
 #MAIN
