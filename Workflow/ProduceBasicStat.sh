@@ -139,20 +139,43 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 		echo "--Density graph--"
 		if [ "$USE_DIAMOND" = true ] ; then
 			TASK="D"
-			echo "python ${SDIR}/DrawGaphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}"
-			python ${SDIR}/DrawGaphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}
+			echo "python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}"
+			python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}
 		fi
 		if [ "$USE_BLASTX" = true ] ; then
 			TASK="X"
-			echo "python ${SDIR}/DrawGaphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}"
-			python ${SDIR}/DrawGaphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}
+			echo "python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}"
+			python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}
 		fi
 		if [ "$USE_BLASTN" = true ] ; then
 			TASK="N"
-			echo "python ${SDIR}/DrawGaphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}"
-			python ${SDIR}/DrawGaphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}
+			echo "python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}"
+			python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}
 		fi
-		echo "--Density graph--"
+		echo "--/Density graph--"
+		echo "--Restricted tab--"
+		if [ "$USE_DIAMOND" = true ] ; then
+			TASK="D"
+			echo "python ${SDIR}/ExtractInterrestingVirus.py  -i ${PID}_Blast${TASK}_results.tab -o ${PID}_Blast${TASK}_results.focused.tab -f ${PID}_Stat_Blast${TASK}"
+			python ${SDIR}/ExtractInterrestingVirus.py  -i ${PID}_Blast${TASK}_results.tab -o ${PID}_Blast${TASK}_results.focused.tab -f ${PID}_Stat_Blast${TASK}
+			echo "perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_Blast${TASK}_results.tab ${PID}_Blast${TASK}_results.xlsx $((${#PID}+7))"
+			perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_Blast${TASK}_results.focused.tab ${PID}_Blast${TASK}_results.focused.xlsx $((${#PID}+7))
+		fi
+		if [ "$USE_BLASTX" = true ] ; then
+			TASK="X"
+			echo "python ${SDIR}/ExtractInterrestingVirus.py  -i ${PID}_Blast${TASK}_results.tab -o ${PID}_Blast${TASK}_results.focused.tab -f ${PID}_Stat_Blast${TASK}"
+			python ${SDIR}/ExtractInterrestingVirus.py  -i ${PID}_Blast${TASK}_results.tab -o ${PID}_Blast${TASK}_results.focused.tab -f ${PID}_Stat_Blast${TASK}
+			echo "perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_Blast${TASK}_results.tab ${PID}_Blast${TASK}_results.xlsx $((${#PID}+7))"
+			perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_Blast${TASK}_results.focused.tab ${PID}_Blast${TASK}_results.focused.xlsx $((${#PID}+7))
+		fi
+		if [ "$USE_BLASTN" = true ] ; then
+			TASK="N"
+			echo "python ${SDIR}/ExtractInterrestingVirus.py  -i ${PID}_Blast${TASK}_results.tab -o ${PID}_Blast${TASK}_results.focused.tab -f ${PID}_Stat_Blast${TASK}"
+			python ${SDIR}/ExtractInterrestingVirus.py  -i ${PID}_Blast${TASK}_results.tab -o ${PID}_Blast${TASK}_results.focused.tab -f ${PID}_Stat_Blast${TASK}
+			echo "perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_Blast${TASK}_results.tab ${PID}_Blast${TASK}_results.xlsx $((${#PID}+7))"
+			perl -I ${SDIR} ${SDIR}/Tab2Xls.pl ${PID}_Blast${TASK}_results.focused.tab ${PID}_Blast${TASK}_results.focused.xlsx $((${#PID}+7))
+		fi
+		echo "--/Restricted tab--"
 	fi
 fi
 
