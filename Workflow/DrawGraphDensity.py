@@ -67,10 +67,6 @@ if not sFolder:
 sOutput=options.output
 if not sOutput:
 	exit("Error : no output -o defined, process broken")
-
-sPrefix=options.prefix
-if sPrefix:
-    sOutput=sPrefix+"_"+sOutput
     
 ########################################################################
 #Function
@@ -211,9 +207,7 @@ if __name__ == "__main__":
     WriteRdataframe(dGlobalDensity,LIST_SUPP,sOutput+TAG_OUTPUT2)
     LaunchRScript(sOutput+TAG_OUTPUT1)
     LaunchRScript(sOutput+TAG_OUTPUT2)
-    
-    
-	
+
 ########################################################################    
 iTime2=time.time()
 iDeltaTime=iTime2-iTime1
