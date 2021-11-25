@@ -5,6 +5,7 @@ import time
 from optparse import OptionParser
 import os
 import re
+import subprocess
 
 sCurrentVersionScript="v1"
 iTime1=time.time()
@@ -22,7 +23,7 @@ PREFIX: Prefix output
 '''
 ########################################################################
 #CONSTANT
-RSCRIPT="DrawGrapgDensity.r"
+RSCRIPT="DrawGraphDensity.r"
 
 SUM="Sum"
 IDENTIFIED="Identified"
@@ -107,11 +108,11 @@ def ParseIdentificationStat(sPath):
 
 def ParseFolderStat(sPath):
     dDict={}
-    tSpeciesList=os.listdir(sPath+"/"+STATBYFAMILY)
+    tSpeciesList=os.listdir(sPath)
     for sSpeciesFile in tSpeciesList:
         sSpeciesName=sSpeciesFile.replace(TAG_TSV,EMPTY)
         dDict[sSpeciesName]={}
-        with open(sPath+"/"+STATBYFAMILY+"/"+sSpeciesFile) as oInput:
+        with open(sPath+"/"+sSpeciesFile) as oInput:
             bHeader=True
             for sNewLine in oInput:
                 if bHeader:
@@ -187,9 +188,11 @@ def RegroupGlobalData(dUnassembled,dIdentification,dVirus):
     
     return dDict
 
-def LauncRScript(sPath):
+def LaunchRScript(sPath):
     print("Launch R script...")
-    subprocess.call(["Rscript",RSCRIPT,os.getcwd(),sPath.replace(TAG_TSV,EMPTY)])
+    tCommand=["Rscript",RSCRIPT,os.getcwd(),sPath.replace(TAG_TSV,EMPTY)]
+    print(" ".join(tCommand)+"$")
+    subprocess.call(tCommand)
 
 ########################################################################
 #MAIN

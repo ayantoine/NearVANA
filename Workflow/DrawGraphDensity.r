@@ -10,7 +10,9 @@ if (length(args)==1){
   sName = args[2]
 }
 
-mydata <- read.csv(paste(sName,".tsv"),header=TRUE, sep="\t")
+myfile <- paste(sName,".tsv", sep="")
+
+mydata <- read.csv(myfile,header=TRUE, sep="\t")
 
 pdf(gsub(" ","",paste(sName,".graph.pdf")), width = 25, height = 25)
 myplot <- ggplot(mydata, aes(x = SampleId, y = Reads))+geom_col(aes(fill = Legend), width = 0.75)
