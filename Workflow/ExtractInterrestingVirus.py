@@ -318,7 +318,10 @@ def GetInterestingContigs(sPath):
         sSampleId=tLine[COL_SAMPLEID]
         if sSampleId==UNASSIGNED_READS:
             continue
-        fFrag=float(tLine[COL_PERCENTFRAG])
+        try:
+            fFrag=float(tLine[COL_PERCENTFRAG])
+        except ValueError:
+            continue
         if fFrag>=INTEREST_THRESHOLD:
             sHost=tLine[COL_HOST]
             sName=tLine[COL_REFORGANISM]

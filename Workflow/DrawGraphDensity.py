@@ -23,7 +23,8 @@ PREFIX: Prefix output
 '''
 ########################################################################
 #CONSTANT
-RSCRIPT="DrawGraphDensity.r"
+CWD=os.getcwd()
+RSCRIPT=CWD+"/DrawGraphDensity.r"
 
 SUM="Sum"
 IDENTIFIED="Identified"
