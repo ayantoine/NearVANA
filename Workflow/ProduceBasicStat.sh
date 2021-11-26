@@ -139,18 +139,18 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 		echo "--Density graph--"
 		if [ "$USE_DIAMOND" = true ] ; then
 			TASK="D"
-			echo "python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}"
-			python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}
+			echo "python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK} -r ${SDIR}"
+			python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK} -r ${SDIR}
 		fi
 		if [ "$USE_BLASTX" = true ] ; then
 			TASK="X"
-			echo "python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}"
-			python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}
+			echo "python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK} -r ${SDIR}"
+			python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK} -r ${SDIR}
 		fi
 		if [ "$USE_BLASTN" = true ] ; then
 			TASK="N"
-			echo "python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}"
-			python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK}
+			echo "python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK} -r ${SDIR}"
+			python ${SDIR}/DrawGraphDensity.py -a ${PID}_Stat_Assembly.tsv -i ${PID}_Stat_Identification-${TASK}.tsv -f ${PID}_Stat_Blast${TASK}/StatByFamily/ -o ${PID}_Density_table-${TASK} -r ${SDIR}
 		fi
 		echo "--/Density graph--"
 		echo "--Restricted tab--"

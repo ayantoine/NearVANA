@@ -23,8 +23,7 @@ PREFIX: Prefix output
 '''
 ########################################################################
 #CONSTANT
-CWD=os.getcwd()
-RSCRIPT=CWD+"/DrawGraphDensity.r"
+RSCRIPT="DrawGraphDensity.r"
 
 SUM="Sum"
 IDENTIFIED="Identified"
@@ -51,6 +50,7 @@ parser.add_option("-a","--assembly_stat", dest="assembly_stat")
 parser.add_option("-i","--identification_stat", dest="identification_stat")
 parser.add_option("-f","--folder_stat", dest="folder_stat")
 parser.add_option("-o","--output", dest="output")
+parser.add_option("-r","--rscript_path", dest="rscript_path")
 
 (options, args) = parser.parse_args()
 
@@ -69,6 +69,10 @@ if not sFolder:
 sOutput=options.output
 if not sOutput:
 	exit("Error : no output -o defined, process broken")
+
+sRpath=options.rscript_path
+if not sRpath:
+	exit("Error : no rscript_path -r defined, process broken")
     
 ########################################################################
 #Function
@@ -189,9 +193,9 @@ def RegroupGlobalData(dUnassembled,dIdentification,dVirus):
     
     return dDict
 
-def LaunchRScript(sPath):
+def LaunchRScript(sPath,sGit):
     print("Launch R script...")
-    tCommand=["Rscript",RSCRIPT,os.getcwd(),sPath.replace(TAG_TSV,EMPTY)]
+    tCommand=["Rscript",sGit+"/"+RSCRIPT,os.getcwd(),sPath.replace(TAG_TSV,EMPTY)]
     print(" ".join(tCommand)+"$")
     subprocess.call(tCommand)
 
@@ -209,8 +213,8 @@ if __name__ == "__main__":
     # print("dDensity",dDensity)
     WriteRdataframe(dVirusDensity,list(sorted(dViruses2SampleReads.keys())),sOutput+TAG_OUTPUT1)
     WriteRdataframe(dGlobalDensity,LIST_SUPP,sOutput+TAG_OUTPUT2)
-    LaunchRScript(sOutput+TAG_OUTPUT1)
-    LaunchRScript(sOutput+TAG_OUTPUT2)
+    LaunchRScript(sOutput+TAG_OUTPUT1,sRpath)
+    LaunchRScript(sOutput+TAG_OUTPUT2,sRpath)
 
 ########################################################################    
 iTime2=time.time()
