@@ -45,16 +45,16 @@ LINE_BY_FASTQ=4
 
 SEARCHWINDOWS_SIZE=30
 
-CONF_COMMENT="#"
-CONF_STEP="="
-KEYCONF_SCALL="SCALL"
-KEYCONF_SPARAM="SPARAM"
-KEYCONF_STASKARRAY="STASKARRAY"
-KEYCONF_SMAXTASK="SMAXTASK"
-KEYCONF_SMAXSIMJOB="SMAXSIMJOB"
-KEYCONF_SMAXARRAYSIZE="SMAXARRAYSIZE"
-KEYCONF_STASKID="STASKID"
-KEYCONF_SPSEUDOTASKID="SPSEUDOTASKID"
+# CONF_COMMENT="#"
+# CONF_STEP="="
+# KEYCONF_SCALL="SCALL"
+# KEYCONF_SPARAM="SPARAM"
+# KEYCONF_STASKARRAY="STASKARRAY"
+# KEYCONF_SMAXTASK="SMAXTASK"
+# KEYCONF_SMAXSIMJOB="SMAXSIMJOB"
+# KEYCONF_SMAXARRAYSIZE="SMAXARRAYSIZE"
+# KEYCONF_STASKID="STASKID"
+# KEYCONF_SPSEUDOTASKID="SPSEUDOTASKID"
 
 TRUE="True"
 FALSE="False"
@@ -312,20 +312,20 @@ def CreateTag(sName):
 	FILE=open(sName,"w")
 	FILE.close()
 
-def LoadConfFile(sPath):
-	dDict={}
-	for sNewLine in open(sPath):
-		# sLine=sNewLine.strip()
-		sLine=sNewLine.replace("\n","")
-		sLine=sLine.replace("\\","")
-		sLine=sLine.replace('"','')
-		if len(sLine)==0:
-			continue
-		if sLine[0]==CONF_COMMENT:
-			continue
-		tLine=sLine.split(CONF_STEP)
-		dDict[tLine[0]]=CONF_STEP.join(tLine[1:])
-	return dDict	
+# def LoadConfFile(sPath):
+	# dDict={}
+	# for sNewLine in open(sPath):
+		# # sLine=sNewLine.strip()
+		# sLine=sNewLine.replace("\n","")
+		# sLine=sLine.replace("\\","")
+		# sLine=sLine.replace('"','')
+		# if len(sLine)==0:
+			# continue
+		# if sLine[0]==CONF_COMMENT:
+			# continue
+		# tLine=sLine.split(CONF_STEP)
+		# dDict[tLine[0]]=CONF_STEP.join(tLine[1:])
+	# return dDict	
 		
 ########################################################################
 #MAIN

@@ -5,7 +5,17 @@ datetime1=$(date +%s)
 ARG=$1
 source $ARG
 source $CONF
-SDIR=${GITDIR}/Analysis
+SDIR=${GITDIR}/Workflow
+
+function boolean() {
+  case $1 in
+    TRUE) echo true ;;
+    FALSE) echo false ;;
+    *) echo "Err: Unknown boolean value \"$1\"" 1>&2; exit 1 ;;
+   esac
+}
+
+USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
 
 echo "------ Megahit ------"
 time megahit --k-list 21,33,55,77,99 -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -r ${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${PID}"_log_Assembly-Megahit"
@@ -27,10 +37,15 @@ echo "------ /Megahit reverse-mapping ------"
 
 rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
 
-echo "------ Write stat ------"
-echo "python ${SDIR}/CountAssemblyStat.py -0 ${PID}_R0.Substracted.fastq -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -u ${PID}_All.Megahit_unmappedReads.tsv -o ${PID}_Stat_Assembly.tsv -d ${PID}_Demultiplexing_Hyper_Distribution.tsv"
-python ${SDIR}/CountAssemblyStat.py -0 ${PID}_R0.Substracted.fastq -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -u ${PID}_All.Megahit_unmappedReads.tsv -o ${PID}_Stat_Assembly.tsv -d ${PID}_Demultiplexing_Hyper_Distribution.tsv
-echo "------ /Write stat ------"
+if [ "$USE_MULTIPLEX" = true ] ; then
+	if [ ! -f ${PID}.Stat_Assembly.ok ]; then
+		echo "------ Write stat ------"
+		echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Stat -e Stat_Assembly.e -o Stat_Assembly.o ${SDIR}/CountAssemblyStat.sh $ARG"
+		$SCALL $SPARAM_HEAVY $SRENAME ${PID}_${TASK}Stat -e Stat_Assembly.e -o Stat_Assembly.o ${SDIR}/CountAssemblyStat.sh $ARG
+		while [ ! -e ${PID}.Stat_Assembly.ok ]; do sleep 60 ; done
+		echo "------ /Write stat ------"
+	fi
+fi
 
 echo "------ Compress Corrected.fastq ------"
 gzip -f ${PID}_R0.Substracted.fastq > ${PID}_R0.Substracted.fastq.gz

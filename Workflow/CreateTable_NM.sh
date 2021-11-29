@@ -6,7 +6,7 @@ ARG=$1
 source $ARG
 source $CONF
 source $DATA
-SDIR=${GITDIR}/Analysis
+SDIR=${GITDIR}/Workflow
 
 task=$2
 nb_jobs=$3

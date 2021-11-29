@@ -5,13 +5,15 @@
 import time
 from optparse import OptionParser
 
-sCurrentVersionScript="v1"
+sCurrentVersionScript="v4"
 iTime1=time.time()
 ########################################################################
 '''
+V4-2021/10/18
+Change: Reads columns now show reads related to sample and no reads related to contigs
+
 V3-2021/04/12
 Fix: No more able to catch metadata file
-
 V2-2020/02/14
 Adapt to Diamond and Demultiplexing
 V1-2019/11/06
@@ -36,6 +38,8 @@ HIT="."
 REPLACEME="REPLACE-ME"
 SAMPLE_SEPARATOR="-"
 CONTIG="Contig"
+TABULATION="\t"
+UNDERSCORE="_"
 
 UNASSIGNED_READS="UnassignedReads"
 
@@ -118,8 +122,6 @@ if __name__ == "__main__":
 		BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
 		BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab"
 		TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Diamond_2.tab.taxo"
-		SHORTMEGAHIT=sPID+"_All.Megahit.contigs2sample.tsv"
-		# SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
 	else:
 		#Half-constant
 		BLAST_OUTPUT=sPID+"_Blast"+sTask+"_results.tab"
@@ -127,8 +129,7 @@ if __name__ == "__main__":
 		BLAST_INPUT=sPID+"_All.fa."+REPLACEME+".keeped"
 		BLAST_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab"
 		TAXO_FILE=sPID+"_All.fa."+REPLACEME+".Blast"+sTask+"_2.tab.taxo"
-		SHORTMEGAHIT=sPID+"_All.Megahit.contigs2sample.tsv"
-		# SHORTFLASH=sPID+"_All.FLASH.contigs2sample.tsv"
+	REVERSE_ASSEMBLY=sPID+"_All.Megahit_reverseAssembly.tsv"
 
 ########################################################################
 #Function 	
@@ -191,15 +192,22 @@ def LoadMetadata(dData):
 				
 	return dDict
 
-def LoadContigs(sFile,dRef,dDict={}):
-	print("Loading file "+str(sFile))
-	for sNewLine in open(sFile):
+def LoadContigsAndQuantity(sFileReverse,dRef,dDict={}):
+	print("Loading targeting reverse query from "+str(sFileReverse))
+	for sNewLine in open(sFileReverse):
 		sLine=sNewLine.strip()
-		tLine=sLine.split("\t")
-		sName=tLine[0]
+		tLine=sLine.split(TABULATION)
+		sReadId=tLine[0]
+		sContigId=tLine[1]
 		try:
-			oCrash=dRef[sName]
-			dDict[sName]=tLine[1].split(SAMPLE_SEPARATOR)
+			oCrash=dRef[sContigId]
+			sSampleId=sReadId.split(UNDERSCORE)[-1]
+			if sContigId not in dDict:
+				dDict[sContigId]={}
+			try:
+				dDict[sContigId][sSampleId]+=1
+			except KeyError:
+				dDict[sContigId][sSampleId]=1
 		except KeyError:
 			continue
 	return dDict
@@ -325,6 +333,7 @@ def LoadQuery(sFile):
 	return dDict
 
 def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
+	# print("dMetadata",dMetadata)
 	for sQuery in dBlast:
 		# print("sQuery",sQuery)
 		for iRank in dBlast[sQuery]:
@@ -338,20 +347,9 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 			iCoverSize=int(dBlast[sQuery][iRank]["QueryEnd"])-int(dBlast[sQuery][iRank]["QueryStart"])
 			fCover=round(float(iCoverSize)/iQuerySize*100,2)
 			
-			try:
-				tGlobalSample=dContigs[sQuery]
-			except KeyError:
-				tGlobalSample=[sQuery.split("_")[-1]]
-			
-			# print("tGlobalSample",tGlobalSample)
-						
-			if CONTIG in sQuery:
-				sReadQuantity=sQuery.split("(")[-1].split(")")[0]
-			else:
-				sReadQuantity="1"
+			tGlobalSample=sorted(list(dContigs[sQuery].keys()))
 			sSubjectId=dBlast[sQuery][iRank]["SubjectId"]
 			
-			# print("sReadQuantity",sReadQuantity)
 			# print("sSubjectId",sSubjectId)
 			
 			try:
@@ -388,8 +386,10 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 						# print("sPlateId",sPlateId)
 						if sPlateId in sGlobalSample:
 							break
-								
-					sSampleId=sGlobalSample.replace(sPlateId,EMPTY)
+					
+					sReadQuantity=str(dContigs[sQuery][sGlobalSample])
+					sSampleId=sGlobalSample.split(UNDERSCORE)[-1]
+					sSampleId=sSampleId.replace(sPlateId,EMPTY)
 					tLine=[sRank,sQuery,sGlobalSample,sReadQuantity,str(iQuerySize),
 					dMetadata[sPlateId][sSampleId]["Location"],dMetadata[sPlateId][sSampleId]["Date"],
 					dMetadata[sPlateId][sSampleId]["Host"],dMetadata[sPlateId][sSampleId]["Individuals"],
@@ -404,6 +404,7 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 					dBlast[sQuery][iRank]["BitScore"],dContent[sQuery]
 					]
 				else:
+					sReadQuantity=str(dContigs[sQuery][UNASSIGNED_READS])
 					tLine=[sRank,sQuery,sGlobalSample,sReadQuantity,str(iQuerySize),
 					DEFAULT,DEFAULT,
 					DEFAULT,DEFAULT,
@@ -446,11 +447,10 @@ if __name__ == "__main__":
 	for iIndex in range(1,iJobs+1):
 		print("Working on index "+str(iIndex))
 		dQuery2Content=LoadQuery(BLAST_FOLDER+"/"+BLAST_INPUT.replace(REPLACEME,str(iIndex)))
-		dContigs2Sample=LoadContigs(SHORTMEGAHIT,dQuery2Content)
-		# dContigs2Sample=LoadContigs(SHORTFLASH,dQuery2Content,dContigs2Sample)
+		dContigs2Sample2Quantity=LoadContigsAndQuantity(REVERSE_ASSEMBLY,dQuery2Content)
 		dTaxo=LoadTaxo(BLAST_FOLDER+"/"+TAXO_FILE.replace(REPLACEME,str(iIndex)))
 		dBlast=LoadBlast(BLAST_FOLDER+"/"+BLAST_FILE.replace(REPLACEME,str(iIndex)))
-		WriteData(FILE,dBlast,dTaxo,dContigs2Sample,dMetadata,dQuery2Content,dLength)
+		WriteData(FILE,dBlast,dTaxo,dContigs2Sample2Quantity,dMetadata,dQuery2Content,dLength)
 	FILE.close()
 	
 ########################################################################    

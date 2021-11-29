@@ -83,7 +83,7 @@ echo
 echo '> Conf details (/!\ beware bash interpretation for STASKID)'
 source $CONF
 
-SDIR=${GITDIR}/Analysis
+SDIR=${GITDIR}/Workflow
 
 echo "------ Check Input existence ------"
 if [ ! -d $SDIR ] ; then
@@ -91,7 +91,7 @@ if [ ! -d $SDIR ] ; then
 	exit 1
 fi
 
-LIST_PARAM=(NUCACC NUCDEF PROACC PRODEF DBLINEAGE VIRMINLEN SCALL SPARAM MULTICPU MULTIMEMORY SPARAM_MULTICPU STASKARRAY SMAXTASK SRENAME SMAXSIMJOB SMAXARRAYSIZE STASKID SPSEUDOTASKID VIRNTDB ALLNTDB  VIRPTDB ALLPTDB VIRPTDB_DIAMOND ALLPTDB_DIAMOND)
+LIST_PARAM=(NUCACC NUCDEF PROACC PRODEF DBLINEAGE VIRMINLEN SCALL SPARAM_EASY SPARAM_HEAVY SPARAM_MULTICPU STASKARRAY SMAXTASK SRENAME SMAXSIMJOB SMAXARRAYSIZE STASKID SPSEUDOTASKID VIRNTDB ALLNTDB  VIRPTDB ALLPTDB VIRPTDB_DIAMOND ALLPTDB_DIAMOND)
 for i in "${LIST_PARAM[@]}"; do
 	echo "$i: ${!i}"
 done
@@ -113,8 +113,8 @@ echo "------ /Get Sample list ------"
 
 echo "------ Extract .gz ------"
 if [ ! -f ${PID}.extraction.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_Extraction -e Extraction.e -o Extraction.o ${SDIR}/Gz_extraction.sh $ARG"
-	$SCALL $SPARAM $SRENAME ${PID}_Extraction -e Extraction.e -o Extraction.o ${SDIR}/Gz_extraction.sh $ARG
+	echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_Extraction -e Extraction.e -o Extraction.o ${SDIR}/Gz_extraction.sh $ARG"
+	$SCALL $SPARAM_HEAVY $SRENAME ${PID}_Extraction -e Extraction.e -o Extraction.o ${SDIR}/Gz_extraction.sh $ARG
 	while [ ! -e ${PID}.extraction.ok ]; do sleep 60 ; done
 else
 	echo "${PID}.extraction.ok already existing, pass"
@@ -125,8 +125,8 @@ echo "------ /Extract .gz ------"
 if [ "$USE_MULTIPLEX" = true ] ; then
 	echo "------ Demultiplexing reads ------"
 	if [ ! -f ${PID}.Demultiplexing.ok ]; then
-		echo "$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing.e -o Demultiplexing.o ${SDIR}/Demultiplexing.sh $ARG"
-		$SCALL $SPARAM $SRENAME ${PID}_Demultiplexing -e Demultiplexing.e -o Demultiplexing.o ${SDIR}/Demultiplexing.sh $ARG
+		echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_Demultiplexing -e Demultiplexing.e -o Demultiplexing.o ${SDIR}/Demultiplexing.sh $ARG"
+		$SCALL $SPARAM_HEAVY $SRENAME ${PID}_Demultiplexing -e Demultiplexing.e -o Demultiplexing.o ${SDIR}/Demultiplexing.sh $ARG
 		while [ ! -e ${PID}.Demultiplexing.ok ]; do sleep 60 ; done
 	else
 		echo "${PID}.Demultiplexing.ok existing, pass"
@@ -143,13 +143,13 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 				mkdir $sampleId	
 			done
 			for VARNAME in "${PLATE[@]}"; do
-				echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_${VARNAME}_R1_SplitReads.e -o Run_${VARNAME}_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R1.fastq 1 ${VARNAME}"
-				$SCALL $SPARAM $SRENAME ${PID}_R1_Run_SplitReads -e Run_${VARNAME}_R1_SplitReads.e -o Run_${VARNAME}_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R1.fastq 1 ${VARNAME}
+				echo "$SCALL $SPARAM_EASY $SRENAME ${PID}_R1_Run_SplitReads -e Run_${VARNAME}_R1_SplitReads.e -o Run_${VARNAME}_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R1.fastq 1 ${VARNAME}"
+				$SCALL $SPARAM_EASY $SRENAME ${PID}_R1_Run_SplitReads -e Run_${VARNAME}_R1_SplitReads.e -o Run_${VARNAME}_R1_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R1.fastq 1 ${VARNAME}
 				while [ ! -e ${PID}_${VARNAME}_R1.fastq.split.ok ]; do sleep 60 ; done
 				rm ${PID}_${VARNAME}_R1.fastq
 				if [ "$USE_PAIREND" = true ] ; then
-					echo "$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}"
-					$SCALL $SPARAM $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}
+					echo "$SCALL $SPARAM_EASY $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}"
+					$SCALL $SPARAM_EASY $SRENAME ${PID}_R2_Run_SplitReads -e Run_${VARNAME}_R2_SplitReads.e -o Run_${VARNAME}_R2_SplitReads.o ${SDIR}/Run_SplitReads.sh $ARG ${PID}_${VARNAME}_R2.fastq 2 ${VARNAME}
 					while [ ! -e ${PID}_${VARNAME}_R2.fastq.split.ok ]; do sleep 60 ; done
 					rm ${PID}_${VARNAME}_R2.fastq
 				fi
@@ -161,8 +161,8 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 		
 		if [ ! -f ${PID}.CutAdapt.ok ]; then
 			echo -e "\t- Trim adapters"
-			echo "$SCALL $SPARAM $SRENAME ${PID}_R1_Run_CutAdapt -e Run_R1_CutAdapt.e -o Run_R1_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG ${PID}_R1.fastq"
-			$SCALL $SPARAM $SRENAME ${PID}_Run_CutAdapt -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG
+			echo "$SCALL $SPARAM_EASY $SRENAME ${PID}_R1_Run_CutAdapt -e Run_R1_CutAdapt.e -o Run_R1_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG ${PID}_R1.fastq"
+			$SCALL $SPARAM_EASY $SRENAME ${PID}_Run_CutAdapt -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt.sh $ARG
 			while [ ! -e ${PID}.CutAdapt.ok ]; do sleep 60 ; done
 			for sampleId in "${SAMPLE_LIST[@]}"; do
 				rm ${sampleId}/${sampleId}_${PID}_R1.fastq.split
@@ -174,8 +174,8 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 		
 		if [ ! -f ${PID}.Substraction-Deinterlacing.ok ]; then
 			echo -e "\t- PhiX Substraction : deinterlacing"
-			echo "$SCALL $SPARAM $SRENAME ${PID}_Run_Correction -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG"
-			$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG
+			echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_Run_Correction -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG"
+			$SCALL $SPARAM_HEAVY $SRENAME ${PID}_Run_RetrievePair -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair.sh $ARG
 			while [ ! -e ${PID}.Deinterlacing.ok ]; do sleep 60 ; done
 			rm ${PID}.Deinterlacing.ok
 				
@@ -206,8 +206,8 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 		
 		if [ ! -f ${PID}.Substraction-Deinterlacing.ok ]; then
 			echo -e "\t- PhiX Substraction : deinterlacing"
-			echo "$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG"
-			$SCALL $SPARAM $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG
+			echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG"
+			$SCALL $SPARAM_HEAVY $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG
 			while [ ! -e ${PID}.Deinterlacing.ok ]; do sleep 60 ; done
 			rm ${PID}.Deinterlacing.ok
 			
@@ -262,8 +262,8 @@ echo "------ /Reads assembly------"
 
 echo "------ Split fasta for Blast ------"
 if [ ! -f ${PID}.SplitFasta.ok ]; then
-	echo "$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG"
-	$SCALL $SPARAM $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG
+	echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG"
+	$SCALL $SPARAM_HEAVY $SRENAME ${PID}_SplitFasta -e SplitFasta.e -o SplitFasta.o ${SDIR}/SplitFasta.sh $ARG
 	while [ ! -e ${PID}.SplitFasta.ok ]; do sleep 60 ; done
 else
 	echo "${PID}.SplitFasta.ok already existing, pass"
@@ -276,30 +276,30 @@ if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
 	echo "zcat ${PID}_All.Megahit_reverseAssembly.tsv.gz > ${PID}_All.Megahit_reverseAssembly.tsv"
 	zcat ${PID}_All.Megahit_reverseAssembly.tsv.gz > ${PID}_All.Megahit_reverseAssembly.tsv
 	if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
-		echo "Seems weird, the previous command didn't gen"
+		echo "Seems weird, the previous command didn't generate the missing files ~~'"
 	fi
 fi
 
 if [ "$BLASTN" = true ] ; then
 	if [ ! -f ${PID}.BlastTreatmentN.ok ]; then
-		echo "$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N"
-		$SCALL $SPARAM $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N
+		echo "$SCALL $SPARAM_EASY $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N"
+		$SCALL $SPARAM_EASY $SRENAME ${PID}_BlastNTreatment -e Run_BlastNTreatment.e -o Run_BlastNTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG N
 	else
 		echo "${PID}.BlastTreatmentN.ok already existing, pass"
 	fi
 fi
 if [ "$BLASTX" = true ] ; then
 	if [ ! -f ${PID}.BlastTreatmentX.ok ]; then
-		echo "$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X"
-		$SCALL $SPARAM $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X
+		echo "$SCALL $SPARAM_EASY $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X"
+		$SCALL $SPARAM_EASY $SRENAME ${PID}_BlastXTreatment -e Run_BlastXTreatment.e -o Run_BlastXTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG X
 	else
 		echo "${PID}.BlastTreatmentX.ok already existing, pass"
 	fi
 fi
 if [ "$DIAMOND" = true ] ; then
 	if [ ! -f ${PID}.BlastTreatmentD.ok ]; then
-		echo "$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D"
-		$SCALL $SPARAM $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D
+		echo "$SCALL $SPARAM_EASY $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D"
+		$SCALL $SPARAM_EASY $SRENAME ${PID}_DiamondTreatment -e Run_DiamondTreatment.e -o Run_DiamondTreatment.o ${SDIR}/Run_BlastTreatment.sh $ARG D
 	else
 		echo "${PID}.BlastTreatmentD.ok already existing, pass"
 	fi
@@ -335,104 +335,13 @@ if [ -f ${PID}_All.Megahit.contigs2sample.tsv ]; then
 fi
 
 echo "------ Produce basic stat------"
-if [ ! -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
-	echo -e "\t- Decompressing reverseAssembly archive"
-	zcat ${PID}_All.Megahit_reverseAssembly.tsv.gz > ${PID}_All.Megahit_reverseAssembly.tsv
-fi
-
-if [ "$USE_MULTIPLEX" = true ] ; then
-	if [ "$PREFILTER" = true ] ; then
-		if [ "$DIAMOND" = true ] ; then
-			if [ ! -f ${PID}.StatBlastD.ok ]; then
-				echo "python ${SDIR}/Extract4Stat.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > Stat_BlastD.o"
-				python ${SDIR}/Extract4Stat.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > Stat_BlastD.o
-				touch ${PID}.StatBlastD.ok
-			else
-				echo "${PID}.StatBlastD.ok already existing, pass"
-			fi
-		fi
-		if [ "$BLASTX" = true ] ; then
-			if [ ! -f ${PID}.StatBlastX.ok ]; then
-				echo "python ${SDIR}/Extract4Stat.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > Stat_BlastX.o"
-				python ${SDIR}/Extract4Stat.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > Stat_BlastX.o
-				touch ${PID}.StatBlastX.ok
-			else
-				echo "${PID}.StatBlastX.ok already existing, pass"
-			fi
-		fi
-		if [ "$BLASTN" = true ] ; then
-			if [ ! -f ${PID}.StatBlastN.ok ]; then
-				echo "python ${SDIR}/Extract4Stat.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > Stat_BlastN.o"
-				python ${SDIR}/Extract4Stat.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} > Stat_BlastN.o
-				touch ${PID}.StatBlastN.ok
-			else
-				echo "${PID}.StatBlastN.ok already existing, pass"
-			fi
-		fi
-	else
-		if [ "$DIAMOND" = true ] ; then
-			if [ ! -f ${PID}.StatBlastD.ok ]; then
-				echo "python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} -1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > Stat_BlastD.o"
-				python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} -1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > Stat_BlastD.o
-				touch ${PID}.StatBlastD.ok
-			else
-				echo "${PID}.StatBlastD.ok already existing, pass"
-			fi
-		fi
-		if [ "$BLASTX" = true ] ; then
-			if [ ! -f ${PID}.StatBlastX.ok ]; then
-				echo "python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} -1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > Stat_BlastX.o"
-				python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} -1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > Stat_BlastX.o
-				touch ${PID}.StatBlastX.ok
-			else
-				echo "${PID}.StatBlastX.ok already existing, pass"
-			fi
-		fi
-		if [ "$BLASTN" = true ] ; then
-			if [ ! -f ${PID}.StatBlastN.ok ]; then
-				echo "python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} -1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > Stat_BlastN.o"
-				python ${SDIR}/Extract4Stat_all.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv -d ${DATA} -1 ${LOCALDB}/All_Family_GB.list.tsv -2 ${LOCALDB}/All_Genus_GB.list.tsv -3 ${LOCALDB}/All_Species_GB.list.tsv > Stat_BlastN.o
-				touch ${PID}.StatBlastN.ok
-			else
-				echo "${PID}.StatBlastN.ok already existing, pass"
-			fi
-		fi
-	fi
+if [ ! -f ${PID}.BasicStat.ok ]; then
+	echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_BasicStat -e BasicStat.e -o BasicStat.o ${SDIR}/ProduceBasicStat.sh $ARG"
+	$SCALL $SPARAM_HEAVY $SRENAME ${PID}_BasicStat -e BasicStat.e -o BasicStat.o ${SDIR}/ProduceBasicStat.sh $ARG
+	while [ ! -e ${PID}.Assembly.ok ]; do sleep 60 ; done
 else
-	if [ "$DIAMOND" = true ] ; then
-		if [ ! -f ${PID}.StatBlastD.ok ]; then
-			echo "python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > Stat_BlastD.o"
-			python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastD_results.tab -o ${PID}_Stat_BlastD/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > Stat_BlastD.o
-			touch ${PID}.StatBlastD.ok
-		else
-			echo "${PID}.StatBlastD.ok already existing, pass"
-		fi
-	fi
-	if [ "$BLASTX" = true ] ; then
-		if [ ! -f ${PID}.StatBlastX.ok ]; then
-			echo "python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > Stat_BlastX.o"
-			python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastX_results.tab -o ${PID}_Stat_BlastX/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > Stat_BlastX.o
-			touch ${PID}.StatBlastX.ok
-		else
-			echo "${PID}.StatBlastX.ok already existing, pass"
-		fi
-	fi
-	if [ "$BLASTN" = true ] ; then
-		if [ ! -f ${PID}.StatBlastN.ok ]; then
-			echo "python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > Stat_BlastN.o"
-			python ${SDIR}/Extract4Stat_RNAseq.py -i ${PID}_BlastN_results.tab -o ${PID}_Stat_BlastN/ -v ${VMR} -r ${PID}_All.Megahit_reverseAssembly.tsv > Stat_BlastN.o
-			touch ${PID}.StatBlastN.ok
-		else
-			echo "${PID}.StatBlastN.ok already existing, pass"
-		fi
-	fi
+	echo "${PID}.BasicStat.ok already existing, pass"
 fi
-
-if [ -f ${PID}_All.Megahit_reverseAssembly.tsv ]; then
-	echo -e "\t- remove reverseAssembly file"
-	rm ${PID}_All.Megahit_reverseAssembly.tsv
-fi
-
 echo "------ /Produce basic stat------"
 
 echo "------ Remove various auxiliary temporary files ------"
@@ -453,7 +362,6 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 		fi
 	done
 fi
-
 echo "------ /Remove various auxiliary temporary files ------"
 
 datetime2=$(date +%s)

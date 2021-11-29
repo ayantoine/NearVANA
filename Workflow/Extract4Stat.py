@@ -6,13 +6,19 @@ from optparse import OptionParser
 import os
 import re
 
-sCurrentVersionScript="v20"
+sCurrentVersionScript="v22"
 iTime1=time.time()
 ########################################################################
 '''
+V22-2021/11/10
+Fix: Confusion between complete contig name and short contig name
+Remove: Auto-grouping sample, not interresting
+Fix: Reinsert UnassignedReads sample...
+
+V21-2021/09/24
+Adapt to new table results that fraction contigs reads among sample
 V20-2021/06/18
 Branching to main workflow. Master.o no more available, switch on DATA
-
 V19-2021/02/04
 Retrieve Sample from Master.o to catch multiplate data.
 V18-2021/02/02
@@ -76,6 +82,7 @@ NOISE: Part of Contigs below or equal to this value are ignored
 #CONSTANT
 BEST_HIT="Best hit"
 TARGET="Viruses"
+SAMPLE_UNASSIGNED_READS="UnassignedReads"
 
 FILTER_CONTIG_SIZE=0
 FILTER_READ_QUANTITY=300
@@ -152,11 +159,7 @@ SPECIES_THRESHOLD=80
 PARTOF="(Partof)"
 COVER_THRESHOLD=66
 
-# UNKNOWN_SIZETHRESHOLD=2000
-# UNKNOWN_QUANTITYTHRESHOLD=500
-
 FOLDER_FAMILYGLOBAL="StatByFamily"
-FOLDER_GROUP="StatByGroup"
 FOLDER_FAMILY="ByFamily"
 FOLDER_GENUS="ByGenus"
 FOLDER_SPECIES="BySpecies"
@@ -291,12 +294,6 @@ def StoreLog():
 
 def CreateFolder(sPath):
     tFolder=[sPath,"{}/{}".format(sPath,FOLDER_FAMILYGLOBAL),
-            "{}/{}/{}".format(sPath,FOLDER_FAMILYGLOBAL,FOLDER_GROUP),
-            "{}/{}/{}".format(sPath,FOLDER_FAMILYGLOBAL,FOLDER_SAMPLE),
-            "{}/{}".format(sPath,FOLDER_GROUP),
-            "{}/{}/{}".format(sPath,FOLDER_GROUP,FOLDER_FAMILY),
-            "{}/{}/{}".format(sPath,FOLDER_GROUP,FOLDER_GENUS),
-            "{}/{}/{}".format(sPath,FOLDER_GROUP,FOLDER_SPECIES),
             "{}/{}".format(sPath,FOLDER_SAMPLE),
             "{}/{}/{}".format(sPath,FOLDER_SAMPLE,FOLDER_FAMILY),
             "{}/{}/{}".format(sPath,FOLDER_SAMPLE,FOLDER_GENUS),
@@ -363,118 +360,6 @@ def LoadData(sPath):
             dResult[sUniqSeqName]=dbLine
     # print(dResult["Contigs_Megahit_18612_(1619)"])
     return dResult    
-
-def GetDateFormat(sString):
-    for iIndex in range(len(sString)):
-        if sString[iIndex] not in INTEGER:
-            break
-    if iIndex==2:
-        return 2 # format: dd-mm-yyyy
-    if iIndex==4:
-        return 1 # format: yyyy-mm-dd
-
-def GroupByHostDateAndLocation(dDict,sOutput):
-    dSample2Date={}
-    dSample2Location={}
-    dSample2Host={}
-    iDateFormat=None
-    for iLine in dDict:
-        dbData=dDict[iLine]
-        sHost=dbData[COL_HOST]
-        sSample=dbData[COL_SAMPLEID]
-        sLocation=dbData[COL_LOCATION]
-        sDate=dbData[COL_DATE]
-        if iDateFormat is None:
-            iDateFormat=GetDateFormat(sDate)
-        if iDateFormat==1:
-            sDate=sDate[:7] # format: yyyy-mm-dd
-        else:
-            sDate=sDate[4:] # format: dd-mm-yyyy
-        dSample2Date[sSample]=sDate
-        dSample2Location[sSample]=sLocation
-        dSample2Host[sSample]=sHost
-    dResult={}
-    for sKey in dSample2Date:
-        dbId=(dSample2Date[sKey],dSample2Host[sKey],dSample2Location[sKey])
-        try:
-            dResult[dbId].append(sKey)
-        except KeyError:
-            dResult[dbId]=[sKey]
-    FILE=open("{}/Group2SampleId.tsv".format(sOutput),"w")
-    for dbId in sorted(dResult):
-        FILE.write("Grp_{}\t{}\n".format("_".join(dbId).replace("/","."),", ".join(sorted(dResult[dbId]))))
-    FILE.close()
-    return dResult
-
-def ReverseTableDict(dDict):    
-    dResult={}
-    for sKey in dDict:
-        for sValue in dDict[sKey]:
-            dResult[sValue]=sKey
-    return dResult
-
-def FolderNameFormat(dbString):
-    return "_".join(dbString).replace("/",".").replace(":","").replace(" ","_")
-
-def LoadReverseAssembly(dData,sFile):
-    dResult={}
-    for sKey in dData:
-        sContigName="_".join(sKey.split("_")[:-1])
-        sSample=sKey.split("_")[-1]        
-        try:
-            oCrash=dResult[sContigName]
-        except KeyError:
-            dResult[sContigName]={}
-        dResult[sContigName][sSample]=0
-   
-    for sNewLine in open(sFile):
-        tLine=sNewLine.split("\t")
-        sContigName=tLine[1]
-        try:
-            oCrash=dResult[sContigName]
-        except KeyError:
-            continue
-        sRead=tLine[0]
-        sSample=sRead.split("_")[-1]
-        dResult[sContigName][sSample]+=1
-
-    if FILTER_NOISE!=0:
-        tRemoveContig=[]
-        for sContigName in dResult:
-            tRemoveSample=[]
-            #Remove reads quantity below T- sample
-            for sSample in dResult[sContigName]:
-                if dResult[sContigName][sSample]<=FILTER_NOISE:
-                    tRemoveSample.append(sSample)
-            for sSample in tRemoveSample:
-                del dResult[sContigName][sSample]
-            if len(dResult[sContigName])==0:
-                tRemoveContig.append(sContigName)
-        for sContigName in tRemoveContig:
-            del dResult[sContigName]
-            
-    if FILTER_READ_REPRESENTATIVITE!=0:
-        tRemoveContig=[]
-        for sContigName in dResult:
-            #Get sum of reads
-            iSum=0
-            for sSample in dResult[sContigName]:
-                iSum+=dResult[sContigName][sSample]
-                
-            tRemoveSample=[]
-            #Remove sample that have less reads that minimal value
-            for sSample in dResult[sContigName]:
-                fValue=float(dResult[sContigName][sSample])/iSum*100
-                if fValue<FILTER_READ_REPRESENTATIVITE and dResult[sContigName][sSample]<FILTER_READ_HARDLIMIT:
-                    tRemoveSample.append(sSample)
-            for sSample in tRemoveSample:
-                del dResult[sContigName][sSample]
-            if len(dResult[sContigName])==0:
-                tRemoveContig.append(sContigName)
-        for sContigName in tRemoveContig:
-            del dResult[sContigName]
-            
-    return dResult
 
 def GetTaxo(dData):
     dResult={}
@@ -547,7 +432,7 @@ def GetTaxo(dData):
     
     return dResult
 
-def ProcessBilan(sOutput,dSeq2Sample2Quantity,dGroup2Sample,tSampleList):
+def ProcessBilan(sOutput,dSeq2Sample2Quantity,tSampleList):
     iSumReads=0
     iSumContigs=0
     for sSeq in dSeq2Sample2Quantity:
@@ -559,43 +444,19 @@ def ProcessBilan(sOutput,dSeq2Sample2Quantity,dGroup2Sample,tSampleList):
     FILE.write("Data contains {} Reads in {} Contigs\n".format(iSumReads,iSumContigs))
     FILE.close()
     
-    dSample2Group=ReverseTableDict(dGroup2Sample)
-    dGroup2Count={}
     dSample2Count={}
     for sSeq in dSeq2Sample2Quantity:
-        dGroup2Reads={}
         for sSample in dSeq2Sample2Quantity[sSeq]:
-            dbGroup=dSample2Group[sSample]
-            try:
-                oCrash=dGroup2Reads[dbGroup]
-            except KeyError:
-                dGroup2Reads[dbGroup]=0
             try:
                 oCrash=dSample2Count[sSample]
             except KeyError:
                 dSample2Count[sSample]={CONTIGS:0,READS:0}
             dSample2Count[sSample][CONTIGS]+=1
             dSample2Count[sSample][READS]+=dSeq2Sample2Quantity[sSeq][sSample]
-            dGroup2Reads[dbGroup]+=dSeq2Sample2Quantity[sSeq][sSample]
-        for dbGroup in dGroup2Reads:
-            try:
-                oCrash=dGroup2Count[dbGroup]
-            except KeyError:
-                dGroup2Count[dbGroup]={CONTIGS:0,READS:0}
-            dGroup2Count[dbGroup][CONTIGS]+=1
-            dGroup2Count[dbGroup][READS]+=dGroup2Reads[dbGroup]
-            
-    FILE_GROUP=open(sOutput+"/BilanByGroup.tsv","w")
-    FILE_GROUP.write("Group\tReads\tContigs\t%Reads(/All)\t%Contigs(/All)\n")
-    for dbGroup in sorted(dGroup2Count):
-        fReads=round(float(dGroup2Count[dbGroup][READS])/iSumReads*100,2)
-        fContigs=round(float(dGroup2Count[dbGroup][CONTIGS])/iSumContigs*100,2)
-        FILE_GROUP.write("{}\t{}\t{}\t{}\t{}\n".format(dbGroup,dGroup2Count[dbGroup][READS],dGroup2Count[dbGroup][CONTIGS],fReads,fContigs))
-    FILE_GROUP.close()
     
     FILE_SAMPLE=open(sOutput+"/BilanBySample.tsv","w")
-    FILE_SAMPLE.write("Group\tReads\tContigs\t%Reads(/All)\t%Contigs(/All)\n")
-    for sSample in sorted(tSampleList): #sorted(dSample2Count):
+    FILE_SAMPLE.write("Sample\tReads\tContigs\t%Reads(/All)\t%Contigs(/All)\n")
+    for sSample in sorted(tSampleList):
         try:
             fReads=round(float(dSample2Count[sSample][READS])/iSumReads*100,2)
             fContigs=round(float(dSample2Count[sSample][CONTIGS])/iSumContigs*100,2)
@@ -657,66 +518,33 @@ def ProcessStatAllSample(sOutput,dSeq2Sample2Quantity,dContig2Taxo):
         FILE_SPECIES.write("{}\t{}\t{}\t{}\t{}\n".format(sSpecies,dTaxoSpecies[sSpecies][READS],dTaxoSpecies[sSpecies][CONTIGS],fReads,fContigs))
     FILE_SPECIES.close()        
         
-def ProcessStatGroupedByVirus(sOutput,dSeq2Sample2Quantity,dContig2Taxo,dGroup2Sample,dContig2Attribut):
-    dSample2Group=ReverseTableDict(dGroup2Sample)
-    dFamily2Group2Reads={}
+def ProcessStatGroupedByVirus(sOutput,dSeq2Sample2Quantity,dContig2Taxo,dContig2Attribut):
     dFamily2Sample2Reads={}
-    dGroup2Reads={}
     dSample2Reads={}
-    dGroup2Contigs={}
     dSample2Contigs={}
-    dFamily2Group2Contigs={}
     dFamily2Sample2Contigs={}
     for sSeq in dSeq2Sample2Quantity:
-        dGroup2Bool={}
         dSample2Bool={}
         sFamily=dContig2Taxo[sSeq][FAMILY]
         sFamily=sFamily.replace(MAYBE,"").replace(PARTOF,"")
-        try:
-            oCrash=dFamily2Group2Reads[sFamily]
-        except KeyError:
-            dFamily2Group2Reads[sFamily]={}
         try:
             oCrash=dFamily2Sample2Reads[sFamily]
         except KeyError:
             dFamily2Sample2Reads[sFamily]={}
         try:
-            oCrash=dFamily2Group2Contigs[sFamily]
-        except KeyError:
-            dFamily2Group2Contigs[sFamily]={}
-        try:
             oCrash=dFamily2Sample2Contigs[sFamily]
         except KeyError:
             dFamily2Sample2Contigs[sFamily]={}
         for sSample in dSeq2Sample2Quantity[sSeq]:
-            dbGroup=dSample2Group[sSample]
-            dGroup2Bool[dbGroup]=True
             dSample2Bool[sSample]=True
-            try:
-                dFamily2Group2Reads[sFamily][dbGroup]+=dSeq2Sample2Quantity[sSeq][sSample]
-            except KeyError:
-                dFamily2Group2Reads[sFamily][dbGroup]=dSeq2Sample2Quantity[sSeq][sSample]
             try:
                 dFamily2Sample2Reads[sFamily][sSample]+=dSeq2Sample2Quantity[sSeq][sSample]
             except KeyError:
                 dFamily2Sample2Reads[sFamily][sSample]=dSeq2Sample2Quantity[sSeq][sSample]
             try:
-                dGroup2Reads[dbGroup]+=dSeq2Sample2Quantity[sSeq][sSample]
-            except KeyError:
-                dGroup2Reads[dbGroup]=dSeq2Sample2Quantity[sSeq][sSample]
-            try:
                 dSample2Reads[sSample]+=dSeq2Sample2Quantity[sSeq][sSample]
             except KeyError:
                 dSample2Reads[sSample]=dSeq2Sample2Quantity[sSeq][sSample]
-        for dbGroup in dGroup2Bool:
-            try:
-                dGroup2Contigs[dbGroup]+=1
-            except KeyError:
-                dGroup2Contigs[dbGroup]=1
-            try:
-                dFamily2Group2Contigs[sFamily][dbGroup]+=1
-            except KeyError:
-                dFamily2Group2Contigs[sFamily][dbGroup]=1
         for sSample in dSample2Bool:
             try:
                 dSample2Contigs[sSample]+=1
@@ -726,23 +554,9 @@ def ProcessStatGroupedByVirus(sOutput,dSeq2Sample2Quantity,dContig2Taxo,dGroup2S
                 dFamily2Sample2Contigs[sFamily][sSample].append(sSeq)
             except KeyError:
                 dFamily2Sample2Contigs[sFamily][sSample]=[sSeq]
-    
-    for sFamily in dFamily2Group2Contigs:
-        FILE_GROUP=open(sOutput+"/"+FOLDER_FAMILYGLOBAL+"/"+FOLDER_GROUP+"/"+sFamily.replace(" ","_")+".tsv","w")
-        FILE_GROUP.write("Groups\tReads\tContigs\t%Reads(/Group)\t%Contigs(/Group)\t#Samples\n")
-        for dbGroup in sorted(dFamily2Group2Contigs[sFamily]):
-            iGroup=len(dGroup2Sample[dbGroup])
-            fReads=round(float(dFamily2Group2Reads[sFamily][dbGroup])/dGroup2Reads[dbGroup]*100,2)
-            fContigs=round(float(dFamily2Group2Contigs[sFamily][dbGroup])/dGroup2Contigs[dbGroup]*100,2)
-            FILE_GROUP.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(
-                                        dbGroup,dFamily2Group2Reads[sFamily][dbGroup],
-                                        dFamily2Group2Contigs[sFamily][dbGroup],fReads,fContigs,iGroup
-                                        ))
-        FILE_GROUP.close()
         
     for sFamily in dFamily2Sample2Contigs:
-        # print(sOutput+"/"+FOLDER_FAMILYGLOBAL+"/"+FOLDER_SAMPLE+"/"+sFamily.replace(" ","_")+".tsv")
-        FILE_SAMPLE=open(sOutput+"/"+FOLDER_FAMILYGLOBAL+"/"+FOLDER_SAMPLE+"/"+sFamily.replace(" ","_")+".tsv","w")
+        FILE_SAMPLE=open(sOutput+"/"+FOLDER_FAMILYGLOBAL+"/"+sFamily.replace(" ","_")+".tsv","w")
         FILE_SAMPLE.write("Sample\tReads\tContigs\t%Reads(/Sample)\t%Contigs(/Sample)\tContigs\tContigsSize\tRefId\n")
         for sSample in sorted(dFamily2Sample2Contigs[sFamily]):
             fReads=round(float(dFamily2Sample2Reads[sFamily][sSample])/dSample2Reads[sSample]*100,2)
@@ -755,77 +569,6 @@ def ProcessStatGroupedByVirus(sOutput,dSeq2Sample2Quantity,dContig2Taxo,dGroup2S
                                         ";".join([dContig2Attribut[X][REF] for X in dFamily2Sample2Contigs[sFamily][sSample]])
                                         ))
         FILE_SAMPLE.close()
- 
-
-def ProcessStatByGroup(sOutput,dSeq2Sample2Quantity,dContig2Taxo,dGroup2Sample):
-    dSample2Group=ReverseTableDict(dGroup2Sample)
-    dTaxo2Group2Data={FAMILY:{},GENUS:{},SPECIES:{}}
-    dGroup2SumContigs={}
-    dGroup2SumReads={}
-    for sSeq in dSeq2Sample2Quantity:
-        dGroup2Bool={}
-        sFamily=dContig2Taxo[sSeq][FAMILY]
-        sGenus=dContig2Taxo[sSeq][GENUS]
-        sSpecies=dContig2Taxo[sSeq][SPECIES]
-        for sSample in dSeq2Sample2Quantity[sSeq]:
-            dbGroup=dSample2Group[sSample]
-            try:
-                oCrash=dGroup2SumContigs[dbGroup]
-            except KeyError:
-                dGroup2SumContigs[dbGroup]=0
-            try:
-                oCrash=dGroup2SumReads[dbGroup]
-            except KeyError:
-                dGroup2SumReads[dbGroup]=0
-            dGroup2SumContigs[dbGroup]+=1
-            dGroup2SumReads[dbGroup]+=dSeq2Sample2Quantity[sSeq][sSample]
-            try:
-                oCrash=dTaxo2Group2Data[FAMILY][dbGroup]
-            except KeyError:
-                dTaxo2Group2Data[FAMILY][dbGroup]={}
-            try:
-                oCrash=dTaxo2Group2Data[FAMILY][dbGroup][sFamily]
-            except KeyError:
-                dTaxo2Group2Data[FAMILY][dbGroup][sFamily]={READS:0,CONTIGS:0}
-            try:
-                oCrash=dTaxo2Group2Data[GENUS][dbGroup]
-            except KeyError:
-                dTaxo2Group2Data[GENUS][dbGroup]={}
-            try:
-                oCrash=dTaxo2Group2Data[GENUS][dbGroup][sGenus]
-            except KeyError:
-                dTaxo2Group2Data[GENUS][dbGroup][sGenus]={READS:0,CONTIGS:0}
-            try:
-                oCrash=dTaxo2Group2Data[SPECIES][dbGroup]
-            except KeyError:
-                dTaxo2Group2Data[SPECIES][dbGroup]={}
-            try:
-                oCrash=dTaxo2Group2Data[SPECIES][dbGroup][sSpecies]
-            except KeyError:
-                dTaxo2Group2Data[SPECIES][dbGroup][sSpecies]={READS:0,CONTIGS:0}
-            dGroup2Bool[dbGroup]=True
-            dTaxo2Group2Data[FAMILY][dbGroup][sFamily][READS]+=dSeq2Sample2Quantity[sSeq][sSample]
-            dTaxo2Group2Data[GENUS][dbGroup][sGenus][READS]+=dSeq2Sample2Quantity[sSeq][sSample]
-            dTaxo2Group2Data[SPECIES][dbGroup][sSpecies][READS]+=dSeq2Sample2Quantity[sSeq][sSample]
-        for dbGroup in dGroup2Bool:
-            dTaxo2Group2Data[FAMILY][dbGroup][sFamily][CONTIGS]+=1
-            dTaxo2Group2Data[GENUS][dbGroup][sGenus][CONTIGS]+=1
-            dTaxo2Group2Data[SPECIES][dbGroup][sSpecies][CONTIGS]+=1
-    
-    for dbGroup in dGroup2SumContigs:
-        dTarget={FAMILY:FOLDER_FAMILY,GENUS:FOLDER_GENUS,SPECIES:FOLDER_SPECIES}
-        iSumContigs=dGroup2SumContigs[dbGroup]
-        iSumReads=dGroup2SumReads[dbGroup]
-        for sTaxo in dTarget:
-            FILE_GROUP=open(sOutput+"/"+FOLDER_GROUP+"/"+dTarget[sTaxo]+"/"+FolderNameFormat(dbGroup)+".tsv","w")
-            FILE_GROUP.write(sTaxo+"\tReads\tContigs\t%Reads(/Group)\t%Contigs(/Group)\n")
-            for sItem in sorted(dTaxo2Group2Data[sTaxo][dbGroup]):
-                iGroupContigs=dTaxo2Group2Data[sTaxo][dbGroup][sItem][CONTIGS]
-                iGroupReads=dTaxo2Group2Data[sTaxo][dbGroup][sItem][READS]
-                fContigs=round(float(iGroupContigs)/iSumContigs*100,2)
-                fReads=round(float(iGroupReads)/iSumReads*100,2)
-                FILE_GROUP.write("{}\t{}\t{}\t{}\t{}\n".format(sItem,iGroupReads,iGroupContigs,fReads,fContigs))
-            FILE_GROUP.close()
 
 def ProcessStatBySample(sOutput,dSeq2Sample2Quantity,dContig2Taxo,tSampleList):
     dTaxo2Sample2Data={FAMILY:{},GENUS:{},SPECIES:{}}
@@ -1051,7 +794,7 @@ def GetSampleList(sPath):
                 tContent=sContent.split(SPACE)
                 sFile=tContent[-1]
                 dTag2File[sTag]=sFile
-    tResult=[]
+    tResult=[SAMPLE_UNASSIGNED_READS]
     for sTag in sorted(dTag2File):
         for sNewLine in open(dTag2File[sTag]):
             sLine=sNewLine.strip()
@@ -1062,7 +805,62 @@ def GetSampleList(sPath):
             tResult.append(sSampleId)
     return tResult
         
+
+def RetrieveReverseAssembly(dData):
+    dResult={}
+    #Retrieve basic data
+    for sKey in dData:
+        sContigName=dData[sKey][COL_QUERYID]
+        try:
+            oCrash=dResult[sContigName]
+        except KeyError:
+            dResult[sContigName]={}
+        sSample=dData[sKey][COL_SAMPLEID]
+        iReads=int(dData[sKey][COL_READNUMBER])
+        try:
+            dResult[sContigName][sSample]+=iReads
+        except KeyError:
+            dResult[sContigName][sSample]=iReads
     
+    #Filter data below Noise value
+    if FILTER_NOISE!=0:
+        tRemoveContig=[]
+        for sContigName in dResult:
+            tRemoveSample=[]
+            #Remove reads quantity below T- sample
+            for sSample in dResult[sContigName]:
+                if dResult[sContigName][sSample]<=FILTER_NOISE:
+                    tRemoveSample.append(sSample)
+            for sSample in tRemoveSample:
+                del dResult[sContigName][sSample]
+            if len(dResult[sContigName])==0:
+                tRemoveContig.append(sContigName)
+        for sContigName in tRemoveContig:
+            del dResult[sContigName]
+    
+    #Filter sample association if reads below minimum representativite
+    if FILTER_READ_REPRESENTATIVITE!=0:
+        tRemoveContig=[]
+        for sContigName in dResult:
+            #Get sum of reads
+            iSum=0
+            for sSample in dResult[sContigName]:
+                iSum+=dResult[sContigName][sSample]
+                
+            tRemoveSample=[]
+            #Remove sample that have less reads that minimal value
+            for sSample in dResult[sContigName]:
+                fValue=float(dResult[sContigName][sSample])/iSum*100
+                if fValue<FILTER_READ_REPRESENTATIVITE and dResult[sContigName][sSample]<FILTER_READ_HARDLIMIT:
+                    tRemoveSample.append(sSample)
+            for sSample in tRemoveSample:
+                del dResult[sContigName][sSample]
+            if len(dResult[sContigName])==0:
+                tRemoveContig.append(sContigName)
+        for sContigName in tRemoveContig:
+            del dResult[sContigName]
+            
+    return dResult
 
 ########################################################################
 #MAIN
@@ -1077,28 +875,23 @@ if __name__ == "__main__":
     dICTV=LoadICTV(sTaxo)
     print("Load Input...")
     dBasicData=LoadData(sInput)
+    dSeq2Sample2Quantity=RetrieveReverseAssembly(dBasicData)
     print("Extract Taxo...")
-    dContig2Taxo=GetTaxo(dBasicData)
-    print("Load ReverseAssembly...")
-    dSeq2Sample2Quantity=LoadReverseAssembly(dBasicData,sReverseAssembly)   
+    dContig2Taxo=GetTaxo(dBasicData) 
     print("Write Filtered Contigs data...")
     WriteFilteredContigsData(sOutput,dSeq2Sample2Quantity)
     print("Write Reads by Contigs...")
     WriteReadsByContigs(dBasicData,dContig2Taxo)
     print("Write Reads by Filtered Contigs...")
     WriteReadsByFilteredContigs(dBasicData,dContig2Taxo,dSeq2Sample2Quantity)
-    print("Regroup Sample...")
-    dGroup2Sample=GroupByHostDateAndLocation(dBasicData,sOutput)
     print("Get Contigs attribut...")
     dContig2Attribut=GetContigAttribut(dBasicData)
     print("Write Bilan...")
-    ProcessBilan(sOutput,dSeq2Sample2Quantity,dGroup2Sample,tSampleList)
+    ProcessBilan(sOutput,dSeq2Sample2Quantity,tSampleList)
     print("Write Stat All Sample merged...")
     ProcessStatAllSample(sOutput,dSeq2Sample2Quantity,dContig2Taxo)
     print("Write Stat, grouped by Virus...")
-    ProcessStatGroupedByVirus(sOutput,dSeq2Sample2Quantity,dContig2Taxo,dGroup2Sample,dContig2Attribut)
-    print("Write Stat by Group...")
-    ProcessStatByGroup(sOutput,dSeq2Sample2Quantity,dContig2Taxo,dGroup2Sample)
+    ProcessStatGroupedByVirus(sOutput,dSeq2Sample2Quantity,dContig2Taxo,dContig2Attribut)
     print("Write Stat by Sample...")
     ProcessStatBySample(sOutput,dSeq2Sample2Quantity,dContig2Taxo,tSampleList)
     print("Write Sample to Contigs...")

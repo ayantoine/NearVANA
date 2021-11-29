@@ -24,9 +24,13 @@ VMR=${LOCALDB}/
 
 ### Scheduler keyword ###
 SCALL="sbatch"
-SPARAM="--cpus-per-task=1 --mem=25G"
 MULTICPU=20
+SINGLECPU=1
 MULTIMEMORY=100
+EASYMEMORY=1
+HEAVYMEMORY=25
+SPARAM_EASY="--cpus-per-task=${SINGLECPU} --mem=${EASYMEMORY}G"
+SPARAM_HEAVY="--cpus-per-task=${SINGLECPU} --mem=${HEAVYMEMORY}G"
 SPARAM_MULTICPU="--cpus-per-task=${MULTICPU} --mem=${MULTIMEMORY}G"
 STASKARRAY="--array="
 SMAXTASK=%

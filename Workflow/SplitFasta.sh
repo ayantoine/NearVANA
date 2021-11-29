@@ -5,7 +5,7 @@ datetime1=$(date +%s)
 ARG=$1
 source $ARG
 source $CONF
-SDIR=${GITDIR}/Analysis
+SDIR=${GITDIR}/Workflow
 
 echo "------ Configure job array ------"
 SEQMARKER="^>"

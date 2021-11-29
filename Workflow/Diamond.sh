@@ -3,7 +3,7 @@
 ARG=$1
 source $ARG
 source $CONF
-SDIR=${GITDIR}/Analysis
+SDIR=${GITDIR}/Workflow
 
 function boolean() {
   case $1 in

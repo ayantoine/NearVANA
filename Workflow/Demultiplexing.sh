@@ -14,7 +14,7 @@ ARG=$1
 source $ARG
 source $CONF
 source $DATA
-SDIR=${GITDIR}/Analysis
+SDIR=${GITDIR}/Workflow
 
 USE_PAIREND="$(boolean "${PAIREND}")"
 USE_METADATA="$(boolean "${METADATA}")"
@@ -61,7 +61,7 @@ for VARNAME in "${PLATE[@]}"; do
 	echo "python ${SDIR}/QsubAssignation.py -v ${VARNAME} -a ${ARG} -s ${SDIR} -k ${!VAR_DODE}.kmer.tsv -d ${PID}_${VARNAME}_Demultiplexing -o QsubAssignation.sh -c ${CONF} -q ${NB_SEQ} -p ${PID}"
 	python ${SDIR}/QsubAssignation.py -v ${VARNAME} -a ${ARG} -s ${SDIR} -k ${!VAR_DODE}.kmer.tsv -d ${PID}_${VARNAME}_Demultiplexing -o QsubAssignation.sh -c ${CONF} -q ${NB_SEQ} -p ${PID}
 	cat ./QsubAssignation.sh
-	bash ./QsubAssignation.sh
+	bash ./QsubAssignation.sh ${ARG}
 	echo "------ /Make assignation ------"
 	
 	sleep 60
