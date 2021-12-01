@@ -74,11 +74,14 @@ done
 echo "------ /Launch Trim array ------"
 
 echo "------ Store used data ------"
+for VARNAME in "${PLATE[@]}"; do
+    VAR_SAMPLE_FILE="${VARNAME}[$ID_DODE]"
     if [ "$USE_KEEPUNASSIGNED" = true ] ; then
 	    gzip -f ${PID}_${VARNAME}_Demultiplexing_Global.tsv > ${PID}_${VARNAME}_Demultiplexing_Global.tsv.gz
     else
 	    gzip -f ${PID}_${VARNAME}_Hyper_Identified.tsv > ${PID}_${VARNAME}_Hyper_Identified.tsv.gz
     fi
+done
 echo "------ /Store used data ------"
 
 

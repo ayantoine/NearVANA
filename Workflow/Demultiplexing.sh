@@ -41,7 +41,7 @@ for VARNAME in "${PLATE[@]}"; do
 	TARGET_FILES=${!VAR_R1_FILE}
 	if [ "$USE_PAIREND" = true ] ; then
 		VAR_R2_FILE="${VARNAME}[$ID_R2]"
-		TARGET_FILES+=" and "+${!VAR_R2_FILE}
+		TARGET_FILES+=" and "${!VAR_R2_FILE}
 	fi
 	VAR_DODE="${VARNAME}[$ID_DODE]"
 	
