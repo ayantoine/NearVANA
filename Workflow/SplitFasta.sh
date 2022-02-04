@@ -36,7 +36,8 @@ echo "------ /Configure job array ------"
 rm Target.txt
 
 echo "------ Compress All.fa ------"
-gzip -f ${PID}_All.fa > ${PID}_All.fa.gz
+#gzip -f ${PID}_All.fa > ${PID}_All.fa.gz
+gzip -f ${PID}_All.fa
 echo "------ /Compress All.fa ------"
 
 touch ${PID}.SplitFasta.ok

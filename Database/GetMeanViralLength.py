@@ -18,7 +18,7 @@ FOLDER: output folder where to store the table
 '''
 ########################################################################
 #CONSTANT
-OUTPUT="ViralFamily2MinLen.tsv"
+OUTPUT="ViralFamily2MeanLen.tsv"
 
 VIRALZONE_SITE="https://viralzone.expasy.org"
 VIRALZONE_TABLE=["238","239","246","243","245","240"]

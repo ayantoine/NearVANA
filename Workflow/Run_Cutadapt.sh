@@ -77,9 +77,11 @@ echo "------ Store used data ------"
 for VARNAME in "${PLATE[@]}"; do
     VAR_SAMPLE_FILE="${VARNAME}[$ID_DODE]"
     if [ "$USE_KEEPUNASSIGNED" = true ] ; then
-	    gzip -f ${PID}_${VARNAME}_Demultiplexing_Global.tsv > ${PID}_${VARNAME}_Demultiplexing_Global.tsv.gz
+	    #gzip -f ${PID}_${VARNAME}_Demultiplexing_Global.tsv > ${PID}_${VARNAME}_Demultiplexing_Global.tsv.gz
+	    gzip -f ${PID}_${VARNAME}_Demultiplexing_Global.tsv
     else
-	    gzip -f ${PID}_${VARNAME}_Hyper_Identified.tsv > ${PID}_${VARNAME}_Hyper_Identified.tsv.gz
+	    #gzip -f ${PID}_${VARNAME}_Hyper_Identified.tsv > ${PID}_${VARNAME}_Hyper_Identified.tsv.gz
+	    gzip -f ${PID}_${VARNAME}_Hyper_Identified.tsv
     fi
 done
 echo "------ /Store used data ------"

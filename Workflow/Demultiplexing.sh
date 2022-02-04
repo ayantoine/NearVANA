@@ -95,19 +95,27 @@ for VARNAME in "${PLATE[@]}"; do
 	echo "------ /Bilan ------"
 
 	echo "------ Store supplementary data ------"
-	gzip -f ${PID}_${VARNAME}_Hypo_1_Identified.tsv > ${PID}_${VARNAME}_Hypo_1_Identified.tsv.gz
-	gzip -f ${PID}_${VARNAME}_Hypo_2_Identified.tsv > ${PID}_${VARNAME}_Hypo_2_Identified.tsv.gz
-	gzip -f ${PID}_${VARNAME}_Ambiguous_1.tsv > ${PID}_${VARNAME}_Ambiguous_1.tsv.gz
-	gzip -f ${PID}_${VARNAME}_Ambiguous_2.tsv > ${PID}_${VARNAME}_Ambiguous_2.tsv.gz
-	gzip -f ${PID}_${VARNAME}_Unidentified.tsv > ${PID}_${VARNAME}_Unidentified.tsv.gz
-	gzip -f ${PID}_${VARNAME}_Demultiplexing_Hyper.tsv > ${PID}_${VARNAME}_Demultiplexing_Hyper.tsv.gz
+	#gzip -f ${PID}_${VARNAME}_Hypo_1_Identified.tsv > ${PID}_${VARNAME}_Hypo_1_Identified.tsv.gz
+	#gzip -f ${PID}_${VARNAME}_Hypo_2_Identified.tsv > ${PID}_${VARNAME}_Hypo_2_Identified.tsv.gz
+	#gzip -f ${PID}_${VARNAME}_Ambiguous_1.tsv > ${PID}_${VARNAME}_Ambiguous_1.tsv.gz
+	#gzip -f ${PID}_${VARNAME}_Ambiguous_2.tsv > ${PID}_${VARNAME}_Ambiguous_2.tsv.gz
+	#gzip -f ${PID}_${VARNAME}_Unidentified.tsv > ${PID}_${VARNAME}_Unidentified.tsv.gz
+	#gzip -f ${PID}_${VARNAME}_Demultiplexing_Hyper.tsv > ${PID}_${VARNAME}_Demultiplexing_Hyper.tsv.gz
+	gzip -f ${PID}_${VARNAME}_Hypo_1_Identified.tsv
+	gzip -f ${PID}_${VARNAME}_Hypo_2_Identified.tsv
+	gzip -f ${PID}_${VARNAME}_Ambiguous_1.tsv
+	gzip -f ${PID}_${VARNAME}_Ambiguous_2.tsv
+	gzip -f ${PID}_${VARNAME}_Unidentified.tsv
+	gzip -f ${PID}_${VARNAME}_Demultiplexing_Hyper.tsv
 	echo "------ /Store supplementary data ------"
 	
 	echo "------ Store unused data ------"
 	if [ "$USE_KEEPUNASSIGNED" = true ] ; then
-		gzip -f ${PID}_${VARNAME}_Hyper_Identified.tsv > ${PID}_${VARNAME}_Hyper_Identified.tsv.gz
+		#gzip -f ${PID}_${VARNAME}_Hyper_Identified.tsv > ${PID}_${VARNAME}_Hyper_Identified.tsv.gz
+		gzip -f ${PID}_${VARNAME}_Hyper_Identified.tsv
 	else
-		gzip -f ${PID}_${VARNAME}_Demultiplexing_Global.tsv > ${PID}_${VARNAME}_Demultiplexing_Global.tsv.gz
+		#gzip -f ${PID}_${VARNAME}_Demultiplexing_Global.tsv > ${PID}_${VARNAME}_Demultiplexing_Global.tsv.gz
+		gzip -f ${PID}_${VARNAME}_Demultiplexing_Global.tsv
 	fi
 	echo "------ /Store unused data ------"
 	

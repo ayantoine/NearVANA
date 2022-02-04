@@ -10,11 +10,13 @@ sCurrentVersionScript="v22"
 iTime1=time.time()
 ########################################################################
 '''
+V23-2022/02/04
+Tony Travis patch: handle case of empty line in ICTV file
+
 V22-2021/11/10
 Fix: Confusion between complete contig name and short contig name
 Remove: Auto-grouping sample, not interresting
 Fix: Reinsert UnassignedReads sample...
-
 V21-2021/09/24
 Adapt to new table results that fraction contigs reads among sample
 V20-2021/06/18
@@ -316,6 +318,8 @@ def LoadICTV(sPath):
     for sNewLine in open(sPath):
         iLine+=1
         sLine=sNewLine.strip()
+        if len(sLine)==0:
+            pass
         tLine=sLine.split("\t")
         if bHeader:
             for iColIndex in range(len(tLine)):

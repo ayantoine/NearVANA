@@ -48,9 +48,12 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 fi
 
 echo "------ Compress Corrected.fastq ------"
-gzip -f ${PID}_R0.Substracted.fastq > ${PID}_R0.Substracted.fastq.gz
-gzip -f ${PID}_R1.Substracted.fastq > ${PID}_R1.Substracted.fastq.gz
-gzip -f ${PID}_R2.Substracted.fastq > ${PID}_R2.Substracted.fastq.gz
+#gzip -f ${PID}_R0.Substracted.fastq > ${PID}_R0.Substracted.fastq.gz
+#gzip -f ${PID}_R1.Substracted.fastq > ${PID}_R1.Substracted.fastq.gz
+#gzip -f ${PID}_R2.Substracted.fastq > ${PID}_R2.Substracted.fastq.gz
+gzip -f ${PID}_R0.Substracted.fastq
+gzip -f ${PID}_R1.Substracted.fastq
+gzip -f ${PID}_R2.Substracted.fastq
 echo "------ /Compress Corrected.fastq ------"
 
 echo "------ Merge Assembly ------"
@@ -58,10 +61,14 @@ mv ${PID}_All.Megahit_contigs.fa ${PID}_All.fa
 echo "------ /Merge Assembly ------"
 
 echo "------ Compress Megahit output ------"
-gzip -f ${PID}_All.Megahit_reverseAssembly.tsv > ${PID}_All.Megahit_reverseAssembly.tsv.gz
-gzip -f ${PID}_All.Megahit_ambigousReads.tsv > ${PID}_All.Megahit_ambigousReads.tsv.gz
-gzip -f ${PID}_All.Megahit_rejectedContigs.fa > ${PID}_All.Megahit_rejectedContigs.fa.gz
-gzip -f ${PID}_All.Megahit_unmappedReads.tsv > ${PID}_All.Megahit_unmappedReads.tsv.gz
+#gzip -f ${PID}_All.Megahit_reverseAssembly.tsv > ${PID}_All.Megahit_reverseAssembly.tsv.gz
+#gzip -f ${PID}_All.Megahit_ambigousReads.tsv > ${PID}_All.Megahit_ambigousReads.tsv.gz
+#gzip -f ${PID}_All.Megahit_rejectedContigs.fa > ${PID}_All.Megahit_rejectedContigs.fa.gz
+#gzip -f ${PID}_All.Megahit_unmappedReads.tsv > ${PID}_All.Megahit_unmappedReads.tsv.gz
+gzip -f ${PID}_All.Megahit_reverseAssembly.tsv
+gzip -f ${PID}_All.Megahit_ambigousReads.tsv
+gzip -f ${PID}_All.Megahit_rejectedContigs.fa
+gzip -f ${PID}_All.Megahit_unmappedReads.tsv
 echo "------ /Compress Megahit output ------"
 
 touch ${PID}.Assembly.ok
