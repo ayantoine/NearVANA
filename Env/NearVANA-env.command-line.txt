@@ -1,1 +1,1 @@
-conda create -n NearVANA-env bash=4.4.18 bowtie2=2.3.5.1 Cutadapt=2.9 python=3.7.6 perl-excel-writer-xlsx megahit=1.2.9 blast=2.9.0 diamond=0.9.30 pandas requests openpyxl r-base r-ggplot2
+conda create -n NearVANA-env bash=4.4.18 bowtie2=2.3.5.1 Cutadapt=2.9 python=3.7.6 perl-excel-writer-xlsx megahit=1.2.9 blast=2.9.0 diamond=0.9.30 pandas requests openpyxl  r-base=3.6.3  r-ggplot2=3.3.3

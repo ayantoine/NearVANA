@@ -45,6 +45,14 @@ git clone https://github.com/ayantoine/NearVANA.git
 conda env create --name NearVANA-env --file ~/Git/NearVANA/Env/NearVANA-env.spec-file.txt
 ```
 
+NearVANA-env needs package from the bioconda and conda-forge channels.
+If they are not accessible for your conda manager, update with this command and retry.
+```
+conda config --add channels defaults
+conda config --add channels bioconda
+conda config --add channels conda-forge
+```
+
 3. Download and store database in your database folder (assuming ~/Database)
 ```
 bash ~/Git/NearVANA/BuildLocalDB.sh ~/Database
