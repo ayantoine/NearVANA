@@ -31,12 +31,26 @@ for VARNAME in "${PLATE[@]}"; do
 	done < ${!VAR_SAMPLE_FILE}
 done
 
+
+touch ${PID}"_All.Megahit_rejectedContigs.fa"
+touch ${PID}"_All.Megahit_ambigousReads.tsv"
+touch ${PID}"_All.Megahit_unmappedReads.tsv"
+
+touch ${PID}"_All.Megahit_reverseAssembly.tsv"
+touch ${PID}"_All.Megahit_contigs.fa"
+touch ${PID}"_R1.Megahit_unassembled.fastq"
+touch ${PID}"_R2.Megahit_unassembled.fastq"
+touch ${PID}"_R0.Megahit_unassembled.fastq"
+
+
 for sampleId in "${SAMPLE_LIST[@]}"; do
 	cd $sampleId/
 	
 	megahit --k-list 21,33,55,77,99 -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -r ${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${PID}"_log_Assembly-Megahit"
 	
-	mv ${PID}_log_Assembly-Megahit/final.contigs.fa ${PID}_Temp.Megahit_contigs.fa
+	#mv ${PID}_log_Assembly-Megahit/final.contigs.fa ${PID}_Temp.Megahit_contigs.fa
+	python ${SDIR}/Hack_RenameFastq.py -i ${PID}_log_Assembly-Megahit/final.contigs.fa -o ${PID}_Temp.Megahit_contigs.fa -s $sampleId
+	
 	
 	bowtie2-build --threads ${MULTICPU} ${PID}_Temp.Megahit_contigs.fa ${PID}_Temp.Megahit_contigs.fa
 	if [ -s "${PID}_R0.Substracted.fastq" ]; then
@@ -49,6 +63,19 @@ for sampleId in "${SAMPLE_LIST[@]}"; do
 	python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}
 	
 	cd ..
+	
+	cat $sampleId/${PID}"_All.Megahit_rejectedContigs.fa" >> ${PID}"_All.Megahit_rejectedContigs.fa"
+	cat $sampleId/${PID}"_All.Megahit_ambigousReads.tsv" >> ${PID}"_All.Megahit_ambigousReads.tsv"
+	cat $sampleId/${PID}"_All.Megahit_unmappedReads.tsv" >> ${PID}"_All.Megahit_unmappedReads.tsv"
+
+	cat $sampleId/${PID}"_All.Megahit_reverseAssembly.tsv" >> ${PID}"_All.Megahit_reverseAssembly.tsv"
+	cat $sampleId/${PID}"_All.Megahit_contigs.fa" >> ${PID}"_All.Megahit_contigs.fa"
+	cat $sampleId/${PID}"_R1.Megahit_unassembled.fastq" >> ${PID}"_R1.Megahit_unassembled.fastq"
+	cat $sampleId/${PID}"_R2.Megahit_unassembled.fastq" >> ${PID}"_R2.Megahit_unassembled.fastq"
+	cat $sampleId/${PID}"_R0.Megahit_unassembled.fastq" >> ${PID}"_R0.Megahit_unassembled.fastq"
+
+	rm -r $sampleId/
+
 done
 
 
