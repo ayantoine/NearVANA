@@ -40,6 +40,7 @@ def CreateFolder(sPath):
 
 def ParseInput(sFastq):
     sPreviousSample=""
+    sContent=""
     iIndex=0
     for sNewLine in open(sFastq):
         iIndex+=1
