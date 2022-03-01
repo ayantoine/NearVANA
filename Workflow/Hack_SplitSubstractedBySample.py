@@ -55,7 +55,7 @@ def ParseInput(sFastq):
                 except NameError:
                     pass
                 CreateFolder(sSample)
-                FILE=open(sSample+"/"+sInput)
+                FILE=open(sSample+"/"+sInput,"w")
             FILE.write(sContent)    
             sContent=""
     FILE.close()
