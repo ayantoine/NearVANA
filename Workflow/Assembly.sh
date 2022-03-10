@@ -44,18 +44,22 @@ touch ${PID}"_R0.Megahit_unassembled.fastq"
 
 
 for sampleId in "${SAMPLE_LIST[@]}"; do
-	cd $sampleId/
+	cd ${sampleId}/
+	echo "Working in ${sampleId} folder"
 	
+	echo "megahit --k-list 21,33,55,77,99 -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -r ${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${PID}_log_Assembly-Megahit"
 	megahit --k-list 21,33,55,77,99 -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -r ${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${PID}"_log_Assembly-Megahit"
 	
-	#mv ${PID}_log_Assembly-Megahit/final.contigs.fa ${PID}_Temp.Megahit_contigs.fa
-	python ${SDIR}/Hack_RenameFastq.py -i ${PID}_log_Assembly-Megahit/final.contigs.fa -o ${PID}_Temp.Megahit_contigs.fa -s $sampleId
+	echo "python ${SDIR}/Hack_RenameFastq.py -i ${PID}_log_Assembly-Megahit/final.contigs.fa -o ${PID}_Temp.Megahit_contigs.fa -s ${sampleId}"
+	python ${SDIR}/Hack_RenameFastq.py -i ${PID}_log_Assembly-Megahit/final.contigs.fa -o ${PID}_Temp.Megahit_contigs.fa -s ${sampleId}
 	
-	
+	echo "bowtie2-build --threads ${MULTICPU} ${PID}_Temp.Megahit_contigs.fa ${PID}_Temp.Megahit_contigs.fa"
 	bowtie2-build --threads ${MULTICPU} ${PID}_Temp.Megahit_contigs.fa ${PID}_Temp.Megahit_contigs.fa
 	if [ -s "${PID}_R0.Substracted.fastq" ]; then
+		echo "bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -U ${PID}_R0.Substracted.fastq -S reads2contigs.sam"
 		bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -U ${PID}_R0.Substracted.fastq -S reads2contigs.sam
 	else
+		echo "bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -S reads2contigs.sam"
 		bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -S reads2contigs.sam
 	fi
 	rm *.bt2
@@ -64,38 +68,22 @@ for sampleId in "${SAMPLE_LIST[@]}"; do
 	
 	cd ..
 	
-	cat $sampleId/${PID}"_All.Megahit_rejectedContigs.fa" >> ${PID}"_All.Megahit_rejectedContigs.fa"
-	cat $sampleId/${PID}"_All.Megahit_ambigousReads.tsv" >> ${PID}"_All.Megahit_ambigousReads.tsv"
-	cat $sampleId/${PID}"_All.Megahit_unmappedReads.tsv" >> ${PID}"_All.Megahit_unmappedReads.tsv"
+	cat ${sampleId}/${PID}"_All.Megahit_rejectedContigs.fa" >> ${PID}"_All.Megahit_rejectedContigs.fa"
+	cat ${sampleId}/${PID}"_All.Megahit_ambigousReads.tsv" >> ${PID}"_All.Megahit_ambigousReads.tsv"
+	cat ${sampleId}/${PID}"_All.Megahit_unmappedReads.tsv" >> ${PID}"_All.Megahit_unmappedReads.tsv"
 
-	cat $sampleId/${PID}"_All.Megahit_reverseAssembly.tsv" >> ${PID}"_All.Megahit_reverseAssembly.tsv"
-	cat $sampleId/${PID}"_All.Megahit_contigs.fa" >> ${PID}"_All.Megahit_contigs.fa"
-	cat $sampleId/${PID}"_R1.Megahit_unassembled.fastq" >> ${PID}"_R1.Megahit_unassembled.fastq"
-	cat $sampleId/${PID}"_R2.Megahit_unassembled.fastq" >> ${PID}"_R2.Megahit_unassembled.fastq"
-	cat $sampleId/${PID}"_R0.Megahit_unassembled.fastq" >> ${PID}"_R0.Megahit_unassembled.fastq"
-
-	rm -r $sampleId/
+	cat ${sampleId}/${PID}"_All.Megahit_reverseAssembly.tsv" >> ${PID}"_All.Megahit_reverseAssembly.tsv"
+	cat ${sampleId}/${PID}"_All.Megahit_contigs.fa" >> ${PID}"_All.Megahit_contigs.fa"
+	cat ${sampleId}/${PID}"_R1.Megahit_unassembled.fastq" >> ${PID}"_R1.Megahit_unassembled.fastq"
+	cat ${sampleId}/${PID}"_R2.Megahit_unassembled.fastq" >> ${PID}"_R2.Megahit_unassembled.fastq"
+	cat ${sampleId}/${PID}"_R0.Megahit_unassembled.fastq" >> ${PID}"_R0.Megahit_unassembled.fastq"
+	
+	echo "remove ${sampleId}"
+	rm -r ${sampleId}/
 
 done
 
-
 echo "------ /Megahit ------"
-
-#mv ${PID}_log_Assembly-Megahit/final.contigs.fa ${PID}_Temp.Megahit_contigs.fa
-
-#echo "------ Megahit reverse-mapping ------"
-#bowtie2-build --threads ${MULTICPU} ${PID}_Temp.Megahit_contigs.fa ${PID}_Temp.Megahit_contigs.fa
-#if [ -s "${PID}_R0.Substracted.fastq" ]; then
-	#bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -U ${PID}_R0.Substracted.fastq -S reads2contigs.sam
-#else
-	#bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -S reads2contigs.sam
-#fi
-#rm *.bt2
-#echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}"
-#python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}
-#echo "------ /Megahit reverse-mapping ------"
-
-#rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
 
 if [ "$USE_MULTIPLEX" = true ] ; then
 	if [ ! -f ${PID}.Stat_Assembly.ok ]; then
