@@ -36,7 +36,8 @@ def CreateFolder(sPath):
     try:
         os.mkdir(sPath)
     except OSError or FileExistsError:
-        print("Warning: Can not create output folder {}".format(sPath))
+        #print("Warning: Can not create output folder {}".format(sPath))
+        pass
 
 def ParseInput(sFastq):
     sPreviousSample=""

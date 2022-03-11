@@ -31,6 +31,8 @@ for VARNAME in "${PLATE[@]}"; do
 	done < ${!VAR_SAMPLE_FILE}
 done
 
+echo "${SAMPLE_LIST[@]}"
+
 
 touch ${PID}"_All.Megahit_rejectedContigs.fa"
 touch ${PID}"_All.Megahit_ambigousReads.tsv"
@@ -44,6 +46,7 @@ touch ${PID}"_R0.Megahit_unassembled.fastq"
 
 
 for sampleId in "${SAMPLE_LIST[@]}"; do
+	echo "${sampleId}"
 	cd ${sampleId}/
 	echo "Working in ${sampleId} folder"
 	
