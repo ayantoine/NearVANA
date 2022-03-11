@@ -34,57 +34,78 @@ done
 echo "${SAMPLE_LIST[@]}"
 
 
-touch ${PID}"_All.Megahit_rejectedContigs.fa"
-touch ${PID}"_All.Megahit_ambigousReads.tsv"
-touch ${PID}"_All.Megahit_unmappedReads.tsv"
+touch "Hack_"${PID}"_All.Megahit_rejectedContigs.fa"
+touch "Hack_"${PID}"_All.Megahit_ambigousReads.tsv"
+touch "Hack_"${PID}"_All.Megahit_unmappedReads.tsv"
 
-touch ${PID}"_All.Megahit_reverseAssembly.tsv"
-touch ${PID}"_All.Megahit_contigs.fa"
-touch ${PID}"_R1.Megahit_unassembled.fastq"
-touch ${PID}"_R2.Megahit_unassembled.fastq"
-touch ${PID}"_R0.Megahit_unassembled.fastq"
+touch "Hack_"${PID}"_All.Megahit_reverseAssembly.tsv"
+touch "Hack_"${PID}"_All.Megahit_contigs.fa"
+touch "Hack_"${PID}"_R1.Megahit_unassembled.fastq"
+touch "Hack_"${PID}"_R2.Megahit_unassembled.fastq"
+touch "Hack_"${PID}"_R0.Megahit_unassembled.fastq"
 
 
 for sampleId in "${SAMPLE_LIST[@]}"; do
 	echo "${sampleId}"
-	cd ${sampleId}/
-	echo "Working in ${sampleId} folder"
 	
-	echo "megahit --k-list 21,33,55,77,99 -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -r ${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${PID}_log_Assembly-Megahit"
-	megahit --k-list 21,33,55,77,99 -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -r ${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${PID}"_log_Assembly-Megahit"
+	echo "megahit --k-list 21,33,55,77,99 -1 ${sampleId}/${PID}_R1.Substracted.fastq -2 ${sampleId}/${PID}_R2.Substracted.fastq -r ${sampleId}/${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${sampleId}/${PID}_log_Assembly-Megahit"
+	megahit --k-list 21,33,55,77,99 -1 ${sampleId}/${PID}_R1.Substracted.fastq -2 ${sampleId}/${PID}_R2.Substracted.fastq -r ${sampleId}/${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${sampleId}/${PID}"_log_Assembly-Megahit"
 	
-	echo "python ${SDIR}/Hack_RenameFastq.py -i ${PID}_log_Assembly-Megahit/final.contigs.fa -o ${PID}_Temp.Megahit_contigs.fa -s ${sampleId}"
-	python ${SDIR}/Hack_RenameFastq.py -i ${PID}_log_Assembly-Megahit/final.contigs.fa -o ${PID}_Temp.Megahit_contigs.fa -s ${sampleId}
+	echo "python ${SDIR}/Hack_RenameFastq.py -i ${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa -o ${sampleId}/${PID}_Temp.Megahit_contigs.fa -s ${sampleId}"
+	python ${SDIR}/Hack_RenameFastq.py -i ${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa -o ${sampleId}/${PID}_Temp.Megahit_contigs.fa -s ${sampleId}
 	
-	echo "bowtie2-build --threads ${MULTICPU} ${PID}_Temp.Megahit_contigs.fa ${PID}_Temp.Megahit_contigs.fa"
-	bowtie2-build --threads ${MULTICPU} ${PID}_Temp.Megahit_contigs.fa ${PID}_Temp.Megahit_contigs.fa
+	echo "bowtie2-build --threads ${MULTICPU} ${sampleId}/${PID}_Temp.Megahit_contigs.fa ${sampleId}/${PID}_Temp.Megahit_contigs.fa"
+	bowtie2-build --threads ${MULTICPU} ${sampleId}/${PID}_Temp.Megahit_contigs.fa ${sampleId}/${PID}_Temp.Megahit_contigs.fa
 	if [ -s "${PID}_R0.Substracted.fastq" ]; then
-		echo "bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -U ${PID}_R0.Substracted.fastq -S reads2contigs.sam"
-		bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -U ${PID}_R0.Substracted.fastq -S reads2contigs.sam
+		echo "bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${sampleId}/${PID}_Temp.Megahit_contigs.fa -1 ${sampleId}/${PID}_R1.Substracted.fastq -2 ${sampleId}/${PID}_R2.Substracted.fastq -U ${sampleId}/${PID}_R0.Substracted.fastq -S ${sampleId}/reads2contigs.sam"
+		bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${sampleId}/${PID}_Temp.Megahit_contigs.fa -1 ${sampleId}/${PID}_R1.Substracted.fastq -2 ${sampleId}/${PID}_R2.Substracted.fastq -U ${sampleId}/${PID}_R0.Substracted.fastq -S ${sampleId}/reads2contigs.sam
 	else
-		echo "bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -S reads2contigs.sam"
-		bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -S reads2contigs.sam
+		echo "bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${sampleId}/${PID}_Temp.Megahit_contigs.fa -1 ${sampleId}/${PID}_R1.Substracted.fastq -2 ${sampleId}/${PID}_R2.Substracted.fastq -S ${sampleId}/reads2contigs.sam"
+		bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${sampleId}/${PID}_Temp.Megahit_contigs.fa -1 ${sampleId}/${PID}_R1.Substracted.fastq -2 ${sampleId}/${PID}_R2.Substracted.fastq -S ${sampleId}/reads2contigs.sam
 	fi
-	rm *.bt2
+	rm ${sampleId}/*.bt2
+	
+	mv ${sampleId}/reads2contigs.sam ./reads2contigs.sam
+	mv ${sampleId}/*.fastq ./
+	
 	echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}"
 	python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}
 	
-	cd ..
-	
-	cat ${sampleId}/${PID}"_All.Megahit_rejectedContigs.fa" >> ${PID}"_All.Megahit_rejectedContigs.fa"
-	cat ${sampleId}/${PID}"_All.Megahit_ambigousReads.tsv" >> ${PID}"_All.Megahit_ambigousReads.tsv"
-	cat ${sampleId}/${PID}"_All.Megahit_unmappedReads.tsv" >> ${PID}"_All.Megahit_unmappedReads.tsv"
+	cat ${PID}"_All.Megahit_rejectedContigs.fa" >> "Hack_"${PID}"_All.Megahit_rejectedContigs.fa"
+	cat ${PID}"_All.Megahit_ambigousReads.tsv" >> "Hack_"${PID}"_All.Megahit_ambigousReads.tsv"
+	cat ${PID}"_All.Megahit_unmappedReads.tsv" >> "Hack_"${PID}"_All.Megahit_unmappedReads.tsv"
 
-	cat ${sampleId}/${PID}"_All.Megahit_reverseAssembly.tsv" >> ${PID}"_All.Megahit_reverseAssembly.tsv"
-	cat ${sampleId}/${PID}"_All.Megahit_contigs.fa" >> ${PID}"_All.Megahit_contigs.fa"
-	cat ${sampleId}/${PID}"_R1.Megahit_unassembled.fastq" >> ${PID}"_R1.Megahit_unassembled.fastq"
-	cat ${sampleId}/${PID}"_R2.Megahit_unassembled.fastq" >> ${PID}"_R2.Megahit_unassembled.fastq"
-	cat ${sampleId}/${PID}"_R0.Megahit_unassembled.fastq" >> ${PID}"_R0.Megahit_unassembled.fastq"
+	cat ${PID}"_All.Megahit_reverseAssembly.tsv" >> "Hack_"${PID}"_All.Megahit_reverseAssembly.tsv"
+	cat ${PID}"_All.Megahit_contigs.fa" >> "Hack_"${PID}"_All.Megahit_contigs.fa"
+	cat ${PID}"_R1.Megahit_unassembled.fastq" >> "Hack_"${PID}"_R1.Megahit_unassembled.fastq"
+	cat ${PID}"_R2.Megahit_unassembled.fastq" >> "Hack_"${PID}"_R2.Megahit_unassembled.fastq"
+	cat ${PID}"_R0.Megahit_unassembled.fastq" >> "Hack_"${PID}"_R0.Megahit_unassembled.fastq"
 	
 	echo "remove ${sampleId}"
 	rm -r ${sampleId}/
-
+	
+	rm ${PID}"_All.Megahit_rejectedContigs.fa" 
+	rm ${PID}"_All.Megahit_ambigousReads.tsv"
+	rm ${PID}"_All.Megahit_unmappedReads.tsv"
+	
+	rm ${PID}"_All.Megahit_reverseAssembly.tsv"
+	rm ${PID}"_All.Megahit_contigs.fa"
+	rm ${PID}"_R1.Megahit_unassembled.fastq"
+	rm ${PID}"_R2.Megahit_unassembled.fastq"
+	rm ${PID}"_R0.Megahit_unassembled.fastq"
+	
 done
+
+mv "Hack_"${PID}"_All.Megahit_rejectedContigs.fa" ${PID}"_All.Megahit_rejectedContigs.fa" 
+mv "Hack_"${PID}"_All.Megahit_ambigousReads.tsv" ${PID}"_All.Megahit_ambigousReads.tsv"
+mv "Hack_"${PID}"_All.Megahit_unmappedReads.tsv" ${PID}"_All.Megahit_unmappedReads.tsv"
+
+mv "Hack_"${PID}"_All.Megahit_reverseAssembly.tsv" ${PID}"_All.Megahit_reverseAssembly.tsv"
+mv "Hack_"${PID}"_All.Megahit_contigs.fa" ${PID}"_All.Megahit_contigs.fa"
+mv "Hack_"${PID}"_R1.Megahit_unassembled.fastq" ${PID}"_R1.Megahit_unassembled.fastq"
+mv "Hack_"${PID}"_R2.Megahit_unassembled.fastq" ${PID}"_R2.Megahit_unassembled.fastq"
+mv "Hack_"${PID}"_R0.Megahit_unassembled.fastq" ${PID}"_R0.Megahit_unassembled.fastq"
+
 
 echo "------ /Megahit ------"
 
