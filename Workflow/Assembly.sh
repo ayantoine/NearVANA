@@ -7,6 +7,23 @@ source $ARG
 source $CONF
 SDIR=${GITDIR}/Workflow
 
+source $DATA
+NB_ITEM=1
+ID_R1=0
+if [ "$USE_PAIREND" = true ] ; then
+	ID_R2=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+if [ "$USE_MULTIPLEX" = true ] ; then
+	ID_DODE=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+if [ "$USE_METADATA" = true ] ; then
+	ID_META=$NB_ITEM
+	NB_ITEM=$((NB_ITEM+1))
+fi
+
+
 function boolean() {
   case $1 in
     TRUE) echo true ;;
@@ -25,12 +42,14 @@ python ${SDIR}/Hack_SplitSubstractedBySample.py -i ${PID}_R0.Substracted.fastq
 
 declare -a SAMPLE_LIST
 for VARNAME in "${PLATE[@]}"; do
+	echo "${VARNAME} ${ID_DODE}"
 	VAR_SAMPLE_FILE="${VARNAME}[$ID_DODE]"
 	while read c1 leftovers; do
 		SAMPLE_LIST+=(${VARNAME}${c1})
 	done < ${!VAR_SAMPLE_FILE}
 done
 
+echo "DEBUG"
 echo "${SAMPLE_LIST[@]}"
 
 
