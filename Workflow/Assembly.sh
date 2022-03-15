@@ -2,12 +2,25 @@
 
 datetime1=$(date +%s)
 
+function boolean() {
+  case $1 in
+    TRUE) echo true ;;
+    FALSE) echo false ;;
+    *) echo "Err: Unknown boolean value \"$1\"" 1>&2; exit 1 ;;
+   esac
+}
+
 ARG=$1
 source $ARG
 source $CONF
 SDIR=${GITDIR}/Workflow
 
 source $DATA
+
+USE_PAIREND="$(boolean "${PAIREND}")"
+USE_METADATA="$(boolean "${METADATA}")"
+USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
+
 NB_ITEM=1
 ID_R1=0
 if [ "$USE_PAIREND" = true ] ; then
@@ -22,15 +35,6 @@ if [ "$USE_METADATA" = true ] ; then
 	ID_META=$NB_ITEM
 	NB_ITEM=$((NB_ITEM+1))
 fi
-
-
-function boolean() {
-  case $1 in
-    TRUE) echo true ;;
-    FALSE) echo false ;;
-    *) echo "Err: Unknown boolean value \"$1\"" 1>&2; exit 1 ;;
-   esac
-}
 
 USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
 
