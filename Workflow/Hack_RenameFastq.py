@@ -47,7 +47,7 @@ if not sInput:
 def RewriteFastq(sInput,sOutput,sSampleId):
     FILE=open(sOutput,"w")
     iIndex=0
-    for sNewLine in open(sFastq):
+    for sNewLine in open(sInput):
         iIndex+=1
         sContent=sNewLine
         if iIndex%4==1:
