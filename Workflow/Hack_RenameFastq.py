@@ -38,7 +38,7 @@ sOutput=options.output
 if not sInput:
 	exit("Error : no output -o defined, process broken")
 
-sInput=options.input
+sSampleId=options.sample
 if not sInput:
 	exit("Error : no sample -s defined, process broken")
 
