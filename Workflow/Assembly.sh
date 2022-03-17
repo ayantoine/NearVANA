@@ -89,6 +89,7 @@ for sampleId in "${SAMPLE_LIST[@]}"; do
 	rm ${sampleId}/*.bt2
 	
 	mv ${sampleId}/reads2contigs.sam ./reads2contigs.sam
+	mv ${sampleId}/${PID}_Temp.Megahit_contigs.fa ./${PID}_Temp.Megahit_contigs.fa
 	mv ${sampleId}/*.fastq ./
 	
 	echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}"
@@ -118,6 +119,9 @@ for sampleId in "${SAMPLE_LIST[@]}"; do
 	rm ${PID}"_R0.Megahit_unassembled.fastq"
 	
 done
+
+rm ./reads2contigs.sam
+rm ./${PID}_Temp.Megahit_contigs.fa
 
 mv "Hack_"${PID}"_All.Megahit_rejectedContigs.fa" ${PID}"_All.Megahit_rejectedContigs.fa" 
 mv "Hack_"${PID}"_All.Megahit_ambigousReads.tsv" ${PID}"_All.Megahit_ambigousReads.tsv"
