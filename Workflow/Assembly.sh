@@ -74,8 +74,8 @@ for sampleId in "${SAMPLE_LIST[@]}"; do
 	echo "megahit --k-list 21,33,55,77,99 -1 ${sampleId}/${PID}_R1.Substracted.fastq -2 ${sampleId}/${PID}_R2.Substracted.fastq -r ${sampleId}/${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${sampleId}/${PID}_log_Assembly-Megahit"
 	megahit --k-list 21,33,55,77,99 -1 ${sampleId}/${PID}_R1.Substracted.fastq -2 ${sampleId}/${PID}_R2.Substracted.fastq -r ${sampleId}/${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${sampleId}/${PID}"_log_Assembly-Megahit"
 	
-	echo "python ${SDIR}/Hack_RenameFastq.py -i ${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa -o ${sampleId}/${PID}_Temp.Megahit_contigs.fa -s ${sampleId}"
-	python ${SDIR}/Hack_RenameFastq.py -i ${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa -o ${sampleId}/${PID}_Temp.Megahit_contigs.fa -s ${sampleId}
+	echo "python ${SDIR}/Hack_RenameFasta.py -i ${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa -o ${sampleId}/${PID}_Temp.Megahit_contigs.fa -s ${sampleId}"
+	python ${SDIR}/Hack_RenameFasta.py -i ${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa -o ${sampleId}/${PID}_Temp.Megahit_contigs.fa -s ${sampleId}
 	
 	echo "bowtie2-build --threads ${MULTICPU} ${sampleId}/${PID}_Temp.Megahit_contigs.fa ${sampleId}/${PID}_Temp.Megahit_contigs.fa"
 	bowtie2-build --threads ${MULTICPU} ${sampleId}/${PID}_Temp.Megahit_contigs.fa ${sampleId}/${PID}_Temp.Megahit_contigs.fa
@@ -88,9 +88,9 @@ for sampleId in "${SAMPLE_LIST[@]}"; do
 	fi
 	rm ${sampleId}/*.bt2
 	
-	mv ${sampleId}/reads2contigs.sam ./reads2contigs.sam
-	mv ${sampleId}/${PID}_Temp.Megahit_contigs.fa ./${PID}_Temp.Megahit_contigs.fa
-	mv ${sampleId}/*.fastq ./
+	scp ${sampleId}/reads2contigs.sam ./reads2contigs.sam
+	scp ${sampleId}/${PID}_Temp.Megahit_contigs.fa ./${PID}_Temp.Megahit_contigs.fa
+	scp ${sampleId}/*.fastq ./
 	
 	echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}"
 	python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}
@@ -106,7 +106,7 @@ for sampleId in "${SAMPLE_LIST[@]}"; do
 	cat ${PID}"_R0.Megahit_unassembled.fastq" >> "Hack_"${PID}"_R0.Megahit_unassembled.fastq"
 	
 	echo "remove ${sampleId}"
-	rm -r ${sampleId}/
+	#rm -r ${sampleId}/
 	
 	rm ${PID}"_All.Megahit_rejectedContigs.fa" 
 	rm ${PID}"_All.Megahit_ambigousReads.tsv"
