@@ -74,8 +74,8 @@ for sampleId in "${SAMPLE_LIST[@]}"; do
 	echo "megahit --k-list 21,33,55,77,99 -1 ${sampleId}/${PID}_R1.Substracted.fastq -2 ${sampleId}/${PID}_R2.Substracted.fastq -r ${sampleId}/${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${sampleId}/${PID}_log_Assembly-Megahit"
 	megahit --k-list 21,33,55,77,99 -1 ${sampleId}/${PID}_R1.Substracted.fastq -2 ${sampleId}/${PID}_R2.Substracted.fastq -r ${sampleId}/${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${sampleId}/${PID}"_log_Assembly-Megahit"
 	
-	echo "python ${SDIR}/Hack_RenameFasta.py -i ${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa -o ${sampleId}/${PID}_Temp.Megahit_contigs.fa -s ${sampleId}"
-	python ${SDIR}/Hack_RenameFasta.py -i ${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa -o ${sampleId}/${PID}_Temp.Megahit_contigs.fa -s ${sampleId}
+	#echo "python ${SDIR}/Hack_RenameFasta.py -i ${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa -o ${sampleId}/${PID}_Temp.Megahit_contigs.fa -s ${sampleId}"
+	#python ${SDIR}/Hack_RenameFasta.py -i ${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa -o ${sampleId}/${PID}_Temp.Megahit_contigs.fa -s ${sampleId}
 	
 	echo "bowtie2-build --threads ${MULTICPU} ${sampleId}/${PID}_Temp.Megahit_contigs.fa ${sampleId}/${PID}_Temp.Megahit_contigs.fa"
 	bowtie2-build --threads ${MULTICPU} ${sampleId}/${PID}_Temp.Megahit_contigs.fa ${sampleId}/${PID}_Temp.Megahit_contigs.fa
@@ -92,8 +92,8 @@ for sampleId in "${SAMPLE_LIST[@]}"; do
 	scp ${sampleId}/${PID}_Temp.Megahit_contigs.fa ./${PID}_Temp.Megahit_contigs.fa
 	scp ${sampleId}/*.fastq ./
 	
-	echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}"
-	python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}
+	echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX} -s ${SampleID}"
+	python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX} -s ${SampleID}
 	
 	cat ${PID}"_All.Megahit_rejectedContigs.fa" >> "Hack_"${PID}"_All.Megahit_rejectedContigs.fa"
 	cat ${PID}"_All.Megahit_ambigousReads.tsv" >> "Hack_"${PID}"_All.Megahit_ambigousReads.tsv"
