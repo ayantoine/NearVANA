@@ -93,7 +93,7 @@ for sampleId in "${SAMPLE_LIST[@]}"; do
 	scp ${sampleId}/*.fastq ./
 	
 	echo "python ${SDIR}/Hack_MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX} -s ${SampleID}"
-	python ${SDIR}/Hack_MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX} -s ${SampleID}
+	python ${SDIR}/Hack_MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX} -s ${sampleId}
 	
 	cat ${PID}"_All.Megahit_rejectedContigs.fa" >> "Hack_"${PID}"_All.Megahit_rejectedContigs.fa"
 	cat ${PID}"_All.Megahit_ambigousReads.tsv" >> "Hack_"${PID}"_All.Megahit_ambigousReads.tsv"
