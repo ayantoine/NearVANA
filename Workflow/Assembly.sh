@@ -76,6 +76,8 @@ for sampleId in "${SAMPLE_LIST[@]}"; do
 	
 	#echo "python ${SDIR}/Hack_RenameFasta.py -i ${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa -o ${sampleId}/${PID}_Temp.Megahit_contigs.fa -s ${sampleId}"
 	#python ${SDIR}/Hack_RenameFasta.py -i ${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa -o ${sampleId}/${PID}_Temp.Megahit_contigs.fa -s ${sampleId}
+	echo "${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa ${sampleId}/${PID}_Temp.Megahit_contigs.fa"
+	mv ${sampleId}/${PID}_log_Assembly-Megahit/final.contigs.fa ${sampleId}/${PID}_Temp.Megahit_contigs.fa
 	
 	echo "bowtie2-build --threads ${MULTICPU} ${sampleId}/${PID}_Temp.Megahit_contigs.fa ${sampleId}/${PID}_Temp.Megahit_contigs.fa"
 	bowtie2-build --threads ${MULTICPU} ${sampleId}/${PID}_Temp.Megahit_contigs.fa ${sampleId}/${PID}_Temp.Megahit_contigs.fa
