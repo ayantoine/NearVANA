@@ -484,7 +484,7 @@ if __name__ == "__main__":
 		dContigs2Sample2Quantity=LoadContigsAndQuantity(REVERSE_ASSEMBLY,dQuery2Content)
 		dTaxo=LoadTaxo(BLAST_FOLDER+"/"+TAXO_FILE.replace(REPLACEME,str(iIndex)))
 		dBlast=LoadBlast(BLAST_FOLDER+"/"+BLAST_FILE.replace(REPLACEME,str(iIndex)))
-		# dBlast=ReorderBlastData(dBlast,dTaxo)
+		dBlast=ReorderBlastData(dBlast,dTaxo)
 		WriteData(FILE,dBlast,dTaxo,dContigs2Sample2Quantity,dMetadata,dQuery2Content,dLength)
 	FILE.close()
 	
