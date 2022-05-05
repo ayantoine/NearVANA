@@ -9,9 +9,11 @@ sCurrentVersionScript="v4"
 iTime1=time.time()
 ########################################################################
 '''
+V4-2022/05/02
+Change: Reorder Best Evalue to favorise Viruses results
+
 V4-2021/10/18
 Change: Reads columns now show reads related to sample and no reads related to contigs
-
 V3-2021/04/12
 Fix: No more able to catch metadata file
 V2-2020/02/14
@@ -466,7 +468,7 @@ def ReorderBlastData(dBlast,dTaxo):
 			if iRank<0:
 				iInitialRank=-iRank+1
 				iNewRank=iRank-10
-				dBlast[dBlast[sQuery][iNewRank]=dBlast[sQuery][iRank]
+				dBlast[dBlast[sQuery]][iNewRank]=dBlast[sQuery][iRank]
 				del dBlast[sQuery][iRank]
 	return dBlast
 
