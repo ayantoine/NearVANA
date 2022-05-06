@@ -462,14 +462,21 @@ def ReorderBlastData(dBlast,dTaxo):
 			sSuperKingdom=dTaxo[dBlast[sQuery][iRank]["SubjectId"]]["Superkingdom"]
 			if sSuperKingdom=="Viruses":
 				tRank.append(-iRank-1) #0 to -1, 1 to -2, etc.
+				print(iRank,"->",-iRank-1)
 			else:
 				tRank.append(iRank)
 		for iRank in tRank:
 			if iRank<0:
-				iInitialRank=-iRank+1
-				iNewRank=iRank-10
-				dBlast[dBlast[sQuery]][iNewRank]=dBlast[sQuery][iRank]
-				del dBlast[sQuery][iRank]
+				iInitialRank=-iRank-1
+				iNewRank=iInitialRank-10
+				
+				print("---------------")
+				print(iRank)
+				print(iInitialRank)
+				print(iNewRank)
+				
+				dBlast[sQuery][iNewRank]=dBlast[sQuery][iInitialRank]
+				del dBlast[sQuery][iInitialRank]
 	return dBlast
 
 ########################################################################
