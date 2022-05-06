@@ -469,12 +469,6 @@ def ReorderBlastData(dBlast,dTaxo):
 			if iRank<0:
 				iInitialRank=-iRank-1
 				iNewRank=iInitialRank-10
-				
-				print("---------------")
-				print(iRank)
-				print(iInitialRank)
-				print(iNewRank)
-				
 				dBlast[sQuery][iNewRank]=dBlast[sQuery][iInitialRank]
 				del dBlast[sQuery][iInitialRank]
 	return dBlast
