@@ -9,9 +9,11 @@ sCurrentVersionScript="v4"
 iTime1=time.time()
 ########################################################################
 '''
+V4-2022/05/02
+Change: Reorder Best Evalue to favorise Viruses results
+
 V4-2021/10/18
 Change: Reads columns now show reads related to sample and no reads related to contigs
-
 V3-2021/04/12
 Fix: No more able to catch metadata file
 V2-2020/02/14
@@ -336,7 +338,7 @@ def WriteData(FILE,dBlast,dTaxo,dContigs,dMetadata,dContent,dLength):
 	# print("dMetadata",dMetadata)
 	for sQuery in dBlast:
 		# print("sQuery",sQuery)
-		for iRank in dBlast[sQuery]:
+		for iRank in sorted(dBlast[sQuery]):
 			# print("iRank",iRank)
 			if iRank==1:
 				sRank=BEST_HIT
@@ -436,6 +438,41 @@ def LoadLength(sFile):
 		dDict[sFamily]=iMinSize
 	return dDict
 
+def ReverseFlatDict(dDict):
+	dNewDict={}
+	for sKey in dDict:
+		try:
+			oCrash=dNewDict[dDict[sKey]]
+			dNewDict[dDict[sKey]].append(sKey)
+		except KeyError:
+			dNewDict[dDict[sKey]]=[sKey]
+	return dNewDict
+
+def ReorderBlastData(dBlast,dTaxo):
+	for sQuery in dBlast:
+		dRank2Evalue={}
+		for iRank in dBlast[sQuery]:
+			dRank2Evalue[iRank]=float(dBlast[sQuery][iRank]["Evalue"])
+		dEvalue2Rank=ReverseFlatDict(dRank2Evalue)
+		fBetterEvalue=min(dEvalue2Rank.keys())
+		if len(dEvalue2Rank[fBetterEvalue])==1:
+			continue
+		tRank=[]
+		for iRank in dEvalue2Rank[fBetterEvalue]:
+			sSuperKingdom=dTaxo[dBlast[sQuery][iRank]["SubjectId"]]["Superkingdom"]
+			if sSuperKingdom=="Viruses":
+				tRank.append(-iRank-1) #0 to -1, 1 to -2, etc.
+				print(iRank,"->",-iRank-1)
+			else:
+				tRank.append(iRank)
+		for iRank in tRank:
+			if iRank<0:
+				iInitialRank=-iRank-1
+				iNewRank=iInitialRank-10
+				dBlast[sQuery][iNewRank]=dBlast[sQuery][iInitialRank]
+				del dBlast[sQuery][iInitialRank]
+	return dBlast
+
 ########################################################################
 #MAIN
 if __name__ == "__main__":
@@ -450,6 +487,7 @@ if __name__ == "__main__":
 		dContigs2Sample2Quantity=LoadContigsAndQuantity(REVERSE_ASSEMBLY,dQuery2Content)
 		dTaxo=LoadTaxo(BLAST_FOLDER+"/"+TAXO_FILE.replace(REPLACEME,str(iIndex)))
 		dBlast=LoadBlast(BLAST_FOLDER+"/"+BLAST_FILE.replace(REPLACEME,str(iIndex)))
+		dBlast=ReorderBlastData(dBlast,dTaxo)
 		WriteData(FILE,dBlast,dTaxo,dContigs2Sample2Quantity,dMetadata,dQuery2Content,dLength)
 	FILE.close()
 	

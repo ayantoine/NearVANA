@@ -102,6 +102,7 @@ FILTER_NOISE=0
 INTEGER=["0","1","2","3","4","5","6","7","8","9"]
 SPACE=" "
 UNDERSCORE="_"
+EQUAL="="
 
 REJECTED_SEPARATOR="-"
 REJECTED_TAXO=[]
@@ -348,8 +349,12 @@ def LoadICTV(sPath):
     bHeader=True
     dResult={}
     dKeyword2ColId={}
+    iLine=0
     for sNewLine in open(sPath):
+        iLine+=1
         sLine=sNewLine.strip()
+        if len(sLine)==0:
+            break
         tLine=sLine.split("\t")
         if bHeader:
             for iColIndex in range(len(tLine)):

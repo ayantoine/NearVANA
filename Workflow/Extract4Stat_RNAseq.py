@@ -266,6 +266,8 @@ def LoadICTV(sPath):
     for sNewLine in open(sPath):
         iLine+=1
         sLine=sNewLine.strip()
+        if len(sLine)==0:
+            break
         tLine=sLine.split("\t")
         if bHeader:
             for iColIndex in range(len(tLine)):

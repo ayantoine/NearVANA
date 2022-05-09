@@ -21,6 +21,13 @@ DBLINEAGE=${LOCALDB}/
 VIRMINLEN=${LOCALDB}/
 #Path to VMR
 VMR=${LOCALDB}/
+#Path to AllFamily.tsv
+ALLFAM={LOCALDB}/
+#Path to AllGenus.tsv
+ALLGEN={LOCALDB}/
+#Path to AllSpecies.tsv
+ALLSPE={LOCALDB}/
+
 
 ### Scheduler keyword ###
 SCALL="sbatch"
