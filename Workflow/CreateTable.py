@@ -448,7 +448,7 @@ def ReverseFlatDict(dDict):
 			dNewDict[dDict[sKey]]=[sKey]
 	return dNewDict
 
-def ReorderBlastData(dBlast,dTaxo):
+def ReorderBlastData(dBlast,dTaxo,iIndex):
 	for sQuery in dBlast:
 		dRank2Evalue={}
 		for iRank in dBlast[sQuery]:
@@ -458,13 +458,20 @@ def ReorderBlastData(dBlast,dTaxo):
 		if len(dEvalue2Rank[fBetterEvalue])==1:
 			continue
 		tRank=[]
+		bBreak=False
 		for iRank in dEvalue2Rank[fBetterEvalue]:
-			sSuperKingdom=dTaxo[dBlast[sQuery][iRank]["SubjectId"]]["Superkingdom"]
+			try:
+				sSuperKingdom=dTaxo[dBlast[sQuery][iRank]["SubjectId"]]["Superkingdom"]
+			except KeyError:
+				bBreak=True
+				break
 			if sSuperKingdom=="Viruses":
 				tRank.append(-iRank-1) #0 to -1, 1 to -2, etc.
 				print(iRank,"->",-iRank-1)
 			else:
 				tRank.append(iRank)
+		if bBreak:
+			continue
 		for iRank in tRank:
 			if iRank<0:
 				iInitialRank=-iRank-1
@@ -487,7 +494,7 @@ if __name__ == "__main__":
 		dContigs2Sample2Quantity=LoadContigsAndQuantity(REVERSE_ASSEMBLY,dQuery2Content)
 		dTaxo=LoadTaxo(BLAST_FOLDER+"/"+TAXO_FILE.replace(REPLACEME,str(iIndex)))
 		dBlast=LoadBlast(BLAST_FOLDER+"/"+BLAST_FILE.replace(REPLACEME,str(iIndex)))
-		dBlast=ReorderBlastData(dBlast,dTaxo)
+		dBlast=ReorderBlastData(dBlast,dTaxo,iIndex)
 		WriteData(FILE,dBlast,dTaxo,dContigs2Sample2Quantity,dMetadata,dQuery2Content,dLength)
 	FILE.close()
 	
