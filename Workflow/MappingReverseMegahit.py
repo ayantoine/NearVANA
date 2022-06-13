@@ -245,7 +245,7 @@ def ParseSamfile(sPath):
 #MAIN
 if __name__ == "__main__":
 	dContig2Read=ParseSamfile(sInput)
-	# CheckAmbigous(dContig2Read)
+	print(len(dContig2Read))
 	WriteContigFiles(dContig2Read,bMultiplex)
 
 ########################################################################    
