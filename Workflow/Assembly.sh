@@ -35,7 +35,7 @@ echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m 
 python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}
 echo "------ /Megahit reverse-mapping ------"
 
-rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
+#rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
 
 if [ "$USE_MULTIPLEX" = true ] ; then
 	if [ ! -f ${PID}.Stat_Assembly.ok ]; then
@@ -48,9 +48,9 @@ if [ "$USE_MULTIPLEX" = true ] ; then
 fi
 
 echo "------ Compress Corrected.fastq ------"
-#gzip -f ${PID}_R0.Substracted.fastq
-#gzip -f ${PID}_R1.Substracted.fastq
-#gzip -f ${PID}_R2.Substracted.fastq
+gzip -f ${PID}_R0.Substracted.fastq
+gzip -f ${PID}_R1.Substracted.fastq
+gzip -f ${PID}_R2.Substracted.fastq
 echo "------ /Compress Corrected.fastq ------"
 
 echo "------ Merge Assembly ------"
