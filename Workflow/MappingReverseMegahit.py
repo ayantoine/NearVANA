@@ -200,7 +200,7 @@ def ParseSamfile(sPath):
 			iUnmapped+=1
 			continue
 		
-		sCurrentPairId=sId.split(UNDERSCORE)[0]
+		sCurrentPairId=UNDERSCORE.join(sId.split(UNDERSCORE)[:-1])
 		if sPreviousPairId=="":
 			sPreviousPairId=sCurrentPairId
 		if sCurrentPairId==sPreviousPairId:
@@ -245,7 +245,6 @@ def ParseSamfile(sPath):
 #MAIN
 if __name__ == "__main__":
 	dContig2Read=ParseSamfile(sInput)
-	print(len(dContig2Read))
 	WriteContigFiles(dContig2Read,bMultiplex)
 
 ########################################################################    
