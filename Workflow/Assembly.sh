@@ -18,24 +18,26 @@ function boolean() {
 USE_MULTIPLEX="$(boolean "${MULTIPLEX}")"
 
 echo "------ Megahit ------"
-time megahit --k-list 21,33,55,77,99 -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -r ${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${PID}"_log_Assembly-Megahit"
+if [ ! -f ${PID}_Temp.Megahit_contigs.fa ]; then
+    time megahit --k-list 21,33,55,77,99 -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -r ${PID}_R0.Substracted.fastq -m ${MULTIMEMORY} -t ${MULTICPU} -o ${PID}"_log_Assembly-Megahit"
+    mv ${PID}_log_Assembly-Megahit/final.contigs.fa ${PID}_Temp.Megahit_contigs.fa
+fi
 echo "------ /Megahit ------"
 
-mv ${PID}_log_Assembly-Megahit/final.contigs.fa ${PID}_Temp.Megahit_contigs.fa
-
 echo "------ Megahit reverse-mapping ------"
-bowtie2-build --threads ${MULTICPU} ${PID}_Temp.Megahit_contigs.fa ${PID}_Temp.Megahit_contigs.fa
-if [ -s "${PID}_R0.Substracted.fastq" ]; then
-	bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -U ${PID}_R0.Substracted.fastq -S reads2contigs.sam
-else
-	bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -S reads2contigs.sam
+if [ ! -f ${PID}_All.Megahit_contigs.fa ]; then
+    bowtie2-build --threads ${MULTICPU} ${PID}_Temp.Megahit_contigs.fa ${PID}_Temp.Megahit_contigs.fa
+    if [ -s "${PID}_R0.Substracted.fastq" ]; then
+	    bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -U ${PID}_R0.Substracted.fastq -S reads2contigs.sam
+    else
+	    bowtie2 --threads ${MULTICPU} --end-to-end --very-sensitive -x ${PID}_Temp.Megahit_contigs.fa -1 ${PID}_R1.Substracted.fastq -2 ${PID}_R2.Substracted.fastq -S reads2contigs.sam
+    fi
+    rm *.bt2
+    echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}"
+    python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}
+    #rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
 fi
-rm *.bt2
-echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}"
-python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}
 echo "------ /Megahit reverse-mapping ------"
-
-#rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
 
 if [ "$USE_MULTIPLEX" = true ] ; then
 	if [ ! -f ${PID}.Stat_Assembly.ok ]; then
