@@ -5,13 +5,16 @@
 import time
 from optparse import OptionParser
 
-sCurrentVersionScript="v1"
+sCurrentVersionScript="v3"
 iTime1=time.time()
 ########################################################################
 '''
+V3-2022/06/16
+Parsing of Read names worked only for base Illumina reads name (as @ILLUMINA-MISEQ1:53:000000000-AJ6CJ:1:1101:15974:1064 1:N:0:NCAGTG)
+New parsing define as RootId of Paire names everything before the last "1" for R1 files or "2" for R2 files
+
 V2-2020/10/22
 Memory consummation explode for RNAseq. Try a ligther way to do.
-
 V1-2019/10/23
 Scan two Pair-end Fastq, reorder and extract singlet.
 Replace space in name by underscore "_"
@@ -26,6 +29,9 @@ DEINTERLACING=".deinterlaced"
 
 R1="R1"
 R0="R0"
+
+TAG1="1"
+TAG2="2"
 
 SPACE=" "
 NOSPACE="_"
@@ -48,24 +54,14 @@ if not sR2Fastq:
 
 ########################################################################
 #Function 	
-# def GetRootName(sPath):
-	# setName=set()
-	# iLineCount=0
-	# for sNewLine in open(sPath):
-		# iLineCount+=1
-		# if iLineCount%4==1:
-			# sRoot=sNewLine.split(" ")[0]
-			# # print(sRoot)
-			# setName.add(sRoot)
-	# return setName
-
 def GetRootName(sPath):
 	dDict={}
 	iLineCount=0
 	for sNewLine in open(sPath):
 		iLineCount+=1
 		if iLineCount%4==1:
-			sRoot=sNewLine.split(" ")[0]
+			#sRoot=sNewLine.split(" ")[0]
+			sRoot=sNewLine[:-sNewLine[::-1].index(TAG1)-1]
 			dDict[sRoot]=True
 	return dDict
 	
@@ -75,7 +71,8 @@ def IntersectRootName(dBase,sPath):
 	for sNewLine in open(sPath):
 		iLineCount+=1
 		if iLineCount%4==1:
-			sRoot=sNewLine.split(" ")[0]
+			#sRoot=sNewLine.split(" ")[0]
+			sRoot=sNewLine[:-sNewLine[::-1].index(TAG2)-1]
 			try:
 				oCrash=dBase[sRoot]
 				dDict[sRoot]=True
@@ -152,15 +149,8 @@ def WriteFile(tListFastq,dCommon): #,setCommon):
 ########################################################################
 #MAIN
 if __name__ == "__main__":
-	# setR1RootName=GetRootName(sR1Fastq)
-	# print(len(setR1RootName))
-	# setR2RootName=GetRootName(sR2Fastq)
-	# print(len(setR2RootName))
-	# setRXRootName_intersection=setR1RootName & setR2RootName
-	# print(len(setRXRootName_intersection))
 	dR1RootName=GetRootName(sR1Fastq)
 	dRXRootName_intersection=IntersectRootName(dR1RootName,sR2Fastq)
-	# WriteFile([sR1Fastq,sR2Fastq],setRXRootName_intersection)
 	WriteFile([sR1Fastq,sR2Fastq],dRXRootName_intersection)
 		
 ########################################################################    
