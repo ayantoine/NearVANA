@@ -35,7 +35,7 @@ if [ ! -f ${PID}_All.Megahit_contigs.fa ]; then
     rm *.bt2
     echo "python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}"
     python ${SDIR}/MappingReverseMegahit.py -p ${PID} -i reads2contigs.sam -m ${MULTIPLEX}
-    #rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
+    rm ${PID}_Temp.Megahit_contigs.fa reads2contigs.sam
 fi
 echo "------ /Megahit reverse-mapping ------"
 
