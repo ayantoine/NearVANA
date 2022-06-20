@@ -217,7 +217,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 			touch ${PID}_R0.Unsubstracted.fastq
 			
 			for VARNAME in "${PLATE[@]}"; do
-				for R in R1 R2 R3; do
+				for R in R1 R2 R0; do
 					split -l 100000000 ${PID}_${VARNAME}_${R}.fastq.trim.deinterlaced TOMERGE_${PID}_${VARNAME}_${R}_
 					for PART in TOMERGE_${PID}_${VARNAME}_${R}_* ; do
 						cat ${PART} >> ${PID}_${R}.Unsubstracted.fastq
