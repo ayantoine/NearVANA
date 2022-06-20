@@ -217,9 +217,16 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 			touch ${PID}_R0.Unsubstracted.fastq
 			
 			for VARNAME in "${PLATE[@]}"; do
-				cat ${PID}_${VARNAME}_R1.fastq.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
-				cat ${PID}_${VARNAME}_R2.fastq.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
-				cat ${PID}_${VARNAME}_R0.fastq.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
+				for R in R1 R2 R3; do
+					split -l 100000000 ${PID}_${VARNAME}_${R}.fastq.trim.deinterlaced TOMERGE_${PID}_${VARNAME}_${R}_
+					for PART in TOMERGE_${PID}_${VARNAME}_${R}_* ; do
+						cat ${PART} >> ${PID}_${R}.Unsubstracted.fastq
+					done
+					rm TOMERGE_${PID}_${VARNAME}_${R}_*
+				done
+				#cat ${PID}_${VARNAME}_R1.fastq.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
+				#cat ${PID}_${VARNAME}_R2.fastq.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
+				#cat ${PID}_${VARNAME}_R0.fastq.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
 				rm ${PID}_${VARNAME}_R*.fastq.trim.deinterlaced
 			done
 			touch ${PID}.Substraction-Deinterlacing.ok
