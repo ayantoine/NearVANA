@@ -195,11 +195,22 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 			echo -e "\t- ${PID}.Substraction-Deinterlacing.ok existing, pas"
 		fi	
 	else
+		###DEBUG
+		echo "Sarting count R1/R2"
+		cat ${PID}_${VARNAME}_R1.fastq | wc -l
+		cat ${PID}_${VARNAME}_R2.fastq | wc -l
+		##/DEBUG
+	
 		if [ ! -f ${PID}.CutAdapt.ok ]; then
 			echo -e "\t- Trim adapters"
 			echo "$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Run_CutAdapt_NM -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt_NM.sh $ARG"
 			$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Run_CutAdapt_NM -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt_NM.sh $ARG
 			while [ ! -e ${PID}.CutAdapt.ok ]; do sleep 60 ; done
+			###DEBUG
+			echo "Sarting count R1/R2"
+			cat ${PID}_${VARNAME}_R1.fastq.trim | wc -l
+			cat ${PID}_${VARNAME}_R2.fastq.trim | wc -l
+			##/DEBUG
 		else
 			echo -e "\t- ${PID}.CutAdapt.ok existing, pas"
 		fi
@@ -209,6 +220,11 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 			echo "$SCALL $SPARAM_HEAVY $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG"
 			$SCALL $SPARAM_HEAVY $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG
 			while [ ! -e ${PID}.Deinterlacing.ok ]; do sleep 60 ; done
+			###DEBUG
+			echo "Sarting count R1/R2"
+			cat ${PID}_${VARNAME}_R1.fastq.trim.deinterlaced | wc -l
+			cat ${PID}_${VARNAME}_R2.fastq.trim.deinterlaced | wc -l
+			##/DEBUG
 			rm ${PID}.Deinterlacing.ok
 			
 			echo -e "\t- PhiX Substraction : Merge deinterlaced subfiles"
@@ -217,14 +233,10 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 			touch ${PID}_R0.Unsubstracted.fastq
 			
 			for VARNAME in "${PLATE[@]}"; do
-				echo ${VARNAME}
 				for R in R1 R2 R0; do
-					echo ${R}
 					split -l 100000000 ${PID}_${VARNAME}_${R}.fastq.trim.deinterlaced TOMERGE_${PID}_${VARNAME}_${R}_
 					if [ -f TOMERGE_${PID}_${VARNAME}_${R}_aa ]; then
-						echo "if"
 						for PART in TOMERGE_${PID}_${VARNAME}_${R}_* ; do
-							echo ${PART}
 							cat ${PART} >> ${PID}_${R}.Unsubstracted.fastq
 						done
 						rm TOMERGE_${PID}_${VARNAME}_${R}_*
@@ -233,9 +245,13 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 				#cat ${PID}_${VARNAME}_R1.fastq.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
 				#cat ${PID}_${VARNAME}_R2.fastq.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
 				#cat ${PID}_${VARNAME}_R0.fastq.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
+				###DEBUG
+				echo "Sarting count R1/R2"
+				cat ${PID}_R1.Unsubstracted.fastq | wc -l
+				cat ${PID}_R2.Unsubstracted.fastq | wc -l
+				##/DEBUG
 				rm ${PID}_${VARNAME}_R*.fastq.trim.deinterlaced
 			done
-			echo "Done"
 			touch ${PID}.Substraction-Deinterlacing.ok
 		else
 			echo -e "\t- ${PID}.Substraction-Deinterlacing.ok existing, pas"
@@ -258,6 +274,11 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 		mv ${PID}_R2.Unsubstracted.fastq ${PID}_R2.Substracted.fastq
 		mv ${PID}_R0.Unsubstracted.fastq ${PID}_R0.Substracted.fastq
 	fi
+	###DEBUG
+	echo "Sarting count R1/R2"
+	cat ${PID}_R1.Substracted.fastq | wc -l
+	cat ${PID}_R2.Substracted.fastq | wc -l
+	##/DEBUG
 	
 else
 	echo "${PID}.Cleaning.ok already existing, pass"
