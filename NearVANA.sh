@@ -237,6 +237,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 					split -l 100000000 ${PID}_${VARNAME}_${R}.fastq.trim.deinterlaced TOMERGE_${PID}_${VARNAME}_${R}_
 					if [ -f TOMERGE_${PID}_${VARNAME}_${R}_aa ]; then
 						for PART in TOMERGE_${PID}_${VARNAME}_${R}_* ; do
+							echo ${PART}
 							cat ${PART} >> ${PID}_${R}.Unsubstracted.fastq
 						done
 						rm TOMERGE_${PID}_${VARNAME}_${R}_*
