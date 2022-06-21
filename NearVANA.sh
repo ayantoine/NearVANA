@@ -196,7 +196,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 		fi	
 	else
 		###DEBUG
-		echo "Sarting count R1/R2"
+		echo "Starting count R1/R2"
 		cat ${PID}_${VARNAME}_R1.fastq | wc -l
 		cat ${PID}_${VARNAME}_R2.fastq | wc -l
 		##/DEBUG
@@ -207,7 +207,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 			$SCALL $SPARAM_MULTICPU $SRENAME ${PID}_Run_CutAdapt_NM -e Run_CutAdapt.e -o Run_CutAdapt.o ${SDIR}/Run_Cutadapt_NM.sh $ARG
 			while [ ! -e ${PID}.CutAdapt.ok ]; do sleep 60 ; done
 			###DEBUG
-			echo "Sarting count R1/R2"
+			echo "Cutadapt R1/R2"
 			cat ${PID}_${VARNAME}_R1.fastq.trim | wc -l
 			cat ${PID}_${VARNAME}_R2.fastq.trim | wc -l
 			##/DEBUG
@@ -221,7 +221,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 			$SCALL $SPARAM_HEAVY $SRENAME ${PID}_Run_RetrievePair_NM -e Run_RetrievePair.e -o Run_RetrievePair.o ${SDIR}/Run_RetrievePair_NM.sh $ARG
 			while [ ! -e ${PID}.Deinterlacing.ok ]; do sleep 60 ; done
 			###DEBUG
-			echo "Sarting count R1/R2"
+			echo "Deinterlacing R1/R2"
 			cat ${PID}_${VARNAME}_R1.fastq.trim.deinterlaced | wc -l
 			cat ${PID}_${VARNAME}_R2.fastq.trim.deinterlaced | wc -l
 			##/DEBUG
@@ -246,7 +246,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 				#cat ${PID}_${VARNAME}_R2.fastq.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
 				#cat ${PID}_${VARNAME}_R0.fastq.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
 				###DEBUG
-				echo "Sarting count R1/R2"
+				echo "Unsubstraction R1/R2"
 				cat ${PID}_R1.Unsubstracted.fastq | wc -l
 				cat ${PID}_R2.Unsubstracted.fastq | wc -l
 				##/DEBUG
@@ -275,7 +275,7 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 		mv ${PID}_R0.Unsubstracted.fastq ${PID}_R0.Substracted.fastq
 	fi
 	###DEBUG
-	echo "Sarting count R1/R2"
+	echo "Substracted R1/R2"
 	cat ${PID}_R1.Substracted.fastq | wc -l
 	cat ${PID}_R2.Substracted.fastq | wc -l
 	##/DEBUG
