@@ -233,19 +233,19 @@ if [ ! -f ${PID}.Cleaning.ok ]; then
 			touch ${PID}_R0.Unsubstracted.fastq
 			
 			for VARNAME in "${PLATE[@]}"; do
-				for R in R1 R2 R0; do
-					split -l 100000000 ${PID}_${VARNAME}_${R}.fastq.trim.deinterlaced TOMERGE_${PID}_${VARNAME}_${R}_
-					if [ -f TOMERGE_${PID}_${VARNAME}_${R}_aa ]; then
-						for PART in TOMERGE_${PID}_${VARNAME}_${R}_* ; do
-							echo ${PART}
-							cat ${PART} >> ${PID}_${R}.Unsubstracted.fastq
-						done
-						rm TOMERGE_${PID}_${VARNAME}_${R}_*
-					fi
-				done
-				#cat ${PID}_${VARNAME}_R1.fastq.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
-				#cat ${PID}_${VARNAME}_R2.fastq.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
-				#cat ${PID}_${VARNAME}_R0.fastq.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
+				#for R in R1 R2 R0; do
+					#split -l 100000000 ${PID}_${VARNAME}_${R}.fastq.trim.deinterlaced TOMERGE_${PID}_${VARNAME}_${R}_
+					#if [ -f TOMERGE_${PID}_${VARNAME}_${R}_aa ]; then
+						#for PART in TOMERGE_${PID}_${VARNAME}_${R}_* ; do
+							#echo ${PART}
+							#cat ${PART} >> ${PID}_${R}.Unsubstracted.fastq
+						#done
+						#rm TOMERGE_${PID}_${VARNAME}_${R}_*
+					#fi
+				#done
+				cat ${PID}_${VARNAME}_R1.fastq.trim.deinterlaced >> ${PID}_R1.Unsubstracted.fastq
+				cat ${PID}_${VARNAME}_R2.fastq.trim.deinterlaced >> ${PID}_R2.Unsubstracted.fastq
+				cat ${PID}_${VARNAME}_R0.fastq.trim.deinterlaced >> ${PID}_R0.Unsubstracted.fastq
 				###DEBUG
 				echo "Unsubstraction R1/R2"
 				cat ${PID}_R1.Unsubstracted.fastq | wc -l
